@@ -109,10 +109,12 @@ public class HomeFragment extends Fragment {
 
                     // レス一覧を表示
                     LinearLayout resRoot = lt.findViewById(R.id.res_root);
+
                     if (t.getRes().size() <= 1) {
                         resRoot.setVisibility(View.GONE);
                     } else {
                         int count = 0;
+                        int resCount = 0;
                         for (Tubuyaki r : t.getRes()) {
                             if (t.getTno() != r.getTno()) {
                                 count++;
@@ -121,8 +123,12 @@ public class HomeFragment extends Fragment {
                                     LinearLayout lr = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_res, null);
                                     resRoot.addView(lr);
 
+                                    TextView textResNo = lr.findViewById(R.id.text_resNo);
+
                                     TextView textRes = lr.findViewById(R.id.text_tdata);
                                     ImageView imgURes = lr.findViewById(R.id.img_uimg1);
+
+                                    textResNo.setText(String.valueOf(resCount));
 
                                     // レスを簡易表示
                                     String tdataRes = r.getTdata();
@@ -144,6 +150,8 @@ public class HomeFragment extends Fragment {
                                     Picasso.get().load("http://tiraura.orz.hm/usrimg/" + r.getUimg1()).into(imgURes);
                                 }
                             }
+
+                            resCount++;
                         }
                     }
 
@@ -174,6 +182,7 @@ public class HomeFragment extends Fragment {
 
                         }
                     });
+
                 }
                 swipe.setRefreshing(false);
             }
