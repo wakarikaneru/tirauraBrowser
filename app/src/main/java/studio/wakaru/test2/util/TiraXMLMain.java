@@ -1,5 +1,6 @@
 package studio.wakaru.test2.util;
 
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -34,6 +35,15 @@ public class TiraXMLMain {
             DocumentBuilder builder = factory.newDocumentBuilder();
             // 3. DocumentBuilderにXMLを読み込ませ、Documentを作る
             document = builder.parse(url);
+
+            if (document == null) {
+                factory = DocumentBuilderFactory.newInstance();
+                builder = factory.newDocumentBuilder();
+
+                DOMImplementation dom = builder.getDOMImplementation();
+                document = dom.createDocument("", "tiraura", null);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
