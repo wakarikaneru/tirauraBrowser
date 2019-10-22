@@ -16,10 +16,12 @@ import studio.wakaru.test2.util.Tubuyaki;
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<List<Tubuyaki>> mTubuyakiList;
+    private MutableLiveData<Integer> scroll;
 
     public HomeViewModel() {
         Log.d("HomeViewModel", "HomeViewModel constructor");
         mTubuyakiList = new MutableLiveData<>();
+        scroll = new MutableLiveData<>();
 
         refresh();
     }
@@ -28,7 +30,15 @@ public class HomeViewModel extends ViewModel {
         return mTubuyakiList;
     }
 
-    public void refresh(){
+    public LiveData<Integer> getScroll() {
+        return scroll;
+    }
+
+    public void setScroll(int scroll) {
+        this.scroll.setValue(scroll);
+    }
+
+    public void refresh() {
         LoadXML t = new LoadXML();
         t.start();
     }

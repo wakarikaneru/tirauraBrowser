@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -31,6 +32,8 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
 
+    private ScrollView mScrollView;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -38,6 +41,22 @@ public class HomeFragment extends Fragment {
                 ViewModelProviders.of(getActivity()).get(HomeViewModel.class);
 
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        mScrollView = root.findViewById(R.id.scrollView);
+
+        //スクロール状態を復元
+        homeViewModel.getScroll().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer i) {
+                if (i != null) {
+                    mScrollView.post(new Runnable() {
+                        public void run() {
+                            mScrollView.setScrollY(homeViewModel.getScroll().getValue());
+                        }
+                    });
+                }
+            }
+        });
 
         final LinearLayout tubuyakiRoot = root.findViewById(R.id.tubuyaki_root);
 
@@ -103,11 +122,12 @@ public class HomeFragment extends Fragment {
 
                     Picasso.get().load("http://tiraura.orz.hm/usrimg/" + t.getUimg1()).into(imgUimg1);
 
+                    final String imgUrl = "http://tiraura.orz.hm/usrimg/" + t.getTupfile1();
+
                     if (t.getTupfile1().isEmpty()) {
-                        Picasso.get().load("http://tiraura.orz.hm/usrimg/U201610050290969.png").into(imgTupfile1);
                         imgTupfile1.setVisibility(View.GONE);
                     } else {
-                        Picasso.get().load("http://tiraura.orz.hm/usrimg/" + t.getTupfile1()).into(imgTupfile1);
+                        Picasso.get().load(imgUrl).into(imgTupfile1);
                     }
 
                     // レス一覧を表示
@@ -158,8 +178,21 @@ public class HomeFragment extends Fragment {
                         }
                     }
 
-                    final int tno = t.getTno();
 
+                    imgTupfile1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ImageView img = new ImageView(getActivity());
+                            Picasso.get().load(imgUrl).into(img);
+
+                            new AlertDialog.Builder(getActivity())
+                                    .setView(img)
+                                    .setPositiveButton("OK", null)
+                                    .show();
+                        }
+                    });
+
+                    final int tno = t.getTno();
                     lt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -173,7 +206,7 @@ public class HomeFragment extends Fragment {
                             Bundle bundle = new Bundle();
                             bundle.putInt("tno", tno);
 
-                            TubuyakiFragment tf =new TubuyakiFragment();
+                            TubuyakiFragment tf = new TubuyakiFragment();
                             tf.setArguments(bundle);
 
                             getFragmentManager()
@@ -185,11 +218,19 @@ public class HomeFragment extends Fragment {
                     });
 
                 }
+
+
                 swipe.setRefreshing(false);
             }
         });
 
         return root;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        homeViewModel.setScroll(mScrollView.getScrollY());
     }
 
 }

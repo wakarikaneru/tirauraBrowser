@@ -1,5 +1,7 @@
 package studio.wakaru.test2.ui.tubuyaki;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -14,10 +16,13 @@ import studio.wakaru.test2.util.Tubuyaki;
 public class TubuyakiViewModel extends ViewModel {
 
     private MutableLiveData<List<Tubuyaki>> mTubuyakiList;
+    private MutableLiveData<Integer> scroll;
     private int tno;
 
     public TubuyakiViewModel() {
+        Log.d("TubuyakiViewModel", "TubuyakiViewModel constructor");
         mTubuyakiList = new MutableLiveData<>();
+        scroll = new MutableLiveData<>();
         tno = 0;
 
         refresh();
@@ -25,6 +30,14 @@ public class TubuyakiViewModel extends ViewModel {
 
     public LiveData<List<Tubuyaki>> getTubuyakiList() {
         return mTubuyakiList;
+    }
+
+    public LiveData<Integer> getScroll() {
+        return scroll;
+    }
+
+    public void setScroll(int scroll) {
+        this.scroll.setValue(scroll);
     }
 
     public void setTno(int i) {
