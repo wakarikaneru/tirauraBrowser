@@ -12,6 +12,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:itemBackground="@color/colorBackground2"
+        app:itemIconTint="@drawable/bottom_nav_item_state"
+        app:itemTextColor="@drawable/bottom_nav_item_state"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
