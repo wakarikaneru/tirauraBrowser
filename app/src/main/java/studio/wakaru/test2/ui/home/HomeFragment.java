@@ -2,6 +2,8 @@ package studio.wakaru.test2.ui.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,11 +17,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.util.Tubuyaki;
 
 public class HomeFragment extends Fragment {
@@ -30,7 +34,7 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        final View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         final LinearLayout tubuyakiRoot = root.findViewById(R.id.tubuyaki_root);
 
@@ -142,11 +146,40 @@ public class HomeFragment extends Fragment {
                             }
                         }
                     }
+
+                    final int tno = t.getTno();
+
+                    lt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            /*
+                            BottomNavigationView bnv = .findViewById(R.id.nav_view);
+                            Menu menu = bnv.getMenu();
+                            MenuItem menuItem = menu.getItem(2);
+                            menuItem.setChecked(true);
+
+                             */
+
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("tno", tno);
+
+                            TubuyakiFragment tf =new TubuyakiFragment();
+                            tf.setArguments(bundle);
+
+                            getFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.nav_host_fragment, tf)
+                                    .commit();
+
+                        }
+                    });
                 }
                 swipe.setRefreshing(false);
             }
         });
 
+        homeViewModel.refresh();
 
         return root;
     }

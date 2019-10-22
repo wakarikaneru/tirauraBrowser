@@ -3,6 +3,7 @@ package studio.wakaru.test2.util;
 
 import org.apache.commons.text.StringEscapeUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Tubuyaki {
@@ -50,6 +51,9 @@ public class Tubuyaki {
 
     public List<Tubuyaki> res;
 
+    public Tubuyaki() {
+        res = new ArrayList<>();
+    }
 
     public List<Tubuyaki> getRes() {
         return res;
@@ -68,7 +72,7 @@ public class Tubuyaki {
         String f = str;
         f = StringEscapeUtils.unescapeXml(f);
         f = f.replaceAll("<br>", System.lineSeparator());
-        f = f.replaceAll("\\<[^>]*>","");
+        f = f.replaceAll("\\<[^>]*>", "");
 
         return f;
     }

@@ -15,7 +15,7 @@
         android:id="@+id/navigation_tubuyaki"
         android:name="studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment"
         android:label="@string/title_tubuyaki"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_tubuyaki" />
 
     <fragment
         android:id="@+id/navigation_notifications"

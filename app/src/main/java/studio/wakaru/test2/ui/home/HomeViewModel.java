@@ -41,6 +41,7 @@ public class HomeViewModel extends ViewModel {
             }
 
             mTubuyakiList.postValue(list);
+
         }
     }
 }
