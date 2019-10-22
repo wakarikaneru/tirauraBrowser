@@ -1,5 +1,6 @@
 package studio.wakaru.test2.ui.tubuyaki;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.squareup.picasso.Picasso;
@@ -30,10 +32,16 @@ public class TubuyakiFragment extends Fragment {
 
     private ScrollView mScrollView;
 
+    private String imgURL;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         tubuyakiViewModel =
                 ViewModelProviders.of(getActivity()).get(TubuyakiViewModel.class);
+
+        //設定を読み込む
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        imgURL = pref.getString("img_resource", "");
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -83,55 +91,108 @@ public class TubuyakiFragment extends Fragment {
                 } else {
                     int resCount = 0;
                     for (Tubuyaki t : list) {
-                        LinearLayout lt = (LinearLayout) getLayoutInflater().inflate(R.layout.res, null);
-                        tubuyakiRoot.addView(lt);
+                        LinearLayout lt;
+                        if(resCount<=0){
+                            lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
+                            tubuyakiRoot.addView(lt);
 
-                        TextView textResNo = lt.findViewById(R.id.text_resNo);
+                            TextView textResNo = lt.findViewById(R.id.text_resNo);
 
-                        TextView textTdata = lt.findViewById(R.id.text_tdata);
-                        TextView textTdate = lt.findViewById(R.id.text_tdate);
-                        TextView textUname = lt.findViewById(R.id.text_uname);
-                        //TextView textTres = lt.findViewById(R.id.text_tres);
-                        //TextView textTview = lt.findViewById(R.id.text_tview);
-                        TextView textTgood = lt.findViewById(R.id.text_tgood);
+                            TextView textTdata = lt.findViewById(R.id.text_tdata);
+                            TextView textTdate = lt.findViewById(R.id.text_tdate);
+                            TextView textUname = lt.findViewById(R.id.text_uname);
+                            TextView textTres = lt.findViewById(R.id.text_tres);
+                            TextView textTview = lt.findViewById(R.id.text_tview);
+                            TextView textTgood = lt.findViewById(R.id.text_tgood);
 
-                        ImageView imgUimg1 = lt.findViewById(R.id.img_uimg1);
-                        ImageView imgTupfile1 = lt.findViewById(R.id.img_tupfile1);
-
-
-                        textResNo.setText(String.valueOf(resCount));
-
-                        textTdata.setText(t.getTdata());
-                        textTdate.setText(t.getTdate());
-                        textUname.setText(t.getUname());
-                        //textTres.setText("(" + t.getTres() + "レス)");
-                        //textTview.setText("(" + t.getTview() + "チラ見)");
-                        textTgood.setText("(" + t.getTgood() + "Good)");
+                            ImageView imgUimg1 = lt.findViewById(R.id.img_uimg1);
+                            ImageView imgTupfile1 = lt.findViewById(R.id.img_tupfile1);
 
 
-                        Picasso.get().load("http://tiraura.orz.hm/usrimg/" + t.getUimg1()).into(imgUimg1);
+                            textResNo.setText(String.valueOf(resCount));
 
-                        final String imgUrl = "http://tiraura.orz.hm/usrimg/" + t.getTupfile1();
+                            textTdata.setText(t.getTdata());
+                            textTdate.setText(t.getTdate());
+                            textUname.setText(t.getUname());
+                            textTres.setText("(" + t.getTres() + "レス)");
+                            textTview.setText("(" + t.getTview() + "チラ見)");
+                            textTgood.setText("(" + t.getTgood() + "Good)");
 
-                        if (t.getTupfile1().isEmpty()) {
-                            imgTupfile1.setVisibility(View.GONE);
-                        } else {
-                            Picasso.get().load(imgUrl).into(imgTupfile1);
-                        }
 
-                        imgTupfile1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ImageView img = new ImageView(getActivity());
-                                Picasso.get().load(imgUrl).into(img);
+                            Picasso.get().load(imgURL + t.getUimg1()).into(imgUimg1);
 
-                                new AlertDialog.Builder(getActivity())
-                                        .setView(img)
-                                        .setPositiveButton("OK", null)
-                                        .show();
+                            final String imgTupfile1Url = imgURL + t.getTupfile1();
+
+                            if (t.getTupfile1().isEmpty()) {
+                                imgTupfile1.setVisibility(View.GONE);
+                            } else {
+                                Picasso.get().load(imgTupfile1Url).into(imgTupfile1);
                             }
-                        });
 
+                            imgTupfile1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    ImageView img = new ImageView(getActivity());
+                                    Picasso.get().load(imgTupfile1Url).into(img);
+
+                                    new AlertDialog.Builder(getActivity())
+                                            .setView(img)
+                                            .setPositiveButton("OK", null)
+                                            .show();
+                                }
+                            });
+
+                        }else {
+                            lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
+                            tubuyakiRoot.addView(lt);
+
+                            TextView textResNo = lt.findViewById(R.id.text_resNo);
+
+                            TextView textTdata = lt.findViewById(R.id.text_tdata);
+                            TextView textTdate = lt.findViewById(R.id.text_tdate);
+                            TextView textUname = lt.findViewById(R.id.text_uname);
+                            TextView textTres = lt.findViewById(R.id.text_tres);
+                            TextView textTview = lt.findViewById(R.id.text_tview);
+                            TextView textTgood = lt.findViewById(R.id.text_tgood);
+
+                            ImageView imgUimg1 = lt.findViewById(R.id.img_uimg1);
+                            ImageView imgTupfile1 = lt.findViewById(R.id.img_tupfile1);
+
+
+                            textResNo.setText(String.valueOf(resCount));
+
+                            textTdata.setText(t.getTdata());
+                            textTdate.setText(t.getTdate());
+                            textUname.setText(t.getUname());
+                            textTres.setVisibility(View.GONE);//textTres.setText("(" + t.getTres() + "レス)");
+                            textTview.setVisibility(View.GONE);//textTview.setText("(" + t.getTview() + "チラ見)");
+                            textTgood.setText("(" + t.getTgood() + "Good)");
+
+
+                            Picasso.get().load(imgURL + t.getUimg1()).into(imgUimg1);
+
+                            final String imgTupfile1Url = imgURL + t.getTupfile1();
+
+                            if (t.getTupfile1().isEmpty()) {
+                                imgTupfile1.setVisibility(View.GONE);
+                            } else {
+                                Picasso.get().load(imgTupfile1Url).into(imgTupfile1);
+                            }
+
+                            imgTupfile1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    ImageView img = new ImageView(getActivity());
+                                    Picasso.get().load(imgTupfile1Url).into(img);
+
+                                    new AlertDialog.Builder(getActivity())
+                                            .setView(img)
+                                            .setPositiveButton("OK", null)
+                                            .show();
+                                }
+                            });
+
+                        }
                         resCount++;
                     }
                 }

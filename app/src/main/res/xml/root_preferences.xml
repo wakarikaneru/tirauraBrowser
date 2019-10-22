@@ -16,35 +16,51 @@
 
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <PreferenceCategory app:title="@string/general_header">
 
         <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
+            app:key="xml_resource"
+            app:title="@string/general_xml_resource_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
+        <EditTextPreference
+            app:key="img_resource"
+            app:title="@string/general_img_resource_title"
             app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            app:key="dark"
+            app:summaryOff="@string/general_dark_summary_off"
+            app:summaryOn="@string/general_dark_summary_on"
+            app:title="@string/general_dark_title" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header">
+    <PreferenceCategory app:title="@string/new_header">
+
+        <ListPreference
+            app:defaultValue="10"
+            app:entries="@array/entries_count"
+            app:entryValues="@array/entries_count"
+            app:key="entries_count"
+            app:title="@string/new_entries_count_title"
+            app:useSimpleSummaryProvider="true" />
 
         <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
+            app:defaultValue="false"
+            app:key="reply"
+            app:summaryOff="@string/new_reply_summary_off"
+            app:summaryOn="@string/new_reply_summary_on"
+            app:title="@string/new_reply_title" />
 
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+        <ListPreference
+            app:defaultValue="3"
+            app:dependency="reply"
+            app:entries="@array/reply_count"
+            app:entryValues="@array/reply_count"
+            app:key="reply_count"
+            app:title="@string/new_reply_count_title"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 

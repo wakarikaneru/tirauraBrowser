@@ -18,10 +18,21 @@ public class HomeViewModel extends ViewModel {
     private MutableLiveData<List<Tubuyaki>> mTubuyakiList;
     private MutableLiveData<Integer> scroll;
 
+    private String url;
+    private int entriesCount;
+    private boolean reply;
+
     public HomeViewModel() {
         Log.d("HomeViewModel", "HomeViewModel constructor");
         mTubuyakiList = new MutableLiveData<>();
         scroll = new MutableLiveData<>();
+
+        url = "http://tiraura.orz.hm/tiraXML3.cgi";
+        entriesCount = 10;
+        reply = false;
+
+        //SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences();
+        //String url = pref.getString("xml_resource", "");
 
         refresh();
     }
@@ -44,16 +55,19 @@ public class HomeViewModel extends ViewModel {
     }
 
     class LoadXML extends Thread {
+
         public void run() {
 
             //tiraXMLを読み込む
-            TiraXMLMain tiraXML = new TiraXMLMain("http://tiraura.orz.hm/tiraXML3.cgi?st=0&li=30&hs=tiraura");
+            TiraXMLMain tiraXML = new TiraXMLMain(url + "?hs=tiraura&st=0&li=" + entriesCount);
 
             List<Tubuyaki> list = tiraXML.getTubuyakiList();
 
-            for (Tubuyaki t : list) {
-                TiraXMLMain tx = new TiraXMLMain("http://tiraura.orz.hm/tiraXML3.cgi?tn=" + t.tno);
-                t.setRes(tx.getTubuyakiList());
+            if (reply) {
+                for (Tubuyaki t : list) {
+                    TiraXMLMain tx = new TiraXMLMain(url + "?tn=" + t.tno);
+                    t.setRes(tx.getTubuyakiList());
+                }
             }
 
             mTubuyakiList.postValue(list);

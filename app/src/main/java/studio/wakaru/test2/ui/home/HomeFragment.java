@@ -1,5 +1,6 @@
 package studio.wakaru.test2.ui.home;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -34,11 +36,21 @@ public class HomeFragment extends Fragment {
 
     private ScrollView mScrollView;
 
+    private String xmlURL;
+    private String imgURL;
+    private int replyCount;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         homeViewModel =
                 ViewModelProviders.of(getActivity()).get(HomeViewModel.class);
+
+        //設定を読み込む
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        xmlURL = pref.getString("xml_resource", "");
+        imgURL = pref.getString("img_resource", "");
+        replyCount = Integer.parseInt(pref.getString("reply_count", "0"));
 
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -87,6 +99,8 @@ public class HomeFragment extends Fragment {
                     LinearLayout lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
                     tubuyakiRoot.addView(lt);
 
+                    TextView textResNo = lt.findViewById(R.id.text_resNo);
+
                     TextView textTdata = lt.findViewById(R.id.text_tdata);
                     TextView textTdate = lt.findViewById(R.id.text_tdate);
                     TextView textUname = lt.findViewById(R.id.text_uname);
@@ -96,6 +110,8 @@ public class HomeFragment extends Fragment {
 
                     ImageView imgUimg1 = lt.findViewById(R.id.img_uimg1);
                     ImageView imgTupfile1 = lt.findViewById(R.id.img_tupfile1);
+
+                    textResNo.setVisibility(View.GONE);
 
                     // つぶやきを簡易表示
                     String tdata = t.getTdata();
@@ -120,14 +136,14 @@ public class HomeFragment extends Fragment {
                     textTview.setText("(" + t.getTview() + "チラ見)");
                     textTgood.setText("(" + t.getTgood() + "Good)");
 
-                    Picasso.get().load("http://tiraura.orz.hm/usrimg/" + t.getUimg1()).into(imgUimg1);
+                    Picasso.get().load(imgURL + t.getUimg1()).into(imgUimg1);
 
-                    final String imgUrl = "http://tiraura.orz.hm/usrimg/" + t.getTupfile1();
+                    final String imgTupfile1Url = imgURL + t.getTupfile1();
 
                     if (t.getTupfile1().isEmpty()) {
                         imgTupfile1.setVisibility(View.GONE);
                     } else {
-                        Picasso.get().load(imgUrl).into(imgTupfile1);
+                        Picasso.get().load(imgTupfile1Url).into(imgTupfile1);
                     }
 
                     // レス一覧を表示
@@ -141,17 +157,17 @@ public class HomeFragment extends Fragment {
                         for (Tubuyaki r : t.getRes()) {
                             if (t.getTno() != r.getTno()) {
                                 count++;
-                                if (t.getRes().size() - 3 <= count) {
+                                if (t.getRes().size() - replyCount <= count) {
 
                                     LinearLayout lr = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_res, null);
                                     resRoot.addView(lr);
 
-                                    TextView textResNo = lr.findViewById(R.id.text_resNo);
+                                    TextView textResNoRes = lr.findViewById(R.id.text_resNo);
 
                                     TextView textRes = lr.findViewById(R.id.text_tdata);
                                     ImageView imgURes = lr.findViewById(R.id.img_uimg1);
 
-                                    textResNo.setText(String.valueOf(resCount));
+                                    textResNoRes.setText(String.valueOf(resCount));
 
                                     // レスを簡易表示
                                     String tdataRes = r.getTdata();
@@ -170,7 +186,7 @@ public class HomeFragment extends Fragment {
                                         textRes.setText(tubuyakiRes);
                                     }
 
-                                    Picasso.get().load("http://tiraura.orz.hm/usrimg/" + r.getUimg1()).into(imgURes);
+                                    Picasso.get().load(imgURL + r.getUimg1()).into(imgURes);
                                 }
                             }
 
@@ -183,7 +199,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             ImageView img = new ImageView(getActivity());
-                            Picasso.get().load(imgUrl).into(img);
+                            Picasso.get().load(imgTupfile1Url).into(img);
 
                             new AlertDialog.Builder(getActivity())
                                     .setView(img)
