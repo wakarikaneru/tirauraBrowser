@@ -28,6 +28,7 @@ import java.util.List;
 
 import studio.wakaru.test2.R;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
+import studio.wakaru.test2.util.Good;
 import studio.wakaru.test2.util.Tubuyaki;
 
 public class HomeFragment extends Fragment {
@@ -107,6 +108,7 @@ public class HomeFragment extends Fragment {
                     TextView textTres = lt.findViewById(R.id.text_tres);
                     TextView textTview = lt.findViewById(R.id.text_tview);
                     TextView textTgood = lt.findViewById(R.id.text_tgood);
+                    TextView textTgood2 = lt.findViewById(R.id.text_tgood2);
 
                     ImageView imgUimg1 = lt.findViewById(R.id.img_uimg1);
                     ImageView imgTupfile1 = lt.findViewById(R.id.img_tupfile1);
@@ -135,6 +137,7 @@ public class HomeFragment extends Fragment {
                     textTres.setText("(" + t.getTres() + "レス)");
                     textTview.setText("(" + t.getTview() + "チラ見)");
                     textTgood.setText("(" + t.getTgood() + "Good)");
+                    textTgood2.setText(Good.good("♡", t.getTgood()));
 
                     Picasso.get().load(imgURL + t.getUimg1()).into(imgUimg1);
 

@@ -73,6 +73,42 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_tgood2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_weight="1"
+                    android:alpha="0.75"
+                    android:text="tgood"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/colorText"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/text_tgood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_weight="0"
+                    android:alpha="0.75"
+                    android:text="tgood"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/colorText"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:orientation="horizontal">
@@ -87,20 +123,6 @@
                     android:layout_weight="0"
                     android:alpha="0.75"
                     android:text="tview"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/colorText"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:id="@+id/text_tgood"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_weight="0"
-                    android:alpha="0.75"
-                    android:text="tres"
                     android:textAlignment="textStart"
                     android:textColor="@color/colorText"
                     android:textSize="10sp" />

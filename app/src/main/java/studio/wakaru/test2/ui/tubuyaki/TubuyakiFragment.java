@@ -2,6 +2,8 @@ package studio.wakaru.test2.ui.tubuyaki;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.util.Good;
 import studio.wakaru.test2.util.Tubuyaki;
 
 public class TubuyakiFragment extends Fragment {
@@ -92,7 +95,7 @@ public class TubuyakiFragment extends Fragment {
                     int resCount = 0;
                     for (Tubuyaki t : list) {
                         LinearLayout lt;
-                        if(resCount<=0){
+                        if (resCount <= 0) {
                             lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
                             tubuyakiRoot.addView(lt);
 
@@ -104,6 +107,7 @@ public class TubuyakiFragment extends Fragment {
                             TextView textTres = lt.findViewById(R.id.text_tres);
                             TextView textTview = lt.findViewById(R.id.text_tview);
                             TextView textTgood = lt.findViewById(R.id.text_tgood);
+                            TextView textTgood2 = lt.findViewById(R.id.text_tgood2);
 
                             ImageView imgUimg1 = lt.findViewById(R.id.img_uimg1);
                             ImageView imgTupfile1 = lt.findViewById(R.id.img_tupfile1);
@@ -117,7 +121,7 @@ public class TubuyakiFragment extends Fragment {
                             textTres.setText("(" + t.getTres() + "レス)");
                             textTview.setText("(" + t.getTview() + "チラ見)");
                             textTgood.setText("(" + t.getTgood() + "Good)");
-
+                            textTgood2.setText(Good.good("♡", t.getTgood()));
 
                             Picasso.get().load(imgURL + t.getUimg1()).into(imgUimg1);
 
@@ -142,7 +146,7 @@ public class TubuyakiFragment extends Fragment {
                                 }
                             });
 
-                        }else {
+                        } else {
                             lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
                             tubuyakiRoot.addView(lt);
 
@@ -154,6 +158,7 @@ public class TubuyakiFragment extends Fragment {
                             TextView textTres = lt.findViewById(R.id.text_tres);
                             TextView textTview = lt.findViewById(R.id.text_tview);
                             TextView textTgood = lt.findViewById(R.id.text_tgood);
+                            TextView textTgood2 = lt.findViewById(R.id.text_tgood2);
 
                             ImageView imgUimg1 = lt.findViewById(R.id.img_uimg1);
                             ImageView imgTupfile1 = lt.findViewById(R.id.img_tupfile1);
@@ -167,6 +172,7 @@ public class TubuyakiFragment extends Fragment {
                             textTres.setVisibility(View.GONE);//textTres.setText("(" + t.getTres() + "レス)");
                             textTview.setVisibility(View.GONE);//textTview.setText("(" + t.getTview() + "チラ見)");
                             textTgood.setText("(" + t.getTgood() + "Good)");
+                            textTgood2.setText(Good.good("♡", t.getTgood()));
 
 
                             Picasso.get().load(imgURL + t.getUimg1()).into(imgUimg1);
