@@ -1,19 +1,22 @@
 package studio.wakaru.test2;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import studio.wakaru.test2.ui.home.HomeViewModel;
-import studio.wakaru.test2.ui.tubuyaki.TubuyakiViewModel;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
@@ -38,4 +41,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case R.id.action_settings:
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
 }
