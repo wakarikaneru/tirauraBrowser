@@ -6,10 +6,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import studio.wakaru.test2.ui.home.HomeViewModel;
+import studio.wakaru.test2.ui.tubuyaki.TubuyakiViewModel;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         //
         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+
     }
 
 }

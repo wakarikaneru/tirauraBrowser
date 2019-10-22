@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -32,8 +33,10 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
+                ViewModelProviders.of(getActivity()).get(HomeViewModel.class);
+
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         final LinearLayout tubuyakiRoot = root.findViewById(R.id.tubuyaki_root);
@@ -161,13 +164,11 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
 
-                            /*
-                            BottomNavigationView bnv = .findViewById(R.id.nav_view);
+                            //メニューを選択状態に変更
+                            BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
                             Menu menu = bnv.getMenu();
-                            MenuItem menuItem = menu.getItem(2);
+                            MenuItem menuItem = menu.getItem(1);
                             menuItem.setChecked(true);
-
-                             */
 
                             Bundle bundle = new Bundle();
                             bundle.putInt("tno", tno);
@@ -187,8 +188,6 @@ public class HomeFragment extends Fragment {
                 swipe.setRefreshing(false);
             }
         });
-
-        homeViewModel.refresh();
 
         return root;
     }

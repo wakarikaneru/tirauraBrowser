@@ -1,5 +1,8 @@
 package studio.wakaru.test2.ui.home;
 
+import android.util.Log;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -15,7 +18,10 @@ public class HomeViewModel extends ViewModel {
     private MutableLiveData<List<Tubuyaki>> mTubuyakiList;
 
     public HomeViewModel() {
+        Log.d("HomeViewModel", "HomeViewModel constructor");
         mTubuyakiList = new MutableLiveData<>();
+
+        refresh();
     }
 
     public LiveData<List<Tubuyaki>> getTubuyakiList() {

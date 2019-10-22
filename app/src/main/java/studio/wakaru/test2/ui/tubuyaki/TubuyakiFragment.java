@@ -30,7 +30,8 @@ public class TubuyakiFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         tubuyakiViewModel =
-                ViewModelProviders.of(this).get(TubuyakiViewModel.class);
+                ViewModelProviders.of(getActivity()).get(TubuyakiViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         final LinearLayout tubuyakiRoot = root.findViewById(R.id.tubuyaki_root);
@@ -99,12 +100,11 @@ public class TubuyakiFragment extends Fragment {
             }
         });
 
-        //更新する
+        //tnoを設定する
         Bundle bundle = getArguments();
         if (bundle != null) {
             tubuyakiViewModel.setTno(bundle.getInt("tno"));
         }
-        tubuyakiViewModel.refresh();
 
         return root;
     }

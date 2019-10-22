@@ -19,6 +19,8 @@ public class TubuyakiViewModel extends ViewModel {
     public TubuyakiViewModel() {
         mTubuyakiList = new MutableLiveData<>();
         tno = 0;
+
+        refresh();
     }
 
     public LiveData<List<Tubuyaki>> getTubuyakiList() {
@@ -27,6 +29,8 @@ public class TubuyakiViewModel extends ViewModel {
 
     public void setTno(int i) {
         tno = i;
+
+        refresh();
     }
 
     public void refresh() {
