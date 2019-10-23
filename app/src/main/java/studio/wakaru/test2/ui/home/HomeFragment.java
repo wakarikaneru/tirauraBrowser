@@ -246,8 +246,9 @@ public class HomeFragment extends Fragment {
                                 ImageView img = new ImageView(getActivity());
                                 Picasso.get().load(imgTupfile1Url).into(img);
 
-                                new AlertDialog.Builder(getActivity())
+                                AlertDialog ad = new AlertDialog.Builder(getActivity())
                                         .setView(img)
+                                        .setPositiveButton("OK", null)
                                         .setCancelable(true)
                                         .show();
 
