@@ -214,6 +214,8 @@ public class TubuyakiFragment extends Fragment {
             tubuyakiViewModel.setTno(bundle.getInt("tno"));
         }
 
+        tubuyakiViewModel.refresh(getContext());
+
         return root;
     }
 
