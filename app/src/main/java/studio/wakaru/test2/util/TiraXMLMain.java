@@ -36,18 +36,23 @@ public class TiraXMLMain {
             // 3. DocumentBuilderにXMLを読み込ませ、Documentを作る
             document = builder.parse(url);
 
-            if (document == null) {
-                factory = DocumentBuilderFactory.newInstance();
-                builder = factory.newDocumentBuilder();
-
-                DOMImplementation dom = builder.getDOMImplementation();
-                document = dom.createDocument("", "tiraura", null);
-            }
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (document == null) {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+
+                DOMImplementation dom = builder.getDOMImplementation();
+                document = dom.createDocument(null, "tiraura", null);
+            }
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         }

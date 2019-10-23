@@ -1,5 +1,6 @@
 package studio.wakaru.test2.ui.tubuyaki;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -20,7 +21,9 @@ public class TubuyakiViewModel extends ViewModel {
     private MutableLiveData<List<Tubuyaki>> mTubuyakiList;
     private MutableLiveData<Integer> scroll;
 
-    private String url;
+    private String xmlURL;
+    private String imgURL;
+
     private int tno;
 
     public TubuyakiViewModel() {
@@ -28,13 +31,16 @@ public class TubuyakiViewModel extends ViewModel {
         mTubuyakiList = new MutableLiveData<>();
         scroll = new MutableLiveData<>();
 
-        url = "http://tiraura.orz.hm/tiraXML3.cgi";
+        xmlURL = "";
+        imgURL = "";
         tno = 0;
 
-        //SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences();
-        //String url = pref.getString("xml_resource", "");
+    }
 
-        refresh();
+    public void loadSetting(Context c) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(c);
+        xmlURL = pref.getString("xml_resource", "");
+        imgURL = pref.getString("img_resource", "");
     }
 
 
@@ -50,10 +56,6 @@ public class TubuyakiViewModel extends ViewModel {
         this.scroll.setValue(scroll);
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public void setTno(int i) {
         tno = i;
 
@@ -65,13 +67,19 @@ public class TubuyakiViewModel extends ViewModel {
         t.start();
     }
 
+    public void refresh(Context c) {
+        loadSetting(c);
+        LoadXML t = new LoadXML();
+        t.start();
+    }
+
     class LoadXML extends Thread {
         public void run() {
             if (tno != 0) {
 
                 //tiraXMLを読み込む
 
-                TiraXMLMain tiraXML = new TiraXMLMain(url + "?tn=" + tno);
+                TiraXMLMain tiraXML = new TiraXMLMain(xmlURL + "?tn=" + tno);
 
                 List<Tubuyaki> list = tiraXML.getTubuyakiList();
 

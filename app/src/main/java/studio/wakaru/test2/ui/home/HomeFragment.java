@@ -79,7 +79,7 @@ public class HomeFragment extends Fragment {
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                homeViewModel.refresh();
+                homeViewModel.refresh(getContext());
             }
         });
 
