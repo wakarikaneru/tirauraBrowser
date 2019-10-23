@@ -141,7 +141,8 @@ public class TubuyakiFragment extends Fragment {
 
                                     new AlertDialog.Builder(getActivity())
                                             .setView(img)
-                                            .setPositiveButton("OK", null)
+                                            .setPositiveButton(android.R.string.ok, null)
+                                            .setCancelable(true)
                                             .show();
                                 }
                             });
@@ -193,7 +194,8 @@ public class TubuyakiFragment extends Fragment {
 
                                     new AlertDialog.Builder(getActivity())
                                             .setView(img)
-                                            .setPositiveButton("OK", null)
+                                            .setPositiveButton(android.R.string.ok, null)
+                                            .setCancelable(true)
                                             .show();
                                 }
                             });

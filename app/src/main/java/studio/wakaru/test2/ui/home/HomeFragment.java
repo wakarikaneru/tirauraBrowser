@@ -242,8 +242,9 @@ public class HomeFragment extends Fragment {
 
                             new AlertDialog.Builder(getActivity())
                                     .setView(img)
-                                    .setPositiveButton("OK", null)
+                                    .setCancelable(true)
                                     .show();
+
                         }
                     });
 
@@ -258,6 +259,7 @@ public class HomeFragment extends Fragment {
                             MenuItem menuItem = menu.getItem(1);
                             menuItem.setChecked(true);
 
+                            //画面遷移
                             Bundle bundle = new Bundle();
                             bundle.putInt("tno", tno);
 

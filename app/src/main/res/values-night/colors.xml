@@ -4,9 +4,9 @@
     <color name="colorPrimaryDark">#53882c</color>
     <color name="colorAccent">#FF0000</color>
 
-    <color name="colorBackground">#222222</color>
-    <color name="colorBackground2">#111111</color>
+    <color name="colorBackground">#111111</color>
+    <color name="colorBackground2">#222222</color>
 
-    <color name="colorText">#dddddd</color>
-    <color name="colorText2">#eeeeee</color>
+    <color name="colorText">#eeeeee</color>
+    <color name="colorText2">#dddddd</color>
 </resources>

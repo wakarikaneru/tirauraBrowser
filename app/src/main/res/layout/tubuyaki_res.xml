@@ -24,7 +24,6 @@
             android:layout_weight="0"
             android:gravity="center"
             android:text="0"
-            android:textColor="@color/colorText"
             android:textSize="10sp" />
 
         <ImageView
@@ -43,7 +42,6 @@
             android:layout_margin="4dp"
             android:text="tdata"
             android:textAlignment="textStart"
-            android:textColor="@color/colorText"
             android:textSize="10sp" />
 
     </LinearLayout>

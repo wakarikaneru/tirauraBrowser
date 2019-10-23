@@ -21,8 +21,7 @@
             android:layout_margin="4dp"
             android:layout_weight="0"
             android:gravity="center"
-            android:text="0"
-            android:textColor="@color/colorText" />
+            android:text="0" />
 
         <ImageView
             android:id="@+id/img_uimg1"
@@ -37,7 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -54,7 +52,6 @@
                     android:layout_weight="1"
                     android:text="tdata"
                     android:textAlignment="textStart"
-                    android:textColor="@color/colorText"
                     android:textSize="14sp" />
 
                 <ImageView
@@ -88,7 +85,6 @@
                     android:alpha="0.75"
                     android:text="tgood"
                     android:textAlignment="textStart"
-                    android:textColor="@color/colorText"
                     android:textSize="10sp" />
 
                 <TextView
@@ -102,7 +98,6 @@
                     android:alpha="0.75"
                     android:text="tgood"
                     android:textAlignment="textStart"
-                    android:textColor="@color/colorText"
                     android:textSize="10sp" />
 
             </LinearLayout>
@@ -124,7 +119,6 @@
                     android:alpha="0.75"
                     android:text="tview"
                     android:textAlignment="textStart"
-                    android:textColor="@color/colorText"
                     android:textSize="10sp" />
 
                 <TextView
@@ -138,7 +132,6 @@
                     android:alpha="0.75"
                     android:text="tres"
                     android:textAlignment="textStart"
-                    android:textColor="@color/colorText"
                     android:textSize="10sp" />
 
             </LinearLayout>
@@ -158,7 +151,6 @@
                     android:alpha="0.75"
                     android:text="uname"
                     android:textAlignment="textStart"
-                    android:textColor="@color/colorText"
                     android:textSize="10sp" />
 
                 <TextView
@@ -172,7 +164,6 @@
                     android:alpha="0.75"
                     android:text="tdate"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/colorText"
                     android:textSize="10sp" />
             </LinearLayout>
 

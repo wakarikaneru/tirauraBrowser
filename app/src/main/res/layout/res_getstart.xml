@@ -13,6 +13,5 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="8dp"
-        android:text="つぶやきを選択してください"
-        android:textColor="@color/colorText" />
+        android:text="つぶやきを選択してください" />
 </LinearLayout>
