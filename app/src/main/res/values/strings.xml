@@ -7,6 +7,7 @@
 
     <!-- Preference Titles -->
     <string name="general_header">一般</string>
+    <string name="detail_header">詳細</string>
     <string name="new_header">新着</string>
     <string name="new_detail_header">新着(詳細)</string>
 
@@ -16,6 +17,8 @@
     <string name="general_dark_title">ダークテーマ</string>
     <string name="general_dark_summary_on">暗い環境に適したテーマで表示します</string>
     <string name="general_dark_summary_off">通常のテーマで表示します</string>
+
+    <string name="general_tiraura_resource_title">チラ裏.comのURL</string>
 
     <string name="new_entries_count_title">最大新着表示数</string>
     <string name="new_reply_title">レス表示</string>

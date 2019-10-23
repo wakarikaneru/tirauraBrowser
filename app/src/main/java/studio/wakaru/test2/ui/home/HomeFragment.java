@@ -1,6 +1,8 @@
 package studio.wakaru.test2.ui.home;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -27,7 +29,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import studio.wakaru.test2.MainActivity;
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.SettingsActivity;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.util.Good;
 import studio.wakaru.test2.util.Tubuyaki;
@@ -38,6 +42,7 @@ public class HomeFragment extends Fragment {
 
     private ScrollView mScrollView;
 
+    private String tiraURL;
     private String xmlURL;
     private String imgURL;
     private int replyCount;
@@ -53,6 +58,7 @@ public class HomeFragment extends Fragment {
 
         //設定を読み込む
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        tiraURL = pref.getString("tiraura_resource", "");
         xmlURL = pref.getString("xml_resource", "");
         imgURL = pref.getString("img_resource", "");
         replyCount = Integer.parseInt(pref.getString("reply_count", "0"));
@@ -139,9 +145,9 @@ public class HomeFragment extends Fragment {
                         textTdata.setText(t.getTdata());
 
                         if (entryLineLimit != 0) {
-                            if(entryLineLimit==1){
+                            if (entryLineLimit == 1) {
                                 textTdata.setSingleLine();
-                            }else{
+                            } else {
                                 textTdata.setMaxLines(entryLineLimit);
                             }
                             textTdata.setEllipsize(TextUtils.TruncateAt.END);
@@ -192,9 +198,9 @@ public class HomeFragment extends Fragment {
                                         textTdataRes.setText(r.getTdata());
 
                                         if (replyLineLimit != 0) {
-                                            if(replyLineLimit==1){
+                                            if (replyLineLimit == 1) {
                                                 textTdataRes.setSingleLine();
-                                            }else{
+                                            } else {
                                                 textTdataRes.setMaxLines(replyLineLimit);
                                             }
                                             textTdataRes.setEllipsize(TextUtils.TruncateAt.END);
@@ -226,6 +232,7 @@ public class HomeFragment extends Fragment {
                             }
                         });
 
+                        //タップしたらつぶやき画面に遷移
                         final int tno = t.getTno();
                         lt.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -249,6 +256,22 @@ public class HomeFragment extends Fragment {
                                         .replace(R.id.nav_host_fragment, tf)
                                         .commit();
 
+                            }
+                        });
+
+                        //長押しでブラウザで開く
+                        lt.setOnLongClickListener(new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View v) {
+
+                                if (!tiraURL.isEmpty()) {
+                                    //ブラウザ起動
+                                    Uri uri = Uri.parse(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
+                                    Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                                    startActivity(i);
+                                }
+
+                                return true;
                             }
                         });
 

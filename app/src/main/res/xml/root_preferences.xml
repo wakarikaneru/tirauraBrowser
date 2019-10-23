@@ -82,4 +82,11 @@
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/detail_header">
+        <EditTextPreference
+            app:key="tiraura_resource"
+            app:title="@string/general_tiraura_resource_title"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
 </PreferenceScreen>
