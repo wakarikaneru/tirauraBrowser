@@ -2,6 +2,7 @@ package studio.wakaru.test2.ui.home;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,9 +43,7 @@ public class HomeFragment extends Fragment {
     private int replyCount;
 
     private int entryLineLimit;
-    private int entryCountLimit;
     private int replyLineLimit;
-    private int replyCountLimit;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,17 +58,13 @@ public class HomeFragment extends Fragment {
         replyCount = Integer.parseInt(pref.getString("reply_count", "0"));
 
         entryLineLimit = Integer.parseInt(pref.getString("entry_line_limit", "0"));
-        entryCountLimit = Integer.parseInt(pref.getString("entry_count_limit", "0"));
         replyLineLimit = Integer.parseInt(pref.getString("reply_line_limit", "0"));
-        replyCountLimit = Integer.parseInt(pref.getString("reply_count_limit", "0"));
 
         //設定の検証
         replyCount = Math.max(0, Math.min(replyCount, 300));
 
         entryLineLimit = Math.max(0, entryLineLimit);
-        entryCountLimit = Math.max(0, entryCountLimit);
         replyLineLimit = Math.max(0, replyLineLimit);
-        replyCountLimit = Math.max(0, replyCountLimit);
 
         final View root = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -140,29 +135,16 @@ public class HomeFragment extends Fragment {
                         textResNo.setVisibility(View.GONE);
 
                         // つぶやきを簡易表示
-                        String tdata = t.getTdata();
-                        String[] sa = tdata.split("\r\n|[\n\r\u2028\u2029\u0085]");
-                        String tubuyaki = "";
 
-                        if (entryLineLimit == 0) {
-                            tubuyaki = tdata;
-                        } else {
-                            for (int i = 0; i < Math.min(entryLineLimit, sa.length); i++) {
-                                if (i != 0) {
-                                    tubuyaki += System.lineSeparator();
-                                }
-                                tubuyaki += sa[i];
-                            }
-                        }
+                        textTdata.setText(t.getTdata());
 
-                        if (entryCountLimit == 0) {
-                            textTdata.setText(tubuyaki);
-                        } else {
-                            if (entryCountLimit < tubuyaki.length()) {
-                                textTdata.setText(tubuyaki.substring(0, entryCountLimit) + "…");
-                            } else {
-                                textTdata.setText(tubuyaki);
+                        if (entryLineLimit != 0) {
+                            if(entryLineLimit==1){
+                                textTdata.setSingleLine();
+                            }else{
+                                textTdata.setMaxLines(entryLineLimit);
                             }
+                            textTdata.setEllipsize(TextUtils.TruncateAt.END);
                         }
 
                         textTdate.setText(t.getTdate());
@@ -206,29 +188,15 @@ public class HomeFragment extends Fragment {
                                         textResNoRes.setText(String.valueOf(resCount));
 
                                         // レスを簡易表示
-                                        String tdataRes = r.getTdata();
-                                        String[] saRes = tdataRes.split("\r\n|[\n\r\u2028\u2029\u0085]");
-                                        String tubuyakiRes = "";
+                                        textRes.setText(r.getTdata());
 
-                                        if (entryLineLimit == 0) {
-                                            tubuyakiRes = tdataRes;
-                                        } else {
-                                            for (int i = 0; i < Math.min(replyLineLimit, saRes.length); i++) {
-                                                if (i != 0) {
-                                                    tubuyakiRes += System.lineSeparator();
-                                                }
-                                                tubuyakiRes += saRes[i];
+                                        if (replyLineLimit != 0) {
+                                            if(replyLineLimit==1){
+                                                textRes.setSingleLine();
+                                            }else{
+                                                textRes.setMaxLines(replyLineLimit);
                                             }
-                                        }
-
-                                        if (entryLineLimit == 0) {
-                                            textRes.setText(tubuyakiRes);
-                                        } else {
-                                            if (entryCountLimit < tubuyakiRes.length()) {
-                                                textRes.setText(tubuyakiRes.substring(0, entryCountLimit) + "…");
-                                            } else {
-                                                textRes.setText(tubuyakiRes);
-                                            }
+                                            textRes.setEllipsize(TextUtils.TruncateAt.END);
                                         }
 
                                         Picasso.get().load(imgURL + r.getUimg1()).into(imgURes);

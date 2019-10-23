@@ -65,25 +65,20 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/new_detail_header">
-        <EditTextPreference
-            app:defaultValue="3"
+        <ListPreference
+            app:defaultValue="5"
+            app:entries="@array/line_limit_count"
+            app:entryValues="@array/line_limit_count_value"
             app:key="entry_line_limit"
             app:title="@string/new_detail_entry_line_title"
             app:useSimpleSummaryProvider="true" />
-        <EditTextPreference
-            app:defaultValue="100"
-            app:key="entry_count_limit"
-            app:title="@string/new_detail_entry_count_title"
-            app:useSimpleSummaryProvider="true" />
-        <EditTextPreference
+        <ListPreference
             app:defaultValue="2"
+            app:dependency="reply"
+            app:entries="@array/line_limit_count"
+            app:entryValues="@array/line_limit_count_value"
             app:key="reply_line_limit"
             app:title="@string/new_detail_reply_line_title"
-            app:useSimpleSummaryProvider="true" />
-        <EditTextPreference
-            app:defaultValue="100"
-            app:key="reply_count_limit"
-            app:title="@string/new_detail_reply_count_title"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
