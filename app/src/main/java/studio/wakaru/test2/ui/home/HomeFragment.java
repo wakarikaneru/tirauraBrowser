@@ -182,22 +182,25 @@ public class HomeFragment extends Fragment {
 
                                         TextView textResNoRes = lr.findViewById(R.id.text_resNo);
 
-                                        TextView textRes = lr.findViewById(R.id.text_tdata);
+                                        TextView textTdataRes = lr.findViewById(R.id.text_tdata);
+                                        TextView textUnameRes = lr.findViewById(R.id.text_uname);
                                         ImageView imgURes = lr.findViewById(R.id.img_uimg1);
 
                                         textResNoRes.setText(String.valueOf(resCount));
 
                                         // レスを簡易表示
-                                        textRes.setText(r.getTdata());
+                                        textTdataRes.setText(r.getTdata());
 
                                         if (replyLineLimit != 0) {
                                             if(replyLineLimit==1){
-                                                textRes.setSingleLine();
+                                                textTdataRes.setSingleLine();
                                             }else{
-                                                textRes.setMaxLines(replyLineLimit);
+                                                textTdataRes.setMaxLines(replyLineLimit);
                                             }
-                                            textRes.setEllipsize(TextUtils.TruncateAt.END);
+                                            textTdataRes.setEllipsize(TextUtils.TruncateAt.END);
                                         }
+
+                                        textUnameRes.setText(r.getUname());
 
                                         Picasso.get().load(imgURL + r.getUimg1()).into(imgURes);
                                     }
