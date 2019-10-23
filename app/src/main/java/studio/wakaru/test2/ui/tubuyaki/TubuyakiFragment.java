@@ -72,7 +72,7 @@ public class TubuyakiFragment extends Fragment {
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                tubuyakiViewModel.refresh();
+                tubuyakiViewModel.refresh(getContext());
             }
         });
 

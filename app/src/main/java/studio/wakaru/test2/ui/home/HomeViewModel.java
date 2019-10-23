@@ -10,6 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.preference.PreferenceManager;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,9 +65,7 @@ public class HomeViewModel extends ViewModel {
     }
 
     public void refresh(Context c) {
-        Log.d("HomeViewModel", "refresh(Context c)");
         loadSetting(c);
-        Log.d("HomeViewModel", xmlURL);
         LoadXML t = new LoadXML();
         t.start();
     }
@@ -74,20 +74,28 @@ public class HomeViewModel extends ViewModel {
 
         public void run() {
 
-            //tiraXMLを読み込む
-            TiraXMLMain tiraXML = new TiraXMLMain(xmlURL + "?hs=tiraura&st=0&li=" + entriesCount);
+            try {
+                //tiraXMLを読み込む
+                URL u = new URL(xmlURL + "?hs=tiraura&st=0&li=" + entriesCount);
+                TiraXMLMain tiraXML = new TiraXMLMain(u.toString());
+                List<Tubuyaki> list = tiraXML.getTubuyakiList();
 
-            List<Tubuyaki> list = tiraXML.getTubuyakiList();
-
-            if (reply) {
-                for (Tubuyaki t : list) {
-                    TiraXMLMain tx = new TiraXMLMain(xmlURL + "?tn=" + t.tno);
-                    t.setRes(tx.getTubuyakiList());
+                if (reply) {
+                    for (Tubuyaki t : list) {
+                        if (0 < t.tres) {
+                            URL uRes = new URL(xmlURL + "?tn=" + t.tno);
+                            TiraXMLMain tx = new TiraXMLMain(uRes.toString());
+                            t.setRes(tx.getTubuyakiList());
+                        }
+                    }
                 }
+
+                mTubuyakiList.postValue(list);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                mTubuyakiList.postValue(new ArrayList<Tubuyaki>());
             }
-
-            mTubuyakiList.postValue(list);
-
         }
     }
 }

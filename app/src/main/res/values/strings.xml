@@ -8,6 +8,7 @@
     <!-- Preference Titles -->
     <string name="general_header">一般</string>
     <string name="new_header">新着</string>
+    <string name="new_detail_header">新着(詳細)</string>
 
     <!-- Messages Preferences -->
     <string name="general_xml_resource_title">tiraXMLのURL</string>
@@ -21,5 +22,10 @@
     <string name="new_reply_summary_on">新着にレスを表示します(パフォーマンスに大きく影響します)</string>
     <string name="new_reply_summary_off">新着にレスを表示しません</string>
     <string name="new_reply_count_title">最大レス表示数</string>
+
+    <string name="new_detail_entry_line_title">つぶやき行数制限(0で無制限)</string>
+    <string name="new_detail_entry_count_title">つぶやき文字数制限(0で無制限)</string>
+    <string name="new_detail_reply_line_title">レス行数制限(0で無制限)</string>
+    <string name="new_detail_reply_count_title">レス文字数制限(0で無制限)</string>
 
 </resources>

@@ -36,7 +36,6 @@ public class TiraXMLMain {
             // 3. DocumentBuilderにXMLを読み込ませ、Documentを作る
             document = builder.parse(url);
 
-
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {

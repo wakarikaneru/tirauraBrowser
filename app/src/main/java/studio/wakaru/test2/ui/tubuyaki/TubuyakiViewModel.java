@@ -9,6 +9,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.preference.PreferenceManager;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,14 +79,18 @@ public class TubuyakiViewModel extends ViewModel {
         public void run() {
             if (tno != 0) {
 
-                //tiraXMLを読み込む
+                try {
+                    //tiraXMLを読み込む
+                    URL u = new URL(xmlURL + "?tn=" + tno);
+                    TiraXMLMain tiraXML = new TiraXMLMain(u.toString());
+                    List<Tubuyaki> list = tiraXML.getTubuyakiList();
 
-                TiraXMLMain tiraXML = new TiraXMLMain(xmlURL + "?tn=" + tno);
+                    mTubuyakiList.postValue(list);
 
-                List<Tubuyaki> list = tiraXML.getTubuyakiList();
-
-                mTubuyakiList.postValue(list);
-
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                    mTubuyakiList.postValue(new ArrayList<Tubuyaki>());
+                }
             } else {
 
                 mTubuyakiList.postValue(new ArrayList<Tubuyaki>());
