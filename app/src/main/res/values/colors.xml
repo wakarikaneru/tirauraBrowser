@@ -6,7 +6,9 @@
 
     <color name="colorBackground">#eeeeee</color>
     <color name="colorBackground2">#dddddd</color>
+    <color name="colorBackground3">#cccccc</color>
 
     <color name="colorText">#111111</color>
     <color name="colorText2">#222222</color>
+    <color name="colorText3">#333333</color>
 </resources>

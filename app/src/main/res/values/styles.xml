@@ -8,12 +8,57 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:windowBackground">@color/colorBackground</item>
-        <item name="android:itemBackground">@color/colorBackground2</item>
-        <item name="colorBackgroundFloating">@color/colorBackground2</item>
 
-        <item name="android:textColor">@color/colorText</item>
-        <item name="android:textColorPrimary">@color/colorText</item>
+
+        <!--
+        <item name="android:itemBackground">@color/colorBackground2</item>
+        <item name="android:itemTextAppearance">@style/AppTheme.ItemTextAppearance</item>
+
+        <item name="android:colorBackground">@color/colorBackground2</item>
+        <item name="android:popupBackground">@color/colorBackground2</item>
+        <item name="android:itemBackground">@color/colorBackground2</item>
+        -->
+        <!--
+        <item name="colorBackgroundFloating">@color/colorBackground2</item>
+        -->
+
+        <item name="android:itemBackground">@color/colorBackground2</item>
+        <item name="android:itemTextAppearance">@style/AppTheme.ItemTextAppearance</item>
+
         <item name="android:textColorSecondary">@color/colorText2</item>
+        <item name="android:textColorTertiary">@color/colorText3</item>
+
+
+        <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
+        <item name="android:radioButtonStyle">@style/AppTheme.RadioButtonStyle</item>
+        <item name="radioButtonStyle">@style/AppTheme.RadioButtonStyle</item>
+
+    </style>
+
+    <style name="AppTheme.ItemTextAppearance" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="android:textColor">@color/colorText2</item>
+
+    </style>
+
+    <style name="AppTheme.AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:background">@color/colorBackground2</item>
+        <item name="android:textColorPrimary">@color/colorText2</item>
+
+    </style>
+
+    <style name="AppTheme.RadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
+
+        <item name="android:textColor">@color/colorAccent</item>
+
+    </style>
+
+    <style name="AppTheme.PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+
+        <item name="android:background">@color/colorBackground2</item>
+        <item name="android:textColor">@color/colorText2</item>
 
     </style>
 
