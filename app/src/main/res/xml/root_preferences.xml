@@ -84,6 +84,12 @@
             app:key="tiraura_resource"
             app:title="@string/general_tiraura_resource_title"
             app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:defaultValue="0"
+            app:key="setting_version"
+            app:title="設定ファイルのバージョン"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
 </PreferenceScreen>

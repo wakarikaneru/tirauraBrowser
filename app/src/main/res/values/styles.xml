@@ -22,16 +22,20 @@
         <item name="colorBackgroundFloating">@color/colorBackground2</item>
         -->
 
+        <item name="android:textColorPrimary">@color/primary_text_color_selector</item>
+        <item name="android:textColorSecondary">@color/secondary_text_color_selector</item>
+        <item name="android:textColorTertiary">@color/tertiary_text_color_selector</item>
+
+        <item name="android:listDivider">@drawable/divider</item>
+        <item name="android:divider">@drawable/divider</item>
+
+        <item name="colorControlHighlight">@color/color_control_highlight</item>
+
         <item name="android:itemBackground">@color/colorBackground2</item>
         <item name="android:itemTextAppearance">@style/AppTheme.ItemTextAppearance</item>
 
-        <item name="android:textColorSecondary">@color/colorText2</item>
-        <item name="android:textColorTertiary">@color/colorText3</item>
-
-
         <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
-        <item name="android:radioButtonStyle">@style/AppTheme.RadioButtonStyle</item>
-        <item name="radioButtonStyle">@style/AppTheme.RadioButtonStyle</item>
+        <item name="android:alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
 
     </style>
 
@@ -47,17 +51,6 @@
         <item name="android:background">@color/colorBackground2</item>
         <item name="android:textColorPrimary">@color/colorText2</item>
 
-    </style>
-
-    <style name="AppTheme.RadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
-
-        <item name="android:textColor">@color/colorAccent</item>
-
-    </style>
-
-    <style name="AppTheme.PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
-
-        <item name="android:background">@color/colorBackground2</item>
         <item name="android:textColor">@color/colorText2</item>
 
     </style>

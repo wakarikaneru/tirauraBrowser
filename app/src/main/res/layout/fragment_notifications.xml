@@ -15,4 +15,5 @@
         android:padding="8dp"
         android:text="作成中"
         android:textColor="@color/colorText" />
+
 </LinearLayout>

@@ -11,4 +11,9 @@
     <color name="colorText">#eeeeee</color>
     <color name="colorText2">#dddddd</color>
     <color name="colorText3">#cccccc</color>
+
+    <color name="colorTextDisable">#666666</color>
+
+    <color name="color_control_highlight">#777777</color>
+    <color name="color_divider">#777777</color>
 </resources>
