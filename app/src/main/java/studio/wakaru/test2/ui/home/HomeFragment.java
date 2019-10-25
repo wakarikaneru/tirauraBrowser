@@ -287,8 +287,8 @@ public class HomeFragment extends Fragment {
 
                             homeViewModel.add(getContext());
 
-                            LinearLayout layoutGetstart = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_getstart, null);
-                            tubuyakiRoot.addView(layoutGetstart);
+                            LinearLayout layoutLoading = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_loading, null);
+                            tubuyakiRoot.addView(layoutLoading);
 
                             tubuyakiRoot.removeView(v);
                         }
@@ -300,7 +300,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        homeViewModel.refresh(getContext());
+        //homeViewModel.refresh(getContext());
 
         return root;
     }
