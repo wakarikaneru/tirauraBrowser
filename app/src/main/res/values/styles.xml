@@ -49,7 +49,15 @@
 
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:background">@color/colorBackground2</item>
-        <item name="android:textColorPrimary">@color/colorText2</item>
+
+        <item name="android:textColor">@color/primary_text_color_selector</item>
+
+        <item name="android:itemTextAppearance">@style/AppTheme.ItemTextAppearance</item>
+
+        <item name="android:textColorPrimary">@color/primary_text_color_selector</item>
+        <item name="android:textColorSecondary">@color/secondary_text_color_selector</item>
+        <item name="android:textColorTertiary">@color/tertiary_text_color_selector</item>
+
 
     </style>
 

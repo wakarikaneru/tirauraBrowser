@@ -55,6 +55,16 @@ public class MainActivity extends AppCompatActivity {
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
 
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+
         //ダークモード
         if (pref.getBoolean("dark", false)) {
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
@@ -63,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //ログイン情報を取得
+        cookie = pref.getString("COOKIE", "");
         new LoginTask().execute();
 
     }

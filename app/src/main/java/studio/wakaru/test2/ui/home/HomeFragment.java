@@ -1,8 +1,10 @@
 package studio.wakaru.test2.ui.home;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -34,6 +37,9 @@ import studio.wakaru.test2.R;
 import studio.wakaru.test2.SettingsActivity;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.util.Good;
+import studio.wakaru.test2.util.MyData;
+import studio.wakaru.test2.util.TiraXMLMain;
+import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
 public class HomeFragment extends Fragment {
@@ -267,10 +273,33 @@ public class HomeFragment extends Fragment {
                             public boolean onLongClick(View v) {
 
                                 if (!tiraURL.isEmpty()) {
-                                    //ブラウザ起動
-                                    Uri uri = Uri.parse(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
-                                    Intent i = new Intent(Intent.ACTION_VIEW, uri);
-                                    startActivity(i);
+                                    final String[] items = {"Goodする", "ブラウザで開く"};
+                                    new AlertDialog.Builder(getActivity())
+                                            .setCancelable(true)
+                                            .setTitle("このつぶやきを…")
+                                            .setItems(items, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    // item_which pressed
+                                                    Uri uri;
+                                                    switch (which) {
+                                                        case 0:
+                                                            //Good
+                                                            uri = Uri.parse(tiraURL + "?mode=fb_submit&Category=CT01&f=u&no=" + tno);
+                                                            new GoodTask().execute(uri.toString(), cookie);
+                                                            break;
+                                                        case 1:
+                                                            //ブラウザ起動
+                                                            uri = Uri.parse(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
+                                                            Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                                                            startActivity(i);
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
+                                            })
+                                            .show();
                                 }
 
                                 return true;
@@ -313,4 +342,22 @@ public class HomeFragment extends Fragment {
         homeViewModel.setScroll(mScrollView.getScrollY());
     }
 
+    //非同期でGoodをつける
+    private class GoodTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            //do your request in here so that you don't interrupt the UI thread
+            String url = params[0];
+            String cookie = params[1];
+            Tiraura.get(url, cookie);
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //Here you are done with the task
+            Toast.makeText(getContext(), "更新したとき反映されます", Toast.LENGTH_LONG).show();
+        }
+    }
 }
