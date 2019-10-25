@@ -83,6 +83,10 @@ public class TubuyakiFragment extends Fragment {
             }
         });
 
+        //スワイプで更新の操作説明
+        LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.res_getstart, null);
+        tubuyakiRoot.addView(getStart);
+
 
         //つぶやきデータを更新
         tubuyakiViewModel.getTubuyakiList().observe(this, new Observer<List<Tubuyaki>>() {
@@ -241,7 +245,13 @@ public class TubuyakiFragment extends Fragment {
         //tnoを設定する
         Bundle bundle = getArguments();
         if (bundle != null) {
-            tubuyakiViewModel.setTno(bundle.getInt("tno"));
+            int prevTno=tubuyakiViewModel.getTno();
+            int nowTno=bundle.getInt("tno");
+
+            if(prevTno!=nowTno){
+                tubuyakiViewModel.setTno(nowTno);
+                tubuyakiViewModel.refresh(getContext());
+            }
         }
 
         //tubuyakiViewModel.refresh(getContext());

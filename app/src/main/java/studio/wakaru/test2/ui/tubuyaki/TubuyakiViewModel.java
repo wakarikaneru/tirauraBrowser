@@ -66,13 +66,10 @@ public class TubuyakiViewModel extends ViewModel {
 
     public void setTno(int i) {
         tno = i;
-
-        refresh();
     }
 
-    public void refresh() {
-        LoadXML t = new LoadXML();
-        t.start();
+    public int getTno() {
+        return tno;
     }
 
     public void refresh(Context c) {

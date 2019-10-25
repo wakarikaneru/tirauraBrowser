@@ -98,8 +98,8 @@ public class HomeViewModel extends ViewModel {
 
                     if (reply) {
                         for (Tubuyaki t : list) {
-                            if (0 < t.tres) {
-                                URL uRes = new URL(xmlURL + "?tn=" + t.tno);
+                            if (0 < t.getTres()) {
+                                URL uRes = new URL(xmlURL + "?tn=" + t.getTno());
                                 TiraXMLMain tx = new TiraXMLMain(uRes.toString(), cookie);
                                 t.setRes(tx.getTubuyakiList());
                             }
@@ -133,8 +133,8 @@ public class HomeViewModel extends ViewModel {
 
                     if (reply) {
                         for (Tubuyaki t : list) {
-                            if (0 < t.tres) {
-                                URL uRes = new URL(xmlURL + "?tn=" + t.tno);
+                            if (0 < t.getTres()) {
+                                URL uRes = new URL(xmlURL + "?tn=" + t.getTno());
                                 TiraXMLMain tx = new TiraXMLMain(uRes.toString(), cookie);
                                 t.setRes(tx.getTubuyakiList());
                             }

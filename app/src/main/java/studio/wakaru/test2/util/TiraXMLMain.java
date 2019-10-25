@@ -202,6 +202,30 @@ public class TiraXMLMain {
         return list;
     }
 
+    public MyData getMyData() {
+        MyData myData = new MyData();
+        Element e = element;
+
+        myData.setMynum(Integer.parseInt(e.getElementsByTagName("mynum").item(0).getTextContent().trim()));
+        myData.setMyname(e.getElementsByTagName("myname").item(0).getTextContent().trim());
+        myData.setMytubu(Integer.parseInt(e.getElementsByTagName("mytubu").item(0).getTextContent().trim()));
+        myData.setMytira(Integer.parseInt(e.getElementsByTagName("mytira").item(0).getTextContent().trim()));
+        myData.setMyimg1(e.getElementsByTagName("myimg1").item(0).getTextContent().trim());
+        myData.setMyimg2(e.getElementsByTagName("myimg2").item(0).getTextContent().trim());
+        myData.setMyimg3(e.getElementsByTagName("myimg3").item(0).getTextContent().trim());
+        myData.setMybimg1(e.getElementsByTagName("mybimg1").item(0).getTextContent().trim());
+        myData.setMybimg2(e.getElementsByTagName("mybimg2").item(0).getTextContent().trim());
+        myData.setMybimg3(e.getElementsByTagName("mybimg3").item(0).getTextContent().trim());
+        myData.setMyhash(e.getElementsByTagName("myhash").item(0).getTextContent().trim());
+        myData.setMypoint(Integer.parseInt(e.getElementsByTagName("mypoint").item(0).getTextContent().trim()));
+        myData.setMymcount(Integer.parseInt(e.getElementsByTagName("mymcount").item(0).getTextContent().trim()));
+        myData.setMymcount2(Integer.parseInt(e.getElementsByTagName("mymcount2").item(0).getTextContent().trim()));
+        myData.setMytubulog(e.getElementsByTagName("mytubulog").item(0).getTextContent().trim());
+        myData.setMyreslog(e.getElementsByTagName("myreslog").item(0).getTextContent().trim());
+
+        return myData;
+    }
+
     public String getString() {
         return element.getTextContent();
     }
