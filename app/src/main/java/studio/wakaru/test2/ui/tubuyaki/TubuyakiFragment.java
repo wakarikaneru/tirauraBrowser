@@ -237,6 +237,24 @@ public class TubuyakiFragment extends Fragment {
                         }
                         resCount++;
                     }
+
+
+                    //続きを取得する
+                    LinearLayout layoutContinue = (LinearLayout) getLayoutInflater().inflate(R.layout.res_continue, null);
+                    tubuyakiRoot.addView(layoutContinue);
+
+                    layoutContinue.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            tubuyakiViewModel.refresh(getContext());
+
+                            LinearLayout layoutLoading = (LinearLayout) getLayoutInflater().inflate(R.layout.res_loading, null);
+                            tubuyakiRoot.addView(layoutLoading);
+
+                            tubuyakiRoot.removeView(v);
+                        }
+                    });
                 }
                 swipe.setRefreshing(false);
             }
