@@ -68,9 +68,8 @@ public class Tubuyaki {
         tdata = format(tdata);
     }
 
-    public String format(String str) {
+    public static String format(String str) {
         String f = str;
-        f = StringEscapeUtils.unescapeXml(f);
         f = f.replaceAll("<br>", System.lineSeparator());
         f = f.replaceAll("\\<[^>]*>", "");
 

@@ -142,7 +142,7 @@ public class HomeFragment extends Fragment {
 
                         // つぶやきを簡易表示
 
-                        textTdata.setText(t.getTdata());
+                        textTdata.setText(Tubuyaki.format(t.getTdata()));
 
                         if (entryLineLimit != 0) {
                             if (entryLineLimit == 1) {
@@ -195,7 +195,7 @@ public class HomeFragment extends Fragment {
                                         textResNoRes.setText(String.valueOf(resCount));
 
                                         // レスを簡易表示
-                                        textTdataRes.setText(r.getTdata());
+                                        textTdataRes.setText(Tubuyaki.format(r.getTdata()));
 
                                         if (replyLineLimit != 0) {
                                             if (replyLineLimit == 1) {

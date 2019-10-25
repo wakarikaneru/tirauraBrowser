@@ -2,8 +2,10 @@ package studio.wakaru.test2.ui.tubuyaki;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -115,7 +118,10 @@ public class TubuyakiFragment extends Fragment {
 
                             textResNo.setText(String.valueOf(resCount));
 
-                            textTdata.setText(t.getTdata());
+                            textTdata.setAutoLinkMask(Linkify.WEB_URLS);
+                            //textTdata.setText(HtmlCompat.fromHtml(t.getTdata(),HtmlCompat.FROM_HTML_MODE_COMPACT));
+                            textTdata.setText(Tubuyaki.format(t.getTdata()));
+
                             textTdate.setText(t.getTdate());
                             textUname.setText(t.getUname());
                             textTres.setText("(" + t.getTres() + "レス)");
@@ -167,7 +173,10 @@ public class TubuyakiFragment extends Fragment {
 
                             textResNo.setText(String.valueOf(resCount));
 
-                            textTdata.setText(t.getTdata());
+                            textTdata.setAutoLinkMask(Linkify.WEB_URLS);
+                            //textTdata.setText(HtmlCompat.fromHtml(t.getTdata(),HtmlCompat.FROM_HTML_MODE_COMPACT));
+                            textTdata.setText(Tubuyaki.format(t.getTdata()));
+
                             textTdate.setText(t.getTdate());
                             textUname.setText(t.getUname());
                             textTres.setVisibility(View.GONE);//textTres.setText("(" + t.getTres() + "レス)");

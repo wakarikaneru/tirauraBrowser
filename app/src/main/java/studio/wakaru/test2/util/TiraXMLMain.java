@@ -1,5 +1,6 @@
 package studio.wakaru.test2.util;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -92,8 +93,8 @@ public class TiraXMLMain {
             t.setUimg3(e.getElementsByTagName("uimg3").item(0).getTextContent().trim());
             t.setUname(e.getElementsByTagName("uname").item(0).getTextContent().trim());
 
-            t.formatTdata();
-
+            t.setTdata(StringEscapeUtils.unescapeXml(t.getTdata()));
+            t.setThash(StringEscapeUtils.unescapeXml(t.getThash()));
             list.add(t);
         }
 
