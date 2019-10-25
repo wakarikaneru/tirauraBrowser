@@ -276,6 +276,24 @@ public class HomeFragment extends Fragment {
                         });
 
                     }
+
+                    //続きを取得する
+                    LinearLayout layoutContinue = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_continue, null);
+                    tubuyakiRoot.addView(layoutContinue);
+
+                    layoutContinue.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            homeViewModel.add(getContext());
+
+                            LinearLayout layoutGetstart = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_getstart, null);
+                            tubuyakiRoot.addView(layoutGetstart);
+
+                            tubuyakiRoot.removeView(v);
+                        }
+                    });
+
                 }
 
                 swipe.setRefreshing(false);

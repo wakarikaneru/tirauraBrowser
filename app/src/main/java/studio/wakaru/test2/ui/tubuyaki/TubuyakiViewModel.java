@@ -20,6 +20,8 @@ import studio.wakaru.test2.util.Tubuyaki;
 
 public class TubuyakiViewModel extends ViewModel {
 
+    private boolean lock;
+
     private MutableLiveData<List<Tubuyaki>> mTubuyakiList;
     private MutableLiveData<Integer> scroll;
 
@@ -30,6 +32,7 @@ public class TubuyakiViewModel extends ViewModel {
 
     public TubuyakiViewModel() {
         Log.d("TubuyakiViewModel", "TubuyakiViewModel constructor");
+        lock = false;
         mTubuyakiList = new MutableLiveData<>();
         scroll = new MutableLiveData<>();
 
@@ -77,24 +80,30 @@ public class TubuyakiViewModel extends ViewModel {
 
     class LoadXML extends Thread {
         public void run() {
-            if (tno != 0) {
+            if (!lock) {
+                lock = true;
 
-                try {
-                    //tiraXMLを読み込む
-                    URL u = new URL(xmlURL + "?tn=" + tno);
-                    TiraXMLMain tiraXML = new TiraXMLMain(u.toString());
-                    List<Tubuyaki> list = tiraXML.getTubuyakiList();
+                if (tno != 0) {
 
-                    mTubuyakiList.postValue(list);
+                    try {
+                        //tiraXMLを読み込む
+                        URL u = new URL(xmlURL + "?tn=" + tno);
+                        TiraXMLMain tiraXML = new TiraXMLMain(u.toString());
+                        List<Tubuyaki> list = tiraXML.getTubuyakiList();
 
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                        mTubuyakiList.postValue(list);
+
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                        mTubuyakiList.postValue(new ArrayList<Tubuyaki>());
+                    }
+                } else {
+
                     mTubuyakiList.postValue(new ArrayList<Tubuyaki>());
+
                 }
-            } else {
 
-                mTubuyakiList.postValue(new ArrayList<Tubuyaki>());
-
+                lock = false;
             }
         }
     }

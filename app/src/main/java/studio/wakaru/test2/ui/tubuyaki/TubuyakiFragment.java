@@ -1,6 +1,8 @@
 package studio.wakaru.test2.ui.tubuyaki;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -38,6 +40,7 @@ public class TubuyakiFragment extends Fragment {
 
     private ScrollView mScrollView;
 
+    private String tiraURL;
     private String imgURL;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -47,6 +50,7 @@ public class TubuyakiFragment extends Fragment {
 
         //設定を読み込む
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        tiraURL = pref.getString("tiraura_resource", "");
         imgURL = pref.getString("img_resource", "");
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
@@ -150,6 +154,23 @@ public class TubuyakiFragment extends Fragment {
                                             .setPositiveButton(android.R.string.ok, null)
                                             .setCancelable(true)
                                             .show();
+                                }
+                            });
+
+                            final int tno = t.getTno();
+                            //長押しでブラウザで開く
+                            lt.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View v) {
+
+                                    if (!tiraURL.isEmpty()) {
+                                        //ブラウザ起動
+                                        Uri uri = Uri.parse(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
+                                        Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                                        startActivity(i);
+                                    }
+
+                                    return true;
                                 }
                             });
 
