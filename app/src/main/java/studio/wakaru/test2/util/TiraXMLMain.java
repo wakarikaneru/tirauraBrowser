@@ -41,7 +41,7 @@ public class TiraXMLMain {
         loadTiraXMLWithCookies(url, cookies);
     }
 
-    public void loadTiraXML(String url) {
+    public TiraXMLMain loadTiraXML(String url) {
 
         Document document = null;
         try {
@@ -74,59 +74,17 @@ public class TiraXMLMain {
 
         // 4. Documentから、ルート要素を取得する
         this.element = document.getDocumentElement();
+
+        return this;
     }
 
-    public void loadTiraXMLWithCookies(String urlStr, String cookies) {
+    public TiraXMLMain loadTiraXMLWithCookies(String urlStr, String cookies) {
 
         Document document = null;
 
-        HttpURLConnection con = null;
-        InputStream is = null;
-
         String xmlStr = "";
 
-        try {
-            URL url = new URL(urlStr);
-            con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            con.setRequestProperty("Cookie", cookies);
-            con.connect();
-            is = con.getInputStream();
-
-            // レスポンスコードの確認します。
-            int responseCode = con.getResponseCode();
-            if (responseCode != HttpURLConnection.HTTP_OK) {
-                throw new IOException("HTTP responseCode: " + responseCode);
-            }
-
-            // 文字列化します。
-            StringBuilder sb = new StringBuilder();
-
-            is = con.getInputStream();
-            if (is != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
-
-                xmlStr = sb.toString();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (con != null) {
-                con.disconnect();
-            }
-        }
+        xmlStr = Tiraura.get(urlStr, cookies);
 
         Log.d("TiraXMLMain", xmlStr);
 
@@ -160,6 +118,8 @@ public class TiraXMLMain {
 
         // 4. Documentから、ルート要素を取得する
         this.element = document.getDocumentElement();
+
+        return this;
     }
 
     public Element getElement() {
@@ -218,8 +178,12 @@ public class TiraXMLMain {
         myData.setMybimg3(e.getElementsByTagName("mybimg3").item(0).getTextContent().trim());
         myData.setMyhash(e.getElementsByTagName("myhash").item(0).getTextContent().trim());
         myData.setMypoint(Integer.parseInt(e.getElementsByTagName("mypoint").item(0).getTextContent().trim()));
-        myData.setMymcount(Integer.parseInt(e.getElementsByTagName("mymcount").item(0).getTextContent().trim()));
-        myData.setMymcount2(Integer.parseInt(e.getElementsByTagName("mymcount2").item(0).getTextContent().trim()));
+        if (!e.getElementsByTagName("mymcount").item(0).getTextContent().trim().isEmpty()) {
+            myData.setMymcount(Integer.parseInt(e.getElementsByTagName("mymcount").item(0).getTextContent().trim()));
+        }
+        if (!e.getElementsByTagName("mymcount2").item(0).getTextContent().trim().isEmpty()) {
+            myData.setMymcount2(Integer.parseInt(e.getElementsByTagName("mymcount2").item(0).getTextContent().trim()));
+        }
         myData.setMytubulog(e.getElementsByTagName("mytubulog").item(0).getTextContent().trim());
         myData.setMyreslog(e.getElementsByTagName("myreslog").item(0).getTextContent().trim());
 

@@ -42,6 +42,7 @@ public class TubuyakiFragment extends Fragment {
 
     private String tiraURL;
     private String imgURL;
+    private String cookie;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class TubuyakiFragment extends Fragment {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         tiraURL = pref.getString("tiraura_resource", "");
         imgURL = pref.getString("img_resource", "");
+        cookie = pref.getString("COOKIE", "");
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 

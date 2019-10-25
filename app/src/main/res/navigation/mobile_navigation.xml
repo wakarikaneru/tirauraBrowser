@@ -8,18 +8,15 @@
     <fragment
         android:id="@+id/navigation_new"
         android:name="studio.wakaru.test2.ui.home.HomeFragment"
-        android:label="@string/title_new"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_tubuyaki"
         android:name="studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment"
-        android:label="@string/title_tubuyaki"
         tools:layout="@layout/fragment_tubuyaki" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="studio.wakaru.test2.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 </navigation>

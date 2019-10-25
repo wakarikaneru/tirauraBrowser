@@ -45,6 +45,7 @@ public class HomeFragment extends Fragment {
     private String tiraURL;
     private String xmlURL;
     private String imgURL;
+    private String cookie;
     private int replyCount;
 
     private int entryLineLimit;
@@ -61,6 +62,7 @@ public class HomeFragment extends Fragment {
         tiraURL = pref.getString("tiraura_resource", "");
         xmlURL = pref.getString("xml_resource", "");
         imgURL = pref.getString("img_resource", "");
+        cookie = pref.getString("COOKIE", "");
         replyCount = Integer.parseInt(pref.getString("reply_count", "0"));
 
         entryLineLimit = Integer.parseInt(pref.getString("entry_line_limit", "0"));
