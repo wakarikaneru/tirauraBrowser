@@ -2,17 +2,15 @@ package studio.wakaru.test2;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -23,6 +21,10 @@ import androidx.preference.PreferenceManager;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class MainActivity extends AppCompatActivity {
+
+    private String tiraURL;
+    private String xmlURL;
+    private String imgURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +40,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        //ダークモード
+//設定読み込み
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        if (pref.getBoolean("dark",false)) {
+        tiraURL = pref.getString("tiraura_resource", "");
+        xmlURL = pref.getString("xml_resource", "");
+        imgURL = pref.getString("img_resource", "");
+
+        //ダークモード
+        if (pref.getBoolean("dark", false)) {
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -63,7 +70,27 @@ public class MainActivity extends AppCompatActivity {
         switch (itemId) {
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+
                 return true;
+
+            case R.id.action_login:
+                if (!tiraURL.isEmpty()) {
+                    //ブラウザ起動
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
+
+                return true;
+
+            case R.id.action_tiraura:
+                if (!tiraURL.isEmpty()) {
+                    //ブラウザ起動
+                    Uri uri = Uri.parse(tiraURL);
+                    Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(i);
+                }
+
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
