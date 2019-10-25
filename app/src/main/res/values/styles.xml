@@ -41,7 +41,7 @@
 
     <style name="AppTheme.ItemTextAppearance" parent="Theme.AppCompat.Light.DarkActionBar">
 
-        <item name="android:textColor">@color/colorText2</item>
+        <item name="android:textColor">@color/primary_text_color_selector</item>
 
     </style>
 

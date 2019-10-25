@@ -3,9 +3,11 @@ package studio.wakaru.test2;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -18,6 +20,11 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 
+import java.io.IOException;
+
+import studio.wakaru.test2.util.MyData;
+import studio.wakaru.test2.util.TiraXMLMain;
+
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private String tiraURL;
     private String xmlURL;
     private String imgURL;
+    private String cookie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +48,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-//設定読み込み
+        //設定読み込み
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         tiraURL = pref.getString("tiraura_resource", "");
         xmlURL = pref.getString("xml_resource", "");
         imgURL = pref.getString("img_resource", "");
+        cookie = pref.getString("COOKIE", "");
 
         //ダークモード
         if (pref.getBoolean("dark", false)) {
@@ -53,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
+        //ログイン情報を取得
+        new LoginTask().execute();
 
     }
 
@@ -95,5 +106,33 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    //ログイン状況を取得
+    private class LoginTask extends AsyncTask<String, Void, MyData> {
+
+        @Override
+        protected MyData doInBackground(String... params) {
+            //do your request in here so that you don't interrupt the UI thread
+            MyData m = new TiraXMLMain(xmlURL, cookie).getMyData();
+            if (m != null) {
+                return m;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(MyData user) {
+            //Here you are done with the task
+
+            if (user!= null) {
+                getSupportActionBar().setTitle(user.getMyname());
+                Toast.makeText(MainActivity.this, user.getMyname()+"でログインしています", Toast.LENGTH_LONG).show();
+            }else{
+                getSupportActionBar().setTitle("ログインしていません");
+                Toast.makeText(MainActivity.this, "ログインしていません", Toast.LENGTH_LONG).show();
+            }
+
+        }
     }
 }
