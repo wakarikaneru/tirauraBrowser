@@ -62,9 +62,6 @@
             app:title="@string/new_reply_count_title"
             app:useSimpleSummaryProvider="true" />
 
-    </PreferenceCategory>
-
-    <PreferenceCategory app:title="@string/new_detail_header">
         <ListPreference
             app:defaultValue="5"
             app:entries="@array/line_limit_count"
