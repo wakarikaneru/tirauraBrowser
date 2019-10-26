@@ -288,7 +288,7 @@ public class HomeFragment extends Fragment {
                                                         case 1:
                                                             //レス
                                                             uri = Uri.parse(tiraURL);
-                                                            new ResTask().execute(uri.toString(), cookie);
+                                                            new ResTask().execute(uri.toString(), cookie, String.valueOf(tno));
                                                             break;
                                                         case 2:
                                                             //ブラウザ起動
@@ -339,6 +339,16 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        //ログイン情報を取得
+        cookie = pref.getString("COOKIE", "");
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         homeViewModel.setScroll(mScrollView.getScrollY());
@@ -371,10 +381,11 @@ public class HomeFragment extends Fragment {
             //do your request in here so that you don't interrupt the UI thread
             String url = params[0];
             String cookie = params[1];
-            String str = Tiraura.postTubuyaki(url, cookie, "title", "wakaru", "", "615", "", "テスト", "チラ裏ブラウザ");
+            String tno = params[2];
+            //String str = Tiraura.postTubuyaki(url, cookie, "title", "wakaru", "", "615", "", "テスト", "チラ裏ブラウザ",null);
+            String str = Tiraura.postRes(url, cookie, tno, "0", "625", tno, "テスト", "625", "", "wakaru", "レステスト", null);
 
-
-            Log.d("HomeFragment", str);
+            //Log.d("HomeFragment", str);
             return str;
         }
 

@@ -127,7 +127,7 @@ public class Tiraura {
     }
 
 
-    public static String postTubuyaki(String urlStr, String cookies, String title, String name2, String image, String cookieid, String t_session, String data, String hash) {
+    public static String postTubuyaki(String urlStr, String cookies, String title, String name2, String image, String cookieid, String t_session, String data, String hash, String upfile) {
 
         HttpURLConnection con = null;
         OutputStream os;
@@ -146,6 +146,8 @@ public class Tiraura {
         kv.put("t_session", t_session);
         kv.put("Data", data);
         kv.put("hash", hash);
+
+        kv.put("upfile", upfile);
 
         try {
             URL url = new URL(urlStr);
@@ -212,7 +214,7 @@ public class Tiraura {
         return str;
     }
 
-    public static String postRes(String urlStr, String cookies, String upform,String title, String name2, String image, String cookieid, String t_session, String data, String hash) {
+    public static String postRes(String urlStr, String cookies, String upform, String scount, String tubuid, String no, String title, String cookieid, String t_session, String name, String data, String upfile) {
 
         HttpURLConnection con = null;
         OutputStream os;
@@ -223,14 +225,19 @@ public class Tiraura {
         HashMap kv = new HashMap<String, String>();
         kv.put("mode", "bbs_write");
         kv.put("Category", "CT01");
-        kv.put("upform", "s");
+        kv.put("upform", upform);
+        kv.put("scount", scount);
         kv.put("Title", title);
-        kv.put("Name2", name2);
-        kv.put("image", image);
+        kv.put("tubuid", tubuid);
+        kv.put("f", "u");
+        kv.put("no", no);
         kv.put("cookieid", cookieid);
         kv.put("t_session", t_session);
+
+        kv.put("Name", name);
         kv.put("Data", data);
-        kv.put("hash", hash);
+
+        kv.put("upfile", upfile);
 
         try {
             URL url = new URL(urlStr);
