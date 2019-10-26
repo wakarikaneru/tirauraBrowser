@@ -6,9 +6,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +19,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -34,7 +30,6 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import studio.wakaru.test2.R;
-import studio.wakaru.test2.ui.home.HomeFragment;
 import studio.wakaru.test2.util.Good;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
@@ -363,7 +358,7 @@ public class TubuyakiFragment extends Fragment {
             //do your request in here so that you don't interrupt the UI thread
             String url = params[0];
             String cookie = params[1];
-            Tiraura.get(url, cookie);
+            Tiraura.getXML(url, cookie);
             return "";
         }
 

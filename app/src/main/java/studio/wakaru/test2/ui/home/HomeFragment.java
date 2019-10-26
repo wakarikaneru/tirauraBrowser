@@ -33,13 +33,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import studio.wakaru.test2.MainActivity;
 import studio.wakaru.test2.R;
-import studio.wakaru.test2.SettingsActivity;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.util.Good;
-import studio.wakaru.test2.util.MyData;
-import studio.wakaru.test2.util.TiraXMLMain;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
@@ -277,7 +273,7 @@ public class HomeFragment extends Fragment {
                                     final String[] items = {"Goodする", "レスする", "ブラウザで開く"};
                                     new AlertDialog.Builder(getActivity())
                                             .setCancelable(true)
-                                            .setTitle("このつぶやきを…")
+                                            .setTitle("つぶやきID" + tno)
                                             .setItems(items, new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
@@ -356,7 +352,7 @@ public class HomeFragment extends Fragment {
             //do your request in here so that you don't interrupt the UI thread
             String url = params[0];
             String cookie = params[1];
-            Tiraura.get(url, cookie);
+            Tiraura.getXML(url, cookie);
             return "";
         }
 
@@ -376,14 +372,29 @@ public class HomeFragment extends Fragment {
             String url = params[0];
             String cookie = params[1];
             String str = Tiraura.postTubuyaki(url, cookie, "title", "wakaru", "", "615", "", "テスト", "チラ裏ブラウザ");
+
+
             Log.d("HomeFragment", str);
-            return "";
+            return str;
         }
 
         @Override
         protected void onPostExecute(String s) {
             //Here you are done with the task
             Toast.makeText(getContext(), "更新したとき反映されます", Toast.LENGTH_LONG).show();
+
+/*
+            WebView wv = new WebView(getActivity());
+            //wv.loadData(s, "text/html", "EUC-JP");
+            wv.loadUrl("http://tiraura.orz.hm/rbbs.cgi");
+*/
+
+            TextView tv = new TextView(getActivity());
+            tv.setText(s);
+
+            final LinearLayout root = getActivity().findViewById(R.id.tubuyaki_root);
+            root.removeAllViews();
+            root.addView(tv);
         }
     }
 }

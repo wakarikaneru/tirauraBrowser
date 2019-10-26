@@ -81,7 +81,7 @@ public class TiraXMLMain {
 
         String xmlStr = "";
 
-        xmlStr = Tiraura.get(urlStr, cookies);
+        xmlStr = Tiraura.getXML(urlStr, cookies);
 
         Log.d("TiraXMLMain", xmlStr);
 
