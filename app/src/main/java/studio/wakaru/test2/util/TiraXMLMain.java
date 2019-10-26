@@ -10,15 +10,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,26 +163,37 @@ public class TiraXMLMain {
         MyData myData = new MyData();
         Element e = element;
 
-        myData.setMynum(Integer.parseInt(e.getElementsByTagName("mynum").item(0).getTextContent().trim()));
-        myData.setMyname(e.getElementsByTagName("myname").item(0).getTextContent().trim());
-        myData.setMytubu(Integer.parseInt(e.getElementsByTagName("mytubu").item(0).getTextContent().trim()));
-        myData.setMytira(Integer.parseInt(e.getElementsByTagName("mytira").item(0).getTextContent().trim()));
-        myData.setMyimg1(e.getElementsByTagName("myimg1").item(0).getTextContent().trim());
-        myData.setMyimg2(e.getElementsByTagName("myimg2").item(0).getTextContent().trim());
-        myData.setMyimg3(e.getElementsByTagName("myimg3").item(0).getTextContent().trim());
-        myData.setMybimg1(e.getElementsByTagName("mybimg1").item(0).getTextContent().trim());
-        myData.setMybimg2(e.getElementsByTagName("mybimg2").item(0).getTextContent().trim());
-        myData.setMybimg3(e.getElementsByTagName("mybimg3").item(0).getTextContent().trim());
-        myData.setMyhash(e.getElementsByTagName("myhash").item(0).getTextContent().trim());
-        myData.setMypoint(Integer.parseInt(e.getElementsByTagName("mypoint").item(0).getTextContent().trim()));
-        if (!e.getElementsByTagName("mymcount").item(0).getTextContent().trim().isEmpty()) {
-            myData.setMymcount(Integer.parseInt(e.getElementsByTagName("mymcount").item(0).getTextContent().trim()));
+        if (null != e.getElementsByTagName("mynum").item(0)) {
+
+            if (!e.getElementsByTagName("mynum").item(0).getTextContent().trim().isEmpty()) {
+                myData.setMynum(Integer.parseInt(e.getElementsByTagName("mynum").item(0).getTextContent().trim()));
+            }
+            myData.setMyname(e.getElementsByTagName("myname").item(0).getTextContent().trim());
+            if (!e.getElementsByTagName("mytubu").item(0).getTextContent().trim().isEmpty()) {
+                myData.setMytubu(Integer.parseInt(e.getElementsByTagName("mytubu").item(0).getTextContent().trim()));
+            }
+            if (!e.getElementsByTagName("mytira").item(0).getTextContent().trim().isEmpty()) {
+                myData.setMytira(Integer.parseInt(e.getElementsByTagName("mytira").item(0).getTextContent().trim()));
+            }
+            myData.setMyimg1(e.getElementsByTagName("myimg1").item(0).getTextContent().trim());
+            myData.setMyimg2(e.getElementsByTagName("myimg2").item(0).getTextContent().trim());
+            myData.setMyimg3(e.getElementsByTagName("myimg3").item(0).getTextContent().trim());
+            myData.setMybimg1(e.getElementsByTagName("mybimg1").item(0).getTextContent().trim());
+            myData.setMybimg2(e.getElementsByTagName("mybimg2").item(0).getTextContent().trim());
+            myData.setMybimg3(e.getElementsByTagName("mybimg3").item(0).getTextContent().trim());
+            myData.setMyhash(e.getElementsByTagName("myhash").item(0).getTextContent().trim());
+            if (!e.getElementsByTagName("mypoint").item(0).getTextContent().trim().isEmpty()) {
+                myData.setMypoint(Integer.parseInt(e.getElementsByTagName("mypoint").item(0).getTextContent().trim()));
+            }
+            if (!e.getElementsByTagName("mymcount").item(0).getTextContent().trim().isEmpty()) {
+                myData.setMymcount(Integer.parseInt(e.getElementsByTagName("mymcount").item(0).getTextContent().trim()));
+            }
+            if (!e.getElementsByTagName("mymcount2").item(0).getTextContent().trim().isEmpty()) {
+                myData.setMymcount2(Integer.parseInt(e.getElementsByTagName("mymcount2").item(0).getTextContent().trim()));
+            }
+            myData.setMytubulog(e.getElementsByTagName("mytubulog").item(0).getTextContent().trim());
+            myData.setMyreslog(e.getElementsByTagName("myreslog").item(0).getTextContent().trim());
         }
-        if (!e.getElementsByTagName("mymcount2").item(0).getTextContent().trim().isEmpty()) {
-            myData.setMymcount2(Integer.parseInt(e.getElementsByTagName("mymcount2").item(0).getTextContent().trim()));
-        }
-        myData.setMytubulog(e.getElementsByTagName("mytubulog").item(0).getTextContent().trim());
-        myData.setMyreslog(e.getElementsByTagName("myreslog").item(0).getTextContent().trim());
 
         return myData;
     }

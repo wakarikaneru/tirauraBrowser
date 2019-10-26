@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         cookie = pref.getString("COOKIE", "");
 
 
-
     }
 
     @Override
@@ -136,10 +135,10 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(MyData user) {
             //Here you are done with the task
 
-            if (user!= null) {
+            if (0 < user.getMynum()) {
                 getSupportActionBar().setTitle(user.getMyname());
-                Toast.makeText(MainActivity.this, user.getMyname()+"でログインしています", Toast.LENGTH_LONG).show();
-            }else{
+                Toast.makeText(MainActivity.this, user.getMyname() + "でログインしています", Toast.LENGTH_LONG).show();
+            } else {
                 getSupportActionBar().setTitle("ログインしていません");
                 Toast.makeText(MainActivity.this, "ログインしていません", Toast.LENGTH_LONG).show();
             }
