@@ -1,8 +1,10 @@
 package studio.wakaru.test2.ui.tubuyaki;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +34,9 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.ui.home.HomeFragment;
 import studio.wakaru.test2.util.Good;
+import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
 public class TubuyakiFragment extends Fragment {
@@ -42,6 +47,7 @@ public class TubuyakiFragment extends Fragment {
 
     private String tiraURL;
     private String imgURL;
+    private String cookie;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +58,7 @@ public class TubuyakiFragment extends Fragment {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         tiraURL = pref.getString("tiraura_resource", "");
         imgURL = pref.getString("img_resource", "");
+        cookie = pref.getString("COOKIE", "");
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -82,6 +89,10 @@ public class TubuyakiFragment extends Fragment {
                 tubuyakiViewModel.refresh(getContext());
             }
         });
+
+        //スワイプで更新の操作説明
+        LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.res_getstart, null);
+        tubuyakiRoot.addView(getStart);
 
 
         //つぶやきデータを更新
@@ -158,21 +169,46 @@ public class TubuyakiFragment extends Fragment {
                             });
 
                             final int tno = t.getTno();
+
                             //長押しでブラウザで開く
                             lt.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
                                 public boolean onLongClick(View v) {
 
                                     if (!tiraURL.isEmpty()) {
-                                        //ブラウザ起動
-                                        Uri uri = Uri.parse(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
-                                        Intent i = new Intent(Intent.ACTION_VIEW, uri);
-                                        startActivity(i);
+                                        final String[] items = {"Goodする", "ブラウザで開く"};
+                                        new AlertDialog.Builder(getActivity(),R.style.AppTheme_AlertDialogTheme)
+                                                .setCancelable(true)
+                                                .setTitle("このつぶやきを…")
+                                                .setItems(items, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        // item_which pressed
+                                                        Uri uri;
+                                                        switch (which) {
+                                                            case 0:
+                                                                //Good
+                                                                uri = Uri.parse(tiraURL + "?mode=fb_submit&Category=CT01&f=u&no=" + tno);
+                                                                new GoodTask().execute(uri.toString(), cookie);
+                                                                break;
+                                                            case 1:
+                                                                //ブラウザ起動
+                                                                uri = Uri.parse(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
+                                                                Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                                                                startActivity(i);
+                                                                break;
+                                                            default:
+                                                                break;
+                                                        }
+                                                    }
+                                                })
+                                                .show();
                                     }
 
                                     return true;
                                 }
                             });
+
 
                         } else {
                             lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
@@ -230,9 +266,67 @@ public class TubuyakiFragment extends Fragment {
                                 }
                             });
 
+                            final int tno = t.getTno();
+
+                            //長押しでブラウザで開く
+                            lt.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View v) {
+
+                                    if (!tiraURL.isEmpty()) {
+                                        final String[] items = {"Goodする"};
+                                        new AlertDialog.Builder(getActivity(),R.style.AppTheme_AlertDialogTheme)
+                                                .setCancelable(true)
+                                                .setTitle("このつぶやきを…")
+                                                .setItems(items, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        // item_which pressed
+                                                        Uri uri;
+                                                        switch (which) {
+                                                            case 0:
+                                                                //Good
+                                                                uri = Uri.parse(tiraURL + "?mode=fb_submit&Category=CT01&f=u&no=" + tno);
+                                                                new GoodTask().execute(uri.toString(), cookie);
+                                                                break;
+                                                            case 1:
+                                                                //ブラウザ起動
+                                                                uri = Uri.parse(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
+                                                                Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                                                                startActivity(i);
+                                                                break;
+                                                            default:
+                                                                break;
+                                                        }
+                                                    }
+                                                })
+                                                .show();
+                                    }
+
+                                    return true;
+                                }
+                            });
                         }
                         resCount++;
                     }
+
+
+                    //続きを取得する
+                    LinearLayout layoutContinue = (LinearLayout) getLayoutInflater().inflate(R.layout.res_continue, null);
+                    tubuyakiRoot.addView(layoutContinue);
+
+                    layoutContinue.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            tubuyakiViewModel.refresh(getContext());
+
+                            LinearLayout layoutLoading = (LinearLayout) getLayoutInflater().inflate(R.layout.res_loading, null);
+                            tubuyakiRoot.addView(layoutLoading);
+
+                            tubuyakiRoot.removeView(v);
+                        }
+                    });
                 }
                 swipe.setRefreshing(false);
             }
@@ -241,10 +335,16 @@ public class TubuyakiFragment extends Fragment {
         //tnoを設定する
         Bundle bundle = getArguments();
         if (bundle != null) {
-            tubuyakiViewModel.setTno(bundle.getInt("tno"));
+            int prevTno=tubuyakiViewModel.getTno();
+            int nowTno=bundle.getInt("tno");
+
+            if(prevTno!=nowTno){
+                tubuyakiViewModel.setTno(nowTno);
+                tubuyakiViewModel.refresh(getContext());
+            }
         }
 
-        tubuyakiViewModel.refresh(getContext());
+        //tubuyakiViewModel.refresh(getContext());
 
         return root;
     }
@@ -253,5 +353,24 @@ public class TubuyakiFragment extends Fragment {
     public void onPause() {
         super.onPause();
         tubuyakiViewModel.setScroll(mScrollView.getScrollY());
+    }
+
+    //非同期でGoodをつける
+    private class GoodTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            //do your request in here so that you don't interrupt the UI thread
+            String url = params[0];
+            String cookie = params[1];
+            Tiraura.get(url, cookie);
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //Here you are done with the task
+            Toast.makeText(getContext(), "更新したとき反映されます", Toast.LENGTH_LONG).show();
+        }
     }
 }

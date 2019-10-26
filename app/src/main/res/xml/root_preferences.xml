@@ -19,11 +19,13 @@
     <PreferenceCategory app:title="@string/general_header">
 
         <EditTextPreference
+            app:defaultValue="http://tiraura.orz.hm/tiraXML3.cgi"
             app:key="xml_resource"
             app:title="@string/general_xml_resource_title"
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
+            app:defaultValue="http://tiraura.orz.hm/usrimg/"
             app:key="img_resource"
             app:title="@string/general_img_resource_title"
             app:useSimpleSummaryProvider="true" />
@@ -81,6 +83,7 @@
 
     <PreferenceCategory app:title="@string/detail_header">
         <EditTextPreference
+            app:defaultValue="http://tiraura.orz.hm/rbbs.cgi"
             app:key="tiraura_resource"
             app:title="@string/general_tiraura_resource_title"
             app:useSimpleSummaryProvider="true" />

@@ -27,6 +27,7 @@ public class TubuyakiViewModel extends ViewModel {
 
     private String xmlURL;
     private String imgURL;
+    private String cookie;
 
     private int tno;
 
@@ -38,6 +39,7 @@ public class TubuyakiViewModel extends ViewModel {
 
         xmlURL = "";
         imgURL = "";
+        cookie = "";
         tno = 0;
 
     }
@@ -46,6 +48,7 @@ public class TubuyakiViewModel extends ViewModel {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(c);
         xmlURL = pref.getString("xml_resource", "");
         imgURL = pref.getString("img_resource", "");
+        cookie = pref.getString("COOKIE", "");
     }
 
 
@@ -63,13 +66,10 @@ public class TubuyakiViewModel extends ViewModel {
 
     public void setTno(int i) {
         tno = i;
-
-        refresh();
     }
 
-    public void refresh() {
-        LoadXML t = new LoadXML();
-        t.start();
+    public int getTno() {
+        return tno;
     }
 
     public void refresh(Context c) {
@@ -88,7 +88,7 @@ public class TubuyakiViewModel extends ViewModel {
                     try {
                         //tiraXMLを読み込む
                         URL u = new URL(xmlURL + "?tn=" + tno);
-                        TiraXMLMain tiraXML = new TiraXMLMain(u.toString());
+                        TiraXMLMain tiraXML = new TiraXMLMain(u.toString(), cookie);
                         List<Tubuyaki> list = tiraXML.getTubuyakiList();
 
                         mTubuyakiList.postValue(list);

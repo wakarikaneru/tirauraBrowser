@@ -30,6 +30,8 @@ public class HomeViewModel extends ViewModel {
     private String imgURL;
     private int entriesCount;
     private boolean reply;
+    private String cookie;
+
 
     public HomeViewModel() {
         Log.d("HomeViewModel", "HomeViewModel constructor");
@@ -40,6 +42,7 @@ public class HomeViewModel extends ViewModel {
 
         xmlURL = "";
         imgURL = "";
+        cookie = "";
         entriesCount = 10;
         reply = true;
     }
@@ -50,6 +53,7 @@ public class HomeViewModel extends ViewModel {
         imgURL = pref.getString("img_resource", "");
         entriesCount = Integer.parseInt(pref.getString("entries_count", "10"));
         reply = pref.getBoolean("reply", false);
+        cookie = pref.getString("COOKIE", "");
     }
 
     public LiveData<List<Tubuyaki>> getTubuyakiList() {
@@ -88,14 +92,15 @@ public class HomeViewModel extends ViewModel {
                     //tiraXMLを読み込む
                     nowEntry = 0;
                     URL u = new URL(xmlURL + "?hs=tiraura&st=" + nowEntry + "&li=" + entriesCount);
-                    TiraXMLMain tiraXML = new TiraXMLMain(u.toString());
+                    TiraXMLMain tiraXML = new TiraXMLMain(u.toString(), cookie);
+
                     List<Tubuyaki> list = tiraXML.getTubuyakiList();
 
                     if (reply) {
                         for (Tubuyaki t : list) {
-                            if (0 < t.tres) {
-                                URL uRes = new URL(xmlURL + "?tn=" + t.tno);
-                                TiraXMLMain tx = new TiraXMLMain(uRes.toString());
+                            if (0 < t.getTres()) {
+                                URL uRes = new URL(xmlURL + "?tn=" + t.getTno());
+                                TiraXMLMain tx = new TiraXMLMain(uRes.toString(), cookie);
                                 t.setRes(tx.getTubuyakiList());
                             }
                         }
@@ -123,14 +128,14 @@ public class HomeViewModel extends ViewModel {
                 try {
                     //tiraXMLを読み込む
                     URL u = new URL(xmlURL + "?hs=tiraura&st=" + nowEntry + "&li=" + entriesCount);
-                    TiraXMLMain tiraXML = new TiraXMLMain(u.toString());
+                    TiraXMLMain tiraXML = new TiraXMLMain(u.toString(), cookie);
                     List<Tubuyaki> list = tiraXML.getTubuyakiList();
 
                     if (reply) {
                         for (Tubuyaki t : list) {
-                            if (0 < t.tres) {
-                                URL uRes = new URL(xmlURL + "?tn=" + t.tno);
-                                TiraXMLMain tx = new TiraXMLMain(uRes.toString());
+                            if (0 < t.getTres()) {
+                                URL uRes = new URL(xmlURL + "?tn=" + t.getTno());
+                                TiraXMLMain tx = new TiraXMLMain(uRes.toString(), cookie);
                                 t.setRes(tx.getTubuyakiList());
                             }
                         }

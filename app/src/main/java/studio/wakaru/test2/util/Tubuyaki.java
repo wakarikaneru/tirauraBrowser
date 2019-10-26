@@ -29,25 +29,25 @@ public class Tubuyaki {
         <gooder>グッドしたユーザー一覧　id||名前||画像ファイル名|-|というフォーマット（||←小区切り　|-|←大区切り　適宜splitなどで処理を）
      */
 
-    public int tno;
-    public String tdate;
-    public String tdate2;
-    public String uname;
-    public int uid;
-    public String uimg1;
-    public String uimg2;
-    public String uimg3;
-    public String tdata;
-    public int tres;
-    public int tview;
-    public String thash;
-    public int parent;
-    public String tupfile1;
-    public String tupfile2;
-    public String tupfile3;
-    public String nanashiid;
-    public int tgood;
-    public String gooder;
+    private int tno;
+    private String tdate;
+    private String tdate2;
+    private String uname;
+    private int uid;
+    private String uimg1;
+    private String uimg2;
+    private String uimg3;
+    private String tdata;
+    private int tres;
+    private int tview;
+    private String thash;
+    private int parent;
+    private String tupfile1;
+    private String tupfile2;
+    private String tupfile3;
+    private String nanashiid;
+    private int tgood;
+    private String gooder;
 
     public List<Tubuyaki> res;
 

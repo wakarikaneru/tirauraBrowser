@@ -28,6 +28,7 @@
 
         <item name="android:listDivider">@drawable/divider</item>
         <item name="android:divider">@drawable/divider</item>
+        <item name="divider">@drawable/divider</item>
 
         <item name="colorControlHighlight">@color/color_control_highlight</item>
 
@@ -37,11 +38,12 @@
         <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
         <item name="android:alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
 
+
     </style>
 
     <style name="AppTheme.ItemTextAppearance" parent="Theme.AppCompat.Light.DarkActionBar">
 
-        <item name="android:textColor">@color/colorText2</item>
+        <item name="android:textColor">@color/primary_text_color_selector</item>
 
     </style>
 
@@ -49,8 +51,15 @@
 
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:background">@color/colorBackground2</item>
-        <item name="android:textColorPrimary">@color/colorText2</item>
+
+        <item name="android:textColorPrimary">@color/primary_text_color_selector</item>
+        <item name="android:textColorSecondary">@color/secondary_text_color_selector</item>
+        <item name="android:textColorTertiary">@color/tertiary_text_color_selector</item>
+
+        <item name="textColorAlertDialogListItem">@color/primary_text_color_selector</item>
+        <item name="android:textColorAlertDialogListItem">@color/primary_text_color_selector</item>
 
     </style>
+
 
 </resources>
