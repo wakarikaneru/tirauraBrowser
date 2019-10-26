@@ -125,7 +125,7 @@ public class HomeViewModel extends ViewModel {
 
                         //実行＆終了待ち;
                         try {
-                            List<Future<Tubuyaki>> futures = executor.invokeAll(fl);
+                            executor.invokeAll(fl);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
