@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -273,7 +274,7 @@ public class HomeFragment extends Fragment {
                             public boolean onLongClick(View v) {
 
                                 if (!tiraURL.isEmpty()) {
-                                    final String[] items = {"Goodする", "ブラウザで開く"};
+                                    final String[] items = {"Goodする", "レスする", "ブラウザで開く"};
                                     new AlertDialog.Builder(getActivity())
                                             .setCancelable(true)
                                             .setTitle("このつぶやきを…")
@@ -289,6 +290,11 @@ public class HomeFragment extends Fragment {
                                                             new GoodTask().execute(uri.toString(), cookie);
                                                             break;
                                                         case 1:
+                                                            //レス
+                                                            uri = Uri.parse(tiraURL);
+                                                            new ResTask().execute(uri.toString(), cookie);
+                                                            break;
+                                                        case 2:
                                                             //ブラウザ起動
                                                             uri = Uri.parse(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
                                                             Intent i = new Intent(Intent.ACTION_VIEW, uri);
@@ -351,6 +357,26 @@ public class HomeFragment extends Fragment {
             String url = params[0];
             String cookie = params[1];
             Tiraura.get(url, cookie);
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //Here you are done with the task
+            Toast.makeText(getContext(), "更新したとき反映されます", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    //非同期でレスをつける
+    private class ResTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            //do your request in here so that you don't interrupt the UI thread
+            String url = params[0];
+            String cookie = params[1];
+            String str = Tiraura.postTubuyaki(url, cookie, "title", "wakaru", "", "615", "", "テスト", "チラ裏ブラウザ");
+            Log.d("HomeFragment", str);
             return "";
         }
 
