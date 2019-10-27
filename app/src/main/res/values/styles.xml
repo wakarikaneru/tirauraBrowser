@@ -32,11 +32,13 @@
 
         <item name="colorControlHighlight">@color/color_control_highlight</item>
 
-        <item name="android:itemBackground">@color/colorBackground2</item>
+        <item name="android:itemBackground">@color/colorBackground3</item>
         <item name="android:itemTextAppearance">@style/AppTheme.ItemTextAppearance</item>
 
         <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
         <item name="android:alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
+
+        <item name="buttonStyle">@style/AppTheme.buttonStyle</item>
 
     </style>
 
@@ -49,7 +51,7 @@
     <style name="AppTheme.AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog">
 
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:background">@color/colorBackground2</item>
+        <item name="android:background">@color/colorBackground3</item>
 
         <item name="android:textColorPrimary">@color/primary_text_color_selector</item>
         <item name="android:textColorSecondary">@color/secondary_text_color_selector</item>
@@ -60,6 +62,17 @@
 
         <item name="listDividerAlertDialog">@color/color_divider</item>
         <item name="android:listDividerAlertDialog">@color/color_divider</item>
+
+    </style>
+
+    <style name="AppTheme.buttonStyle" parent="Widget.AppCompat.Button">
+
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:background">@color/colorBackground3</item>
+
+        <item name="android:textColorPrimary">@color/primary_text_color_selector</item>
+        <item name="android:textColorSecondary">@color/secondary_text_color_selector</item>
+        <item name="android:textColorTertiary">@color/tertiary_text_color_selector</item>
 
     </style>
 

@@ -39,7 +39,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.SettingsActivity;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.util.Good;
 import studio.wakaru.test2.util.Tiraura;
@@ -332,7 +334,7 @@ public class HomeFragment extends Fragment {
                         new GoodTask().execute(tiraURL, cookie, String.valueOf(tno));
                         return true;
                     case R.id.item_res:
-                        Toast.makeText(getContext(), "res", Toast.LENGTH_LONG).show();
+                        openPostActivity(tno);
                         return true;
                     case R.id.item_browser:
                         //ブラウザ起動
@@ -365,6 +367,15 @@ public class HomeFragment extends Fragment {
                 .beginTransaction()
                 .replace(R.id.nav_host_fragment, tf)
                 .commit();
+    }
+
+    public void openPostActivity(int tno) {
+
+        //画面遷移
+        Intent intent=new Intent(getActivity(), PostActivity.class);
+        intent.putExtra("tno", tno);
+        startActivity(intent);
+
     }
 
     public void openBrowser(int tno) {
