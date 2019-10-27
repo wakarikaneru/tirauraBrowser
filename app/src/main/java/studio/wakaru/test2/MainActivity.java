@@ -1,5 +1,6 @@
 package studio.wakaru.test2;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
@@ -75,6 +77,21 @@ public class MainActivity extends AppCompatActivity {
         cookie = pref.getString("COOKIE", "");
         new LoginTask().execute();
 
+    }
+
+    @Override
+    public void finish() {
+        new AlertDialog.Builder(this)
+                .setTitle("終了しますか？")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // OK button pressed
+                        MainActivity.super.finish();
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     @Override
