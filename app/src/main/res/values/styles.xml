@@ -32,6 +32,10 @@
 
         <item name="colorControlHighlight">@color/color_control_highlight</item>
 
+        <!--
+
+        -->
+
         <item name="android:itemBackground">@color/colorBackground3</item>
         <item name="android:itemTextAppearance">@style/AppTheme.ItemTextAppearance</item>
 
