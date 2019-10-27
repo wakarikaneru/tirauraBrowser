@@ -372,7 +372,7 @@ public class HomeFragment extends Fragment {
     public void openPostActivity(int tno) {
 
         //画面遷移
-        Intent intent=new Intent(getActivity(), PostActivity.class);
+        Intent intent = new Intent(getActivity(), PostActivity.class);
         intent.putExtra("tno", tno);
         startActivity(intent);
 
@@ -441,42 +441,5 @@ public class HomeFragment extends Fragment {
             Toast.makeText(getContext(), "更新したとき反映されます", Toast.LENGTH_LONG).show();
         }
     }
-
-    //非同期でレスをつける
-    private class ResTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            //do your request in here so that you don't interrupt the UI thread
-            String url = params[0];
-            String cookie = params[1];
-            String tno = params[2];
-            //String str = Tiraura.postTubuyaki(url, cookie, "title", "wakaru", "", "615", "", "テスト", "チラ裏ブラウザ",null);
-            String str = Tiraura.postRes(url, cookie, tno, "0", "625", tno, "テスト", "625", "", "wakaru", "レステスト", null);
-
-            //Log.d("HomeFragment", str);
-            return str;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            //Here you are done with the task
-            Toast.makeText(getContext(), "更新したとき反映されます", Toast.LENGTH_LONG).show();
-
-/*
-            WebView wv = new WebView(getActivity());
-            //wv.loadData(s, "text/html", "EUC-JP");
-            wv.loadUrl("http://tiraura.orz.hm/rbbs.cgi");
-*/
-
-            TextView tv = new TextView(getActivity());
-            tv.setText(s);
-
-            final LinearLayout root = getActivity().findViewById(R.id.tubuyaki_root);
-            root.removeAllViews();
-            root.addView(tv);
-        }
-    }
-
 
 }

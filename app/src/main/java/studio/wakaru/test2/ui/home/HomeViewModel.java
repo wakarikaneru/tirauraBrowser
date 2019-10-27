@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.TiraXMLMain;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
@@ -30,6 +31,7 @@ public class HomeViewModel extends ViewModel {
     private boolean lock;
 
     private MutableLiveData<List<Tubuyaki>> mTubuyakiList;
+    private MutableLiveData<MyData> mMyData;
     private MutableLiveData<Integer> scroll;
     private int nowEntry;
 
@@ -44,6 +46,7 @@ public class HomeViewModel extends ViewModel {
         Log.d("HomeViewModel", "HomeViewModel constructor");
         lock = false;
         mTubuyakiList = new MutableLiveData<>();
+        mMyData = new MutableLiveData<>();
         scroll = new MutableLiveData<>();
         nowEntry = 0;
 
@@ -110,6 +113,8 @@ public class HomeViewModel extends ViewModel {
                     URL u = new URL(xmlURL + "?hs=tiraura&st=" + nowEntry + "&li=" + entriesCount);
                     TiraXMLMain tiraXML = new TiraXMLMain(u.toString(), cookie);
 
+                    mMyData.postValue(tiraXML.getMyData());
+
                     List<Tubuyaki> list = tiraXML.getTubuyakiList();
 
                     //レスを取得
@@ -157,27 +162,6 @@ public class HomeViewModel extends ViewModel {
         @Override
         protected void onPostExecute(String s) {
             //Here you are done with the task
-        }
-    }
-
-    public class GetResThread implements Runnable {
-
-        private Tubuyaki tubuyaki;
-
-        GetResThread(Tubuyaki t) {
-            tubuyaki = t;
-        }
-
-        @Override
-        public void run() {
-            URL uRes = null;
-            try {
-                uRes = new URL(xmlURL + "?tn=" + tubuyaki.getTno());
-                TiraXMLMain tx = new TiraXMLMain(uRes.toString(), cookie);
-                tubuyaki.setRes(tx.getTubuyakiList());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
