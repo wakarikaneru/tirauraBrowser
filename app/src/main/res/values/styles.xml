@@ -38,7 +38,6 @@
         <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
         <item name="android:alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
 
-
     </style>
 
     <style name="AppTheme.ItemTextAppearance" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -58,6 +57,9 @@
 
         <item name="textColorAlertDialogListItem">@color/primary_text_color_selector</item>
         <item name="android:textColorAlertDialogListItem">@color/primary_text_color_selector</item>
+
+        <item name="listDividerAlertDialog">@color/color_divider</item>
+        <item name="android:listDividerAlertDialog">@color/color_divider</item>
 
     </style>
 
