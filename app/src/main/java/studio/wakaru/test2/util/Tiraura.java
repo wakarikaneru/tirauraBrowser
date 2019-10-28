@@ -1,10 +1,13 @@
 package studio.wakaru.test2.util;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Base64;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,8 +20,13 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.UUID;
 
 public class Tiraura {
+
+    public static final String TWO_HYPHENS = "--";
+    public static final String BOUNDARY = "----" + UUID.randomUUID().toString();
+    public static final String CRLF = "\r\n";
 
     public static String getXML(String urlStr, String cookies) {
 
@@ -127,7 +135,7 @@ public class Tiraura {
     }
 
 
-    public static String postTubuyaki(String urlStr, String cookies, String title, String name2, String image, String cookieid, String t_session, String data, String hash, String upfile) {
+    public static String postTubuyaki(String urlStr, String cookies, String title, String name2, String cookieid, String t_session, String data, String hash, String hashcheck, String image, byte[] upfile) {
 
         HttpURLConnection con = null;
         OutputStream os;
@@ -141,21 +149,27 @@ public class Tiraura {
         kv.put("upform", "s");
         kv.put("Title", title);
         kv.put("Name2", name2);
-        kv.put("image", image);
         kv.put("cookieid", cookieid);
         kv.put("t_session", t_session);
         kv.put("Data", data);
         kv.put("hash", hash);
+        kv.put("hashcheck", hashcheck);
 
-        kv.put("upfile", upfile);
+        //kv.put("image", "image.png");
+        //kv.put("upfile", upfile);
 
         try {
             URL url = new URL(urlStr);
+            //URL url = new URL("https://en0nu00pa8oq1j.x.pipedream.net");
             con = (HttpURLConnection) url.openConnection();
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setUseCaches(false);
             con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
+            ;
             con.setRequestProperty("Cookie", cookies);
 
-            con.connect();
 
             os = con.getOutputStream();
 
@@ -165,14 +179,51 @@ public class Tiraura {
 
             Set<String> keys = kv.keySet();
             for (String key : keys) {
-                //[key=value]形式の文字列に変換する。
-                builder.appendQueryParameter(key, (String) kv.get(key));
-            }
-            String param = builder.build().getQuery();
-            Log.d("Tiraura", param);
+                ps.print(TWO_HYPHENS + BOUNDARY);
+                ps.print(CRLF);
+                ps.print("Content-Disposition: form-data; name=\"" + key + "\"");
+                ps.print(CRLF);
 
-            ps.print(param);
+                ps.print(CRLF);
+                ps.print(kv.get(key));
+                ps.print(CRLF);
+            }
+
+
+            if (upfile != null) {
+                ps.print(TWO_HYPHENS + BOUNDARY);
+                ps.print(CRLF);
+                ps.print("Content-Disposition: form-data; name=\"upfile\"; filename=\"image.png\"");
+                ps.print(CRLF);
+                ps.print("Content-Type: image/png");
+                ps.print(CRLF);
+
+                ps.print(CRLF);
+                ps.write(upfile);
+                ps.print(CRLF);
+
+                Log.d("Tiraura", "upfile Upload");
+            } else {
+
+                ps.print(TWO_HYPHENS + BOUNDARY);
+                ps.print("Content-Disposition: form-data; name=\"upfile\"; filename=\""+image+"\"");
+                ps.print(CRLF);
+                ps.print("Content-Type: application/octet-stream");
+                ps.print(CRLF);
+
+                ps.print(CRLF);
+                ps.print("");
+                ps.print(CRLF);
+
+                Log.d("Tiraura", "upfile null");
+            }
+
+            ps.print(TWO_HYPHENS + BOUNDARY + TWO_HYPHENS);
+
             ps.close();
+
+            con.connect();
+
 
             is = con.getInputStream();
 
@@ -214,7 +265,8 @@ public class Tiraura {
         return str;
     }
 
-    public static String postRes(String urlStr, String cookies, String upform, String scount, String tubuid, String no, String title, String cookieid, String t_session, String name, String data, String upfile) {
+    public static String postRes(String urlStr, String cookies, String upform, String scount, String tubuid, String no, String title, String cookieid, String t_session, String nomove, String name, String data, String image, byte[] upfile) {
+
 
         HttpURLConnection con = null;
         OutputStream os;
@@ -233,19 +285,26 @@ public class Tiraura {
         kv.put("no", no);
         kv.put("cookieid", cookieid);
         kv.put("t_session", t_session);
+        kv.put("Nomove", nomove);
 
         kv.put("Name", name);
         kv.put("Data", data);
 
-        kv.put("upfile", upfile);
+        //kv.put("image", "image.png");
+        //kv.put("upfile", upfile);
 
         try {
             URL url = new URL(urlStr);
+            //URL url = new URL("https://en0nu00pa8oq1j.x.pipedream.net");
             con = (HttpURLConnection) url.openConnection();
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setUseCaches(false);
             con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
+            ;
             con.setRequestProperty("Cookie", cookies);
 
-            con.connect();
 
             os = con.getOutputStream();
 
@@ -255,14 +314,51 @@ public class Tiraura {
 
             Set<String> keys = kv.keySet();
             for (String key : keys) {
-                //[key=value]形式の文字列に変換する。
-                builder.appendQueryParameter(key, (String) kv.get(key));
-            }
-            String param = builder.build().getQuery();
-            Log.d("Tiraura", param);
+                ps.print(TWO_HYPHENS + BOUNDARY);
+                ps.print(CRLF);
+                ps.print("Content-Disposition: form-data; name=\"" + key + "\"");
+                ps.print(CRLF);
 
-            ps.print(param);
+                ps.print(CRLF);
+                ps.print(kv.get(key));
+                ps.print(CRLF);
+            }
+
+
+            if (upfile != null) {
+                ps.print(TWO_HYPHENS + BOUNDARY);
+                ps.print(CRLF);
+                ps.print("Content-Disposition: form-data; name=\"upfile\"; filename=\""+image+"\"");
+                ps.print(CRLF);
+                ps.print("Content-Type: image/png");
+                ps.print(CRLF);
+
+                ps.print(CRLF);
+                ps.write(upfile);
+                ps.print(CRLF);
+
+                Log.d("Tiraura", "upfile Upload");
+            } else {
+
+                ps.print(TWO_HYPHENS + BOUNDARY);
+                ps.print("Content-Disposition: form-data; name=\"upfile\"; filename=\"\"");
+                ps.print(CRLF);
+                ps.print("Content-Type: application/octet-stream");
+                ps.print(CRLF);
+
+                ps.print(CRLF);
+                ps.print("");
+                ps.print(CRLF);
+
+                Log.d("Tiraura", "upfile null");
+            }
+
+            ps.print(TWO_HYPHENS + BOUNDARY + TWO_HYPHENS);
+
             ps.close();
+
+            con.connect();
+
 
             is = con.getInputStream();
 
