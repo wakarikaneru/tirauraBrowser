@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -170,38 +171,32 @@ public class PostActivity extends AppCompatActivity {
             //画像を処理
             Bitmap image = null;
             byte[] imageByteArray = null;
-            String fileName = "image.jpg";
+            String fileName = "image.png";
 
             try {
                 if (!upFile.isEmpty()) {
+                    
+                    //画像を取得
                     ByteArrayOutputStream baos;
 
                     BufferedInputStream inputStream = new BufferedInputStream(getContentResolver().openInputStream(Uri.parse(upFile)));
                     image = BitmapFactory.decodeStream(inputStream);
 
-                    //ファイルサイズを取得
                     baos = new ByteArrayOutputStream();
-                    image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    image.compress(Bitmap.CompressFormat.PNG, 0, baos);
                     imageByteArray = baos.toByteArray();
+
+                    //ファイルサイズを取得
                     int imageSize = imageByteArray.length;
                     Log.d("PostActivity", "imageSize " + imageSize / 1024 + "KB");
 
                     //ファイルサイズが大きい場合、圧縮をかける
-                    if (1024 * 1024 < imageSize) {
-                        double targetBytes = 1024.0 * 1024.0 * 0.9;
-                        double ratio = imageSize / targetBytes;
-                        Log.d("PostActivity", "imageSize ratio " + ratio);
-                        int quality = (int) Math.floor(100.0 / ratio);
-                        Log.d("PostActivity", "imageSize setQuality " + quality);
+                    int targetFileSize = (int) Math.floor(1024.0 * 1024.0 * 0.9);
+                    imageByteArray = imageCompress(targetFileSize, imageByteArray);
 
-                        baos = new ByteArrayOutputStream();
-                        image.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-                        imageByteArray = baos.toByteArray();
-                        image = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
-                        int compressedImageSize = imageByteArray.length;
-
-                        Log.d("PostActivity", "imageSize compressed " + compressedImageSize / 1024 + "KB");
-                    }
+                    //圧縮後のファイルサイズを取得
+                    int compressedImageSize = imageByteArray.length;
+                    Log.d("PostActivity", "imageSize compressed " + compressedImageSize / 1024 + "KB");
 
                 }
             } catch (FileNotFoundException e) {
@@ -224,5 +219,34 @@ public class PostActivity extends AppCompatActivity {
             //Here you are done with the task
             Toast.makeText(getApplicationContext(), "送信しました", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public static byte[] imageCompress(int targetBytes, byte[] imageByteArray) {
+
+        byte[] compressedImageByteArray = null;
+        Bitmap image = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
+
+        float scale = 1.0f;
+        for (int i = 0; i < 10; i++) {
+            Matrix matrix = new Matrix();
+            matrix.setScale(scale, scale);
+
+            Bitmap compressedImage = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            compressedImage.compress(Bitmap.CompressFormat.PNG, 1, baos);
+            compressedImageByteArray = baos.toByteArray();
+
+            int compressedImageSize = compressedImageByteArray.length;
+
+            Log.d("PostActivity", "compress " + compressedImageSize / 1024 + "KB");
+            if (compressedImageSize <= targetBytes) {
+                break;
+            } else {
+                scale = scale / 2;
+            }
+        }
+
+        return compressedImageByteArray;
     }
 }
