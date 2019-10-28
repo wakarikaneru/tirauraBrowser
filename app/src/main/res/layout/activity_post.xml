@@ -40,7 +40,8 @@
             android:id="@+id/switch_sage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="sage" />
+            android:text="sage"
+            android:textColor="@color/colorText2" />
     </LinearLayout>
 
     <LinearLayout

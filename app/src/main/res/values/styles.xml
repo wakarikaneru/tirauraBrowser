@@ -41,6 +41,8 @@
         <item name="android:itemBackground">@color/colorBackground3</item>
         <item name="android:itemTextAppearance">@style/AppTheme.ItemTextAppearance</item>
 
+        <item name="switchStyle">@style/AppTheme.SwitchStyle</item>
+
         <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
         <item name="android:alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
 
@@ -49,6 +51,12 @@
     </style>
 
     <style name="AppTheme.ItemTextAppearance" parent="TextAppearance.AppCompat">
+
+        <item name="android:textColor">@color/primary_text_color_selector</item>
+
+    </style>
+
+    <style name="AppTheme.SwitchStyle" parent="Widget.AppCompat.CompoundButton.Switch">
 
         <item name="android:textColor">@color/primary_text_color_selector</item>
 
