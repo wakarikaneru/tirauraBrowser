@@ -2,6 +2,7 @@ package studio.wakaru.test2.ui.tubuyaki;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -13,6 +14,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import studio.wakaru.test2.ui.home.HomeViewModel;
 import studio.wakaru.test2.util.TiraXMLMain;
@@ -74,12 +78,16 @@ public class TubuyakiViewModel extends ViewModel {
 
     public void refresh(Context c) {
         loadSetting(c);
-        LoadXML t = new LoadXML();
-        t.start();
+        new LoadXML().execute();
     }
 
-    class LoadXML extends Thread {
-        public void run() {
+    //非同期で新着を取得
+    private class LoadXML extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            //do your request in here so that you don't interrupt the UI thread
+
             if (!lock) {
                 lock = true;
 
@@ -105,6 +113,13 @@ public class TubuyakiViewModel extends ViewModel {
 
                 lock = false;
             }
+
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //Here you are done with the task
         }
     }
 }

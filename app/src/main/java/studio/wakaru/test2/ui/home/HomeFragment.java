@@ -1,5 +1,6 @@
 package studio.wakaru.test2.ui.home;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,11 +8,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -21,6 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -28,17 +35,17 @@ import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import studio.wakaru.test2.MainActivity;
+import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
 import studio.wakaru.test2.SettingsActivity;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.util.Good;
-import studio.wakaru.test2.util.MyData;
-import studio.wakaru.test2.util.TiraXMLMain;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
@@ -113,6 +120,18 @@ public class HomeFragment extends Fragment {
         //スワイプで更新の操作説明
         LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_getstart, null);
         tubuyakiRoot.addView(getStart);
+
+        //FAB
+        FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
+        if (tiraURL.isEmpty()) {
+            fab.hide();
+        }
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openPostActivity(0);
+            }
+        });
 
         //つぶやきデータを更新
         homeViewModel.getTubuyakiList().observe(this, new Observer<List<Tubuyaki>>() {
@@ -245,66 +264,21 @@ public class HomeFragment extends Fragment {
                         lt.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
-                                //メニューを選択状態に変更
-                                BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
-                                Menu menu = bnv.getMenu();
-                                MenuItem menuItem = menu.getItem(1);
-                                menuItem.setChecked(true);
-
-                                //画面遷移
-                                Bundle bundle = new Bundle();
-                                bundle.putInt("tno", tno);
-
-                                TubuyakiFragment tf = new TubuyakiFragment();
-                                tf.setArguments(bundle);
-
-                                getFragmentManager()
-                                        .beginTransaction()
-                                        .replace(R.id.nav_host_fragment, tf)
-                                        .commit();
+                                openTubuyaki(tno);
 
                             }
                         });
 
-                        //長押しでブラウザで開く
+                        //長押しでポップアップメニューを表示
                         lt.setOnLongClickListener(new View.OnLongClickListener() {
                             @Override
                             public boolean onLongClick(View v) {
-
-                                if (!tiraURL.isEmpty()) {
-                                    final String[] items = {"Goodする", "ブラウザで開く"};
-                                    new AlertDialog.Builder(getActivity())
-                                            .setCancelable(true)
-                                            .setTitle("このつぶやきを…")
-                                            .setItems(items, new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    // item_which pressed
-                                                    Uri uri;
-                                                    switch (which) {
-                                                        case 0:
-                                                            //Good
-                                                            uri = Uri.parse(tiraURL + "?mode=fb_submit&Category=CT01&f=u&no=" + tno);
-                                                            new GoodTask().execute(uri.toString(), cookie);
-                                                            break;
-                                                        case 1:
-                                                            //ブラウザ起動
-                                                            uri = Uri.parse(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
-                                                            Intent i = new Intent(Intent.ACTION_VIEW, uri);
-                                                            startActivity(i);
-                                                            break;
-                                                        default:
-                                                            break;
-                                                    }
-                                                }
-                                            })
-                                            .show();
-                                }
-
+                                popup(v, tno, false);
                                 return true;
                             }
                         });
+
+                        //registerForContextMenu(lt);
 
                     }
 
@@ -336,6 +310,126 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    public void popup(View v, final int tno, boolean res) {
+
+        PopupMenu popup = new PopupMenu(getContext(), v, Gravity.END);
+        popup.getMenuInflater().inflate(R.menu.menu_tubuyaki_context, popup.getMenu());
+
+        popup.show();
+
+        Menu menu = popup.getMenu();
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            switch (item.getItemId()) {
+                case R.id.item_open:
+                    item.setEnabled(tno != 0 && !res);
+                    break;
+                case R.id.item_good:
+                    item.setEnabled(!tiraURL.isEmpty() && tno != 0);
+                    break;
+                case R.id.item_res:
+                    item.setEnabled(!tiraURL.isEmpty() && tno != 0 && !res);
+                    break;
+                case R.id.item_browser:
+                    item.setEnabled(!tiraURL.isEmpty() && tno != 0 && !res);
+                    break;
+            }
+        }
+
+        // ポップアップメニューのメニュー項目のクリック処理
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                // 押されたメニュー項目名をToastで表示
+                switch (item.getItemId()) {
+                    case R.id.item_open:
+                        openTubuyaki(tno);
+                        break;
+                    case R.id.item_good:
+                        new GoodTask().execute(tiraURL, cookie, String.valueOf(tno));
+                        return true;
+                    case R.id.item_res:
+                        openPostActivity(tno);
+                        return true;
+                    case R.id.item_browser:
+                        //ブラウザ起動
+                        openBrowser(tno);
+                        return true;
+                    default:
+                        return false;
+                }
+                return false;
+            }
+        });
+    }
+
+    public void openTubuyaki(int tno) {
+
+        //メニューを選択状態に変更
+        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
+        Menu menu = bnv.getMenu();
+        MenuItem menuItem = menu.getItem(1);
+        menuItem.setChecked(true);
+
+        //画面遷移
+        Bundle bundle = new Bundle();
+        bundle.putInt("tno", tno);
+
+        TubuyakiFragment tf = new TubuyakiFragment();
+        tf.setArguments(bundle);
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment, tf)
+                .commit();
+    }
+
+    public void openPostActivity(int tno) {
+
+        //画面遷移
+        Intent intent = new Intent(getActivity(), PostActivity.class);
+        intent.putExtra("tno", tno);
+        startActivity(intent);
+
+    }
+
+    public void openBrowser(int tno) {
+        Uri uri = Uri.parse(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
+        Intent i = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(i);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu_tubuyaki_context, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        Toast.makeText(getContext(), "更新したとき反映されます", Toast.LENGTH_LONG).show();
+        switch (item.getItemId()) {
+            case R.id.item_open:
+                // your first action code
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        //ログイン情報を取得
+        cookie = pref.getString("COOKIE", "");
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -350,7 +444,8 @@ public class HomeFragment extends Fragment {
             //do your request in here so that you don't interrupt the UI thread
             String url = params[0];
             String cookie = params[1];
-            Tiraura.get(url, cookie);
+            String tno = params[2];
+            Tiraura.getXML(url + "?mode=fb_submit&f=u&Category=CT01&no=" + tno, cookie);
             return "";
         }
 
@@ -360,4 +455,5 @@ public class HomeFragment extends Fragment {
             Toast.makeText(getContext(), "更新したとき反映されます", Toast.LENGTH_LONG).show();
         }
     }
+
 }

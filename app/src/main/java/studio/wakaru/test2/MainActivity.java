@@ -1,5 +1,6 @@
 package studio.wakaru.test2;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
@@ -78,8 +80,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void finish() {
+        new AlertDialog.Builder(this)
+                .setTitle("終了しますか？")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // OK button pressed
+                        MainActivity.super.finish();
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            switch (item.getItemId()) {
+
+                case R.id.action_settings:
+                    break;
+
+                case R.id.action_login:
+                    item.setEnabled(!tiraURL.isEmpty());
+                    break;
+
+                case R.id.action_tiraura:
+                    item.setEnabled(!tiraURL.isEmpty());
+                    break;
+
+                default:
+                    break;
+            }
+        }
 
         return true;
     }
@@ -99,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
                     //ブラウザ起動
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
-
                 return true;
 
             case R.id.action_tiraura:
@@ -109,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
                     Intent i = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(i);
                 }
-
                 return true;
 
             default:

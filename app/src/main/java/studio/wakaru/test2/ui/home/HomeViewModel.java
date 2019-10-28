@@ -2,7 +2,9 @@ package studio.wakaru.test2.ui.home;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
@@ -14,8 +16,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
+import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.TiraXMLMain;
+import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
 public class HomeViewModel extends ViewModel {
@@ -23,6 +31,7 @@ public class HomeViewModel extends ViewModel {
     private boolean lock;
 
     private MutableLiveData<List<Tubuyaki>> mTubuyakiList;
+    private MutableLiveData<MyData> mMyData;
     private MutableLiveData<Integer> scroll;
     private int nowEntry;
 
@@ -37,6 +46,7 @@ public class HomeViewModel extends ViewModel {
         Log.d("HomeViewModel", "HomeViewModel constructor");
         lock = false;
         mTubuyakiList = new MutableLiveData<>();
+        mMyData = new MutableLiveData<>();
         scroll = new MutableLiveData<>();
         nowEntry = 0;
 
@@ -71,43 +81,72 @@ public class HomeViewModel extends ViewModel {
     public void refresh(Context c) {
         Log.d("HomeViewModel", "HomeViewModel refresh");
         loadSetting(c);
-        LoadXML t = new LoadXML();
-        t.start();
+        new LoadXML().execute(false);
     }
 
     public void add(Context c) {
         Log.d("HomeViewModel", "HomeViewModel add");
         loadSetting(c);
-        LoadXML2 t = new LoadXML2();
-        t.start();
+        new LoadXML().execute(true);
     }
 
-    class LoadXML extends Thread {
 
-        public void run() {
+    //非同期で新着を取得
+    private class LoadXML extends AsyncTask<Boolean, Void, String> {
+
+        @Override
+        protected String doInBackground(Boolean... params) {
+            //do your request in here so that you don't interrupt the UI thread
+
+            boolean addFlag = params[0];
+
             if (!lock) {
                 lock = true;
 
                 try {
                     //tiraXMLを読み込む
-                    nowEntry = 0;
+                    if (addFlag) {
+                    } else {
+                        nowEntry = 0;
+                    }
+
                     URL u = new URL(xmlURL + "?hs=tiraura&st=" + nowEntry + "&li=" + entriesCount);
                     TiraXMLMain tiraXML = new TiraXMLMain(u.toString(), cookie);
 
+                    mMyData.postValue(tiraXML.getMyData());
+
                     List<Tubuyaki> list = tiraXML.getTubuyakiList();
 
+                    //レスを取得
                     if (reply) {
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        List<GetResCallable> fl = new ArrayList<GetResCallable>();
+
                         for (Tubuyaki t : list) {
                             if (0 < t.getTres()) {
-                                URL uRes = new URL(xmlURL + "?tn=" + t.getTno());
-                                TiraXMLMain tx = new TiraXMLMain(uRes.toString(), cookie);
-                                t.setRes(tx.getTubuyakiList());
+                                fl.add(new GetResCallable(t));
                             }
                         }
+
+                        //実行＆終了待ち;
+                        try {
+                            executor.invokeAll(fl);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        executor.shutdown();
+                    }
+
+                    if (addFlag) {
+                        List<Tubuyaki> listBase = mTubuyakiList.getValue();
+                        listBase.addAll(list);
+
+                        mTubuyakiList.postValue(listBase);
+                    } else {
+                        mTubuyakiList.postValue(list);
                     }
 
                     nowEntry += entriesCount;
-                    mTubuyakiList.postValue(list);
 
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -116,44 +155,33 @@ public class HomeViewModel extends ViewModel {
 
                 lock = false;
             }
+
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //Here you are done with the task
         }
     }
 
-    class LoadXML2 extends Thread {
+    class GetResCallable implements Callable<Tubuyaki> {
+        private Tubuyaki tubuyaki;
 
-        public void run() {
-            if (!lock) {
-                lock = true;
+        public GetResCallable(Tubuyaki t) {
+            tubuyaki = t;
+        }
 
-                try {
-                    //tiraXMLを読み込む
-                    URL u = new URL(xmlURL + "?hs=tiraura&st=" + nowEntry + "&li=" + entriesCount);
-                    TiraXMLMain tiraXML = new TiraXMLMain(u.toString(), cookie);
-                    List<Tubuyaki> list = tiraXML.getTubuyakiList();
-
-                    if (reply) {
-                        for (Tubuyaki t : list) {
-                            if (0 < t.getTres()) {
-                                URL uRes = new URL(xmlURL + "?tn=" + t.getTno());
-                                TiraXMLMain tx = new TiraXMLMain(uRes.toString(), cookie);
-                                t.setRes(tx.getTubuyakiList());
-                            }
-                        }
-                    }
-
-                    List<Tubuyaki> listBase = mTubuyakiList.getValue();
-                    listBase.addAll(list);
-
-                    nowEntry += entriesCount;
-                    mTubuyakiList.postValue(listBase);
-
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                    mTubuyakiList.postValue(new ArrayList<Tubuyaki>());
-                }
-
-                lock = false;
+        public Tubuyaki call() {
+            URL uRes = null;
+            try {
+                uRes = new URL(xmlURL + "?tn=" + tubuyaki.getTno());
+                TiraXMLMain tx = new TiraXMLMain(uRes.toString(), cookie);
+                tubuyaki.setRes(tx.getTubuyakiList());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
             }
+            return tubuyaki;
         }
     }
 }
