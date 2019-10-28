@@ -1,7 +1,5 @@
-package studio.wakaru.test2.ui.home;
+package studio.wakaru.test2.ui.user;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -17,15 +15,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
@@ -36,23 +33,23 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
-import studio.wakaru.test2.SettingsActivity;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
-import studio.wakaru.test2.ui.user.UserFragment;
 import studio.wakaru.test2.util.Good;
+import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
-public class HomeFragment extends Fragment {
+public class UserFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private UserViewModel userViewModel;
 
     private ScrollView mScrollView;
 
@@ -67,10 +64,10 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(getActivity()).get(HomeViewModel.class);
+        userViewModel =
+                ViewModelProviders.of(getActivity()).get(UserViewModel.class);
 
-        final View root = inflater.inflate(R.layout.fragment_home, container, false);
+        final View root = inflater.inflate(R.layout.fragment_user, container, false);
 
         //設定を読み込む
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -90,16 +87,40 @@ public class HomeFragment extends Fragment {
         replyLineLimit = Math.max(0, replyLineLimit);
 
 
+        //cookieからログイン情報を取得
+        Log.d("PostActivity", cookie);
+        Map<String, String> kv = new HashMap<>();
+        final MyData myData = new MyData();
+        if (!cookie.isEmpty()) {
+            String[] cookies = cookie.split("=");
+            String[] cookieDataList = cookies[1].split(",");
+
+            for (String s : cookieDataList) {
+                String[] cookieKV = s.split(":");
+                if (1 <= cookieKV.length) {
+                    String k = cookieKV[0];
+                    String v = "";
+                    if (2 <= cookieKV.length) {
+                        v = cookieKV[1];
+                    }
+                    kv.put(k, v);
+                    Log.d("PostActivity", k + " = " + v);
+                }
+            }
+        }
+        myData.setMynum(Integer.parseInt(kv.get("login_check")));
+        myData.setMyname(kv.get("name"));
+
         //スクロール状態を復元
         mScrollView = root.findViewById(R.id.scrollView);
 
-        homeViewModel.getScroll().observe(this, new Observer<Integer>() {
+        userViewModel.getScroll().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer i) {
                 if (i != null) {
                     mScrollView.post(new Runnable() {
                         public void run() {
-                            mScrollView.setScrollY(homeViewModel.getScroll().getValue());
+                            mScrollView.setScrollY(userViewModel.getScroll().getValue());
                         }
                     });
                 }
@@ -114,12 +135,12 @@ public class HomeFragment extends Fragment {
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                homeViewModel.refresh(getContext());
+                userViewModel.refresh(getContext());
             }
         });
 
         //スワイプで更新の操作説明
-        LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_getstart, null);
+        LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.user_getstart, null);
         tubuyakiRoot.addView(getStart);
 
         //FAB
@@ -130,12 +151,13 @@ public class HomeFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openPostActivity(0);
+                userViewModel.setUid(myData.getMynum());
+                userViewModel.refresh(getContext());
             }
         });
 
         //つぶやきデータを更新
-        homeViewModel.getTubuyakiList().observe(this, new Observer<List<Tubuyaki>>() {
+        userViewModel.getTubuyakiList().observe(this, new Observer<List<Tubuyaki>>() {
             @Override
             public void onChanged(@Nullable List<Tubuyaki> list) {
 
@@ -291,7 +313,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
 
-                            homeViewModel.add(getContext());
+                            userViewModel.add(getContext());
 
                             LinearLayout layoutLoading = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_loading, null);
                             tubuyakiRoot.addView(layoutLoading);
@@ -305,6 +327,19 @@ public class HomeFragment extends Fragment {
                 swipe.setRefreshing(false);
             }
         });
+
+        //uidを設定する
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            int prevUid = userViewModel.getUid();
+            int nowUid = bundle.getInt("uid");
+
+            if (prevUid != nowUid) {
+                userViewModel.setUid(nowUid);
+                userViewModel.setScroll(0);
+                userViewModel.refresh(getContext());
+            }
+        }
 
         //homeViewModel.refresh(getContext());
 
@@ -368,6 +403,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
     public void openTubuyaki(int tno) {
 
         //メニューを選択状態に変更
@@ -460,7 +496,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        homeViewModel.setScroll(mScrollView.getScrollY());
+        userViewModel.setScroll(mScrollView.getScrollY());
     }
 
     //非同期でGoodをつける

@@ -7,6 +7,10 @@
         android:title="@string/title_new" />
 
     <item
+        android:id="@+id/navigation_user"
+        android:icon="@drawable/ic_people_black_24dp"
+        android:title="@string/title_user" />
+    <item
         android:id="@+id/navigation_tubuyaki"
         android:icon="@drawable/ic_comment_black_24dp"
         android:title="@string/title_tubuyaki" />
