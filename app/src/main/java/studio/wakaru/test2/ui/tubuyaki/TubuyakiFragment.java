@@ -295,6 +295,7 @@ public class TubuyakiFragment extends Fragment {
 
             if (prevTno != nowTno) {
                 tubuyakiViewModel.setTno(nowTno);
+                tubuyakiViewModel.setScroll(0);
                 tubuyakiViewModel.refresh(getContext());
             }
         }
