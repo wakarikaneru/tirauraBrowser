@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_new, R.id.navigation_tubuyaki, R.id.navigation_notifications)
+                R.id.navigation_new, R.id.navigation_user, R.id.navigation_tubuyaki, R.id.navigation_notifications)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -109,6 +109,10 @@ public class MainActivity extends AppCompatActivity {
                     item.setEnabled(!tiraURL.isEmpty());
                     break;
 
+                case R.id.action_logout:
+                    item.setEnabled(false);
+                    break;
+
                 case R.id.action_tiraura:
                     item.setEnabled(!tiraURL.isEmpty());
                     break;
@@ -136,6 +140,9 @@ public class MainActivity extends AppCompatActivity {
                     //ブラウザ起動
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
+                return true;
+
+            case R.id.action_logout:
                 return true;
 
             case R.id.action_tiraura:

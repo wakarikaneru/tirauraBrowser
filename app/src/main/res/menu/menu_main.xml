@@ -11,6 +11,9 @@
         android:id="@+id/action_login"
         android:title="チラ裏.comにログイン" />
     <item
+        android:id="@+id/action_logout"
+        android:title="チラ裏.comからログアウト" />
+    <item
         android:id="@+id/action_tiraura"
         android:title="チラ裏.comへ" />
 </menu>
