@@ -35,6 +35,8 @@ import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -118,6 +120,18 @@ public class HomeFragment extends Fragment {
         //スワイプで更新の操作説明
         LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_getstart, null);
         tubuyakiRoot.addView(getStart);
+
+        //FAB
+        FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
+        if (tiraURL.isEmpty()) {
+            fab.hide();
+        }
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openPostActivity(0);
+            }
+        });
 
         //つぶやきデータを更新
         homeViewModel.getTubuyakiList().observe(this, new Observer<List<Tubuyaki>>() {

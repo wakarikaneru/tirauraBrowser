@@ -167,7 +167,6 @@ public class Tiraura {
             con.setUseCaches(false);
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
-            ;
             con.setRequestProperty("Cookie", cookies);
 
 
@@ -193,7 +192,7 @@ public class Tiraura {
             if (upfile != null) {
                 ps.print(TWO_HYPHENS + BOUNDARY);
                 ps.print(CRLF);
-                ps.print("Content-Disposition: form-data; name=\"upfile\"; filename=\"image.png\"");
+                ps.print("Content-Disposition: form-data; name=\"upfile\"; filename=\""+image+"\"");
                 ps.print(CRLF);
                 ps.print("Content-Type: image/png");
                 ps.print(CRLF);
@@ -206,7 +205,7 @@ public class Tiraura {
             } else {
 
                 ps.print(TWO_HYPHENS + BOUNDARY);
-                ps.print("Content-Disposition: form-data; name=\"upfile\"; filename=\""+image+"\"");
+                ps.print("Content-Disposition: form-data; name=\"upfile\"; filename=\"\"");
                 ps.print(CRLF);
                 ps.print("Content-Type: application/octet-stream");
                 ps.print(CRLF);
@@ -302,7 +301,6 @@ public class Tiraura {
             con.setUseCaches(false);
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
-            ;
             con.setRequestProperty("Cookie", cookies);
 
 

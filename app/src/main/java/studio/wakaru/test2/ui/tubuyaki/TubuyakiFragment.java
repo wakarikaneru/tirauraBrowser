@@ -30,6 +30,7 @@ import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -96,6 +97,17 @@ public class TubuyakiFragment extends Fragment {
         LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.res_getstart, null);
         tubuyakiRoot.addView(getStart);
 
+        //FAB
+        FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
+        if (tiraURL.isEmpty()) {
+            fab.hide();
+        }
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openPostActivity(tubuyakiViewModel.getTno());
+            }
+        });
 
         //つぶやきデータを更新
         tubuyakiViewModel.getTubuyakiList().observe(this, new Observer<List<Tubuyaki>>() {

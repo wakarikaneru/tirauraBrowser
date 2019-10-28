@@ -82,7 +82,11 @@ public class PostActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final int tno = intent.getIntExtra("tno", 0);
 
-        getSupportActionBar().setTitle("ID:" + tno);
+        if (tno == 0) {
+            getSupportActionBar().setTitle("新規つぶやき");
+        } else {
+            getSupportActionBar().setTitle("ID:" + tno);
+        }
 
         final TextView text = findViewById(R.id.text_tdata);
 
@@ -166,7 +170,7 @@ public class PostActivity extends AppCompatActivity {
             //画像を処理
             Bitmap image = null;
             byte[] imageByteArray = null;
-            String fileName="image.jpg";
+            String fileName = "image.jpg";
 
             try {
                 if (!upFile.isEmpty()) {
