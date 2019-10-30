@@ -1,5 +1,6 @@
 package studio.wakaru.test2;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
@@ -26,9 +27,13 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
+import studio.wakaru.test2.util.Detector;
 import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.TiraXMLMain;
 import studio.wakaru.test2.util.Tiraura;
@@ -78,6 +83,23 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("PostActivity", "submitButton onClick start");
+
+                Charset charset = Charset.forName("UTF-8");
+
+                String testText = text.getText().toString();
+                try {
+                    InputStream is = new ByteArrayInputStream(testText.getBytes());
+                    charset = Detector.getCharsetName(is);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                new AlertDialog.Builder(PostActivity.this)
+                        .setTitle(charset.toString())
+                        .setMessage(testText)
+                        .setPositiveButton("OK", null)
+                        .show();
+
                 String submitText = text.getText().toString();
 
                 String sageStr = "";
@@ -87,7 +109,7 @@ public class PostActivity extends AppCompatActivity {
                 new PostTask().execute(tiraURL, cookie, String.valueOf(tno), String.valueOf(myData.getMynum()), myData.getMyname(), submitText, sageStr, upFile);
                 Log.d("PostActivity", "submitButton onClick end");
 
-                finish();
+                //finish();
             }
         });
 

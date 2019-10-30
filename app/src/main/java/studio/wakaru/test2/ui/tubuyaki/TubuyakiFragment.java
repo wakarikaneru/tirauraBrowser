@@ -153,6 +153,8 @@ public class TubuyakiFragment extends Fragment {
                             textResNo.setText(String.valueOf(resCount));
 
                             textTdata.setAutoLinkMask(Linkify.WEB_URLS);
+                            //textTdata.setLinksClickable(true);
+                            //textTdata.setClickable(false);
                             //textTdata.setText(HtmlCompat.fromHtml(t.getTdata(),HtmlCompat.FROM_HTML_MODE_COMPACT));
                             textTdata.setText(Tubuyaki.format(t.getTdata()));
 
@@ -221,6 +223,8 @@ public class TubuyakiFragment extends Fragment {
                             textResNo.setText(String.valueOf(resCount));
 
                             textTdata.setAutoLinkMask(Linkify.WEB_URLS);
+                            //textTdata.setLinksClickable(true);
+                            //textTdata.setClickable(false);
                             //textTdata.setText(HtmlCompat.fromHtml(t.getTdata(),HtmlCompat.FROM_HTML_MODE_COMPACT));
                             textTdata.setText(Tubuyaki.format(t.getTdata()));
 

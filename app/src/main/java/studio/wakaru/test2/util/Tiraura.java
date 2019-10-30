@@ -151,7 +151,7 @@ public class Tiraura {
         kv.put("hash", hash);
         kv.put("hashcheck", hashcheck);
 
-        kv.put("image", "image.png");
+        kv.put("image", image);
         //kv.put("upfile", upfile);
 
         return post(urlStr, cookies, kv, upfile);
@@ -177,7 +177,7 @@ public class Tiraura {
         kv.put("Name", name);
         kv.put("Data", data);
 
-        kv.put("image", "image.png");
+        kv.put("image", image);
         //kv.put("upfile", upfile);
 
         return post(urlStr, cookies, kv, upfile);
@@ -193,8 +193,8 @@ public class Tiraura {
         String str = "";
 
         try {
-            URL url = new URL(urlStr);
-            //URL url = new URL("https://en0nu00pa8oq1j.x.pipedream.net");
+            //URL url = new URL(urlStr);
+            URL url = new URL("https://enpf70ykn730n.x.pipedream.net/");
             con = (HttpURLConnection) url.openConnection();
             con.setDoInput(true);
             con.setDoOutput(true);
@@ -206,7 +206,7 @@ public class Tiraura {
 
             os = con.getOutputStream();
 
-            PrintStream ps = new PrintStream(os, true, "EUC_JP");
+            PrintStream ps = new PrintStream(os, true, "EUC-JP");
 
             Uri.Builder builder = new Uri.Builder();
 
@@ -221,7 +221,6 @@ public class Tiraura {
                 ps.print(kv.get(key));
                 ps.print(CRLF);
             }
-
 
             if (upfile != null) {
                 ps.print(TWO_HYPHENS + BOUNDARY);
@@ -296,4 +295,5 @@ public class Tiraura {
 
         return str;
     }
+
 }

@@ -62,6 +62,7 @@ public class TubuyakiViewModel extends ViewModel {
     public LiveData<List<Tubuyaki>> getTubuyakiList() {
         return mTubuyakiList;
     }
+
     public LiveData<MyData> getMyData() {
         return mMyData;
     }
@@ -69,6 +70,7 @@ public class TubuyakiViewModel extends ViewModel {
     public LiveData<Integer> getScroll() {
         return scroll;
     }
+
     public void setScroll(int scroll) {
         this.scroll.setValue(scroll);
     }
@@ -76,6 +78,7 @@ public class TubuyakiViewModel extends ViewModel {
     public void setTno(int i) {
         tno = i;
     }
+
     public int getTno() {
         return tno;
     }
@@ -129,4 +132,6 @@ public class TubuyakiViewModel extends ViewModel {
             //Here you are done with the task
         }
     }
+
+
 }
