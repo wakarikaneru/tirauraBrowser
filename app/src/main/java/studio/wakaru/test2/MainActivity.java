@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         cookie = pref.getString("COOKIE", "");
         new LoginTask().execute();
 
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.action_logout:
-                    item.setEnabled(false);
+                    item.setEnabled(!cookie.isEmpty());
                     break;
 
                 case R.id.action_tiraura:
@@ -137,12 +138,20 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_login:
                 if (!tiraURL.isEmpty()) {
-                    //ブラウザ起動
+                    //ログイン
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
                 return true;
 
             case R.id.action_logout:
+                //ログアウト
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("COOKIE", "");
+                editor.commit();
+
+                onResume();
                 return true;
 
             case R.id.action_tiraura:

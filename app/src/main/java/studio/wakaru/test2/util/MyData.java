@@ -49,19 +49,19 @@ public class MyData {
             }
         }
 
+        //ログインチェック
         String loginCheck = kv.get("login_check");
         String name = kv.get("name");
-        if (kv.get("login_check") != null) {
+        if (loginCheck != null) {
             try {
-                this.mynum = Integer.parseInt(kv.get("login_check"));
-                this.myname = kv.get("name");
+                this.mynum = Integer.parseInt(loginCheck);
+                this.myname = name;
             } catch (NumberFormatException e) {
                 e.printStackTrace();
 
                 this.mynum = 0;
                 this.myname = "";
             }
-
         }
     }
 
