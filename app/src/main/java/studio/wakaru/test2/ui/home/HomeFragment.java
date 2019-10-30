@@ -1,14 +1,12 @@
 package studio.wakaru.test2.ui.home;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,7 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -27,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -36,17 +34,16 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
-import studio.wakaru.test2.SettingsActivity;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.ui.user.UserFragment;
 import studio.wakaru.test2.util.Good;
+import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
@@ -54,12 +51,14 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
 
-    private ScrollView mScrollView;
+    private ScrollView scrollView;
 
     private String tiraURL;
     private String xmlURL;
     private String imgURL;
     private String cookie;
+    private MyData myData;
+
     private int replyCount;
 
     private int entryLineLimit;
@@ -89,17 +88,19 @@ public class HomeFragment extends Fragment {
         entryLineLimit = Math.max(0, entryLineLimit);
         replyLineLimit = Math.max(0, replyLineLimit);
 
+        myData = new MyData(cookie);
+
 
         //スクロール状態を復元
-        mScrollView = root.findViewById(R.id.scrollView);
+        scrollView = root.findViewById(R.id.scrollView);
 
         homeViewModel.getScroll().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer i) {
                 if (i != null) {
-                    mScrollView.post(new Runnable() {
+                    scrollView.post(new Runnable() {
                         public void run() {
-                            mScrollView.setScrollY(homeViewModel.getScroll().getValue());
+                            scrollView.setScrollY(homeViewModel.getScroll().getValue());
                         }
                     });
                 }
@@ -274,7 +275,7 @@ public class HomeFragment extends Fragment {
                         lt.setOnLongClickListener(new View.OnLongClickListener() {
                             @Override
                             public boolean onLongClick(View v) {
-                                popup(v, t);
+                                popup(v, myData, t);
                                 return true;
                             }
                         });
@@ -311,9 +312,9 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-    public void popup(View v, final Tubuyaki t) {
+    public void popup(View v, final MyData m, final Tubuyaki t) {
 
-        PopupMenu popup = new PopupMenu(getContext(), v, Gravity.END);
+        PopupMenu popup = new PopupMenu(v.getContext(), v, Gravity.END, R.attr.actionOverflowMenuStyle, 0);
         popup.getMenuInflater().inflate(R.menu.menu_tubuyaki_context, popup.getMenu());
 
         popup.show();
@@ -329,13 +330,13 @@ public class HomeFragment extends Fragment {
                     item.setEnabled(t.getTno() != 0);
                     break;
                 case R.id.item_good:
-                    item.setEnabled(!tiraURL.isEmpty() && t.getTno() != 0);
+                    item.setEnabled(!tiraURL.isEmpty() && m.getMynum() != 0 && t.getTno() != 0);
                     break;
                 case R.id.item_res:
-                    item.setEnabled(!tiraURL.isEmpty() && t.getTno() != 0 && t.getParent() == 1);
+                    item.setEnabled(!tiraURL.isEmpty() && m.getMynum() != 0 && t.getTno() != 0 && t.getParent() == 1);
                     break;
                 case R.id.item_browser:
-                    item.setEnabled(!tiraURL.isEmpty() && t.getTno() != 0 && t.getParent() == 1);
+                    item.setEnabled(!tiraURL.isEmpty() && m.getMynum() != 0 && t.getTno() != 0 && t.getParent() == 1);
                     break;
             }
         }
@@ -368,6 +369,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
     public void openTubuyaki(int tno) {
 
         //メニューを選択状態に変更
@@ -460,7 +462,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        homeViewModel.setScroll(mScrollView.getScrollY());
+        homeViewModel.setScroll(scrollView.getScrollY());
     }
 
     //非同期でGoodをつける

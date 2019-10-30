@@ -1,5 +1,10 @@
 package studio.wakaru.test2.util;
 
+import android.util.Log;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class MyData {
     private int mynum;
     private String myname;
@@ -17,6 +22,48 @@ public class MyData {
     private int mymcount2;
     private String mytubulog;
     private String myreslog;
+
+    public MyData() {
+    }
+
+    public MyData(String cookie) {
+        //cookieからログイン情報を取得
+        Log.d("PostActivity", cookie);
+        Map<String, String> kv = new HashMap<>();
+
+        if (!cookie.isEmpty()) {
+            String[] cookies = cookie.split("=");
+            String[] cookieDataList = cookies[1].split(",");
+
+            for (String s : cookieDataList) {
+                String[] cookieKV = s.split(":");
+                if (1 <= cookieKV.length) {
+                    String k = cookieKV[0];
+                    String v = "";
+                    if (2 <= cookieKV.length) {
+                        v = cookieKV[1];
+                    }
+                    kv.put(k, v);
+                    Log.d("MyData", k + " = " + v);
+                }
+            }
+        }
+
+        String loginCheck = kv.get("login_check");
+        String name = kv.get("name");
+        if (kv.get("login_check") != null) {
+            try {
+                this.mynum = Integer.parseInt(kv.get("login_check"));
+                this.myname = kv.get("name");
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+
+                this.mynum = 0;
+                this.myname = "";
+            }
+
+        }
+    }
 
     public void setMynum(int mynum) {
         this.mynum = mynum;

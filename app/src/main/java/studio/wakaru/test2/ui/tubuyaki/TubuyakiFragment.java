@@ -1,6 +1,5 @@
 package studio.wakaru.test2.ui.tubuyaki;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -37,9 +36,9 @@ import java.util.List;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
-import studio.wakaru.test2.ui.home.HomeFragment;
 import studio.wakaru.test2.ui.user.UserFragment;
 import studio.wakaru.test2.util.Good;
+import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
@@ -47,11 +46,12 @@ public class TubuyakiFragment extends Fragment {
 
     private TubuyakiViewModel tubuyakiViewModel;
 
-    private ScrollView mScrollView;
+    private ScrollView scrollView;
 
     private String tiraURL;
     private String imgURL;
     private String cookie;
+    private MyData myData;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -66,17 +66,19 @@ public class TubuyakiFragment extends Fragment {
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
 
+        myData = new MyData(cookie);
+
 
         //スクロール状態を復元
-        mScrollView = root.findViewById(R.id.scrollView);
+        scrollView = root.findViewById(R.id.scrollView);
 
         tubuyakiViewModel.getScroll().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer i) {
                 if (i != null) {
-                    mScrollView.post(new Runnable() {
+                    scrollView.post(new Runnable() {
                         public void run() {
-                            mScrollView.setScrollY(tubuyakiViewModel.getScroll().getValue());
+                            scrollView.setScrollY(tubuyakiViewModel.getScroll().getValue());
                         }
                     });
                 }
@@ -191,7 +193,7 @@ public class TubuyakiFragment extends Fragment {
                             lt.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
                                 public boolean onLongClick(View v) {
-                                    popup(v, t);
+                                    popup(v, myData, t);
 
                                     return true;
                                 }
@@ -260,7 +262,7 @@ public class TubuyakiFragment extends Fragment {
                             lt.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
                                 public boolean onLongClick(View v) {
-                                    popup(v, t);
+                                    popup(v, myData, t);
                                     return true;
                                 }
                             });
@@ -308,9 +310,9 @@ public class TubuyakiFragment extends Fragment {
         return root;
     }
 
-    public void popup(View v, final Tubuyaki t) {
+    public void popup(View v, final MyData m, final Tubuyaki t) {
 
-        PopupMenu popup = new PopupMenu(getContext(), v, Gravity.END);
+        PopupMenu popup = new PopupMenu(v.getContext(), v, Gravity.END, R.attr.actionOverflowMenuStyle, 0);
         popup.getMenuInflater().inflate(R.menu.menu_tubuyaki_context, popup.getMenu());
 
         popup.show();
@@ -326,13 +328,13 @@ public class TubuyakiFragment extends Fragment {
                     item.setEnabled(t.getTno() != 0);
                     break;
                 case R.id.item_good:
-                    item.setEnabled(!tiraURL.isEmpty() && t.getTno() != 0);
+                    item.setEnabled(!tiraURL.isEmpty() && m.getMynum() != 0 && t.getTno() != 0);
                     break;
                 case R.id.item_res:
-                    item.setEnabled(!tiraURL.isEmpty() && t.getTno() != 0 && t.getParent() == 1);
+                    item.setEnabled(!tiraURL.isEmpty() && m.getMynum() != 0 && t.getTno() != 0 && t.getParent() == 1);
                     break;
                 case R.id.item_browser:
-                    item.setEnabled(!tiraURL.isEmpty() && t.getTno() != 0 && t.getParent() == 1);
+                    item.setEnabled(!tiraURL.isEmpty() && m.getMynum() != 0 && t.getTno() != 0 && t.getParent() == 1);
                     break;
             }
         }
@@ -426,7 +428,7 @@ public class TubuyakiFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        tubuyakiViewModel.setScroll(mScrollView.getScrollY());
+        tubuyakiViewModel.setScroll(scrollView.getScrollY());
     }
 
     //非同期でGoodをつける

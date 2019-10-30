@@ -51,12 +51,14 @@ public class UserFragment extends Fragment {
 
     private UserViewModel userViewModel;
 
-    private ScrollView mScrollView;
+    private ScrollView scrollView;
 
     private String tiraURL;
     private String xmlURL;
     private String imgURL;
     private String cookie;
+    private MyData myData;
+
     private int replyCount;
 
     private int entryLineLimit;
@@ -86,41 +88,19 @@ public class UserFragment extends Fragment {
         entryLineLimit = Math.max(0, entryLineLimit);
         replyLineLimit = Math.max(0, replyLineLimit);
 
+        myData = new MyData(cookie);
 
-        //cookieからログイン情報を取得
-        Log.d("PostActivity", cookie);
-        Map<String, String> kv = new HashMap<>();
-        final MyData myData = new MyData();
-        if (!cookie.isEmpty()) {
-            String[] cookies = cookie.split("=");
-            String[] cookieDataList = cookies[1].split(",");
-
-            for (String s : cookieDataList) {
-                String[] cookieKV = s.split(":");
-                if (1 <= cookieKV.length) {
-                    String k = cookieKV[0];
-                    String v = "";
-                    if (2 <= cookieKV.length) {
-                        v = cookieKV[1];
-                    }
-                    kv.put(k, v);
-                    Log.d("PostActivity", k + " = " + v);
-                }
-            }
-        }
-        myData.setMynum(Integer.parseInt(kv.get("login_check")));
-        myData.setMyname(kv.get("name"));
 
         //スクロール状態を復元
-        mScrollView = root.findViewById(R.id.scrollView);
+        scrollView = root.findViewById(R.id.scrollView);
 
         userViewModel.getScroll().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer i) {
                 if (i != null) {
-                    mScrollView.post(new Runnable() {
+                    scrollView.post(new Runnable() {
                         public void run() {
-                            mScrollView.setScrollY(userViewModel.getScroll().getValue());
+                            scrollView.setScrollY(userViewModel.getScroll().getValue());
                         }
                     });
                 }
@@ -296,7 +276,7 @@ public class UserFragment extends Fragment {
                         lt.setOnLongClickListener(new View.OnLongClickListener() {
                             @Override
                             public boolean onLongClick(View v) {
-                                popup(v, t);
+                                popup(v, myData, t);
                                 return true;
                             }
                         });
@@ -346,9 +326,9 @@ public class UserFragment extends Fragment {
         return root;
     }
 
-    public void popup(View v, final Tubuyaki t) {
+    public void popup(View v, final MyData m, final Tubuyaki t) {
 
-        PopupMenu popup = new PopupMenu(getContext(), v, Gravity.END);
+        PopupMenu popup = new PopupMenu(v.getContext(), v, Gravity.END, R.attr.actionOverflowMenuStyle, 0);
         popup.getMenuInflater().inflate(R.menu.menu_tubuyaki_context, popup.getMenu());
 
         popup.show();
@@ -364,13 +344,13 @@ public class UserFragment extends Fragment {
                     item.setEnabled(t.getTno() != 0);
                     break;
                 case R.id.item_good:
-                    item.setEnabled(!tiraURL.isEmpty() && t.getTno() != 0);
+                    item.setEnabled(!tiraURL.isEmpty() && m.getMynum() != 0 && t.getTno() != 0);
                     break;
                 case R.id.item_res:
-                    item.setEnabled(!tiraURL.isEmpty() && t.getTno() != 0 && t.getParent() == 1);
+                    item.setEnabled(!tiraURL.isEmpty() && m.getMynum() != 0 && t.getTno() != 0 && t.getParent() == 1);
                     break;
                 case R.id.item_browser:
-                    item.setEnabled(!tiraURL.isEmpty() && t.getTno() != 0 && t.getParent() == 1);
+                    item.setEnabled(!tiraURL.isEmpty() && m.getMynum() != 0 && t.getTno() != 0 && t.getParent() == 1);
                     break;
             }
         }
@@ -496,7 +476,7 @@ public class UserFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        userViewModel.setScroll(mScrollView.getScrollY());
+        userViewModel.setScroll(scrollView.getScrollY());
     }
 
     //非同期でGoodをつける

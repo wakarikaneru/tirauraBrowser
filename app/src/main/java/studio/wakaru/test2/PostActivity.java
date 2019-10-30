@@ -40,6 +40,7 @@ public class PostActivity extends AppCompatActivity {
     private String tiraURL;
     private String imgURL;
     private String cookie;
+    private MyData myData;
 
     private String upFile;
 
@@ -54,31 +55,9 @@ public class PostActivity extends AppCompatActivity {
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
 
+        myData = new MyData(cookie);
+
         upFile = "";
-
-        //cookieからログイン情報を取得
-        Log.d("PostActivity", cookie);
-        Map<String, String> kv = new HashMap<>();
-        final MyData myData = new MyData();
-        if (!cookie.isEmpty()) {
-            String[] cookies = cookie.split("=");
-            String[] cookieDataList = cookies[1].split(",");
-
-            for (String s : cookieDataList) {
-                String[] cookieKV = s.split(":");
-                if (1 <= cookieKV.length) {
-                    String k = cookieKV[0];
-                    String v = "";
-                    if (2 <= cookieKV.length) {
-                        v = cookieKV[1];
-                    }
-                    kv.put(k, v);
-                    Log.d("PostActivity", k + " = " + v);
-                }
-            }
-        }
-        myData.setMynum(Integer.parseInt(kv.get("login_check")));
-        myData.setMyname(kv.get("name"));
 
         Intent intent = getIntent();
         final int tno = intent.getIntExtra("tno", 0);
@@ -175,7 +154,7 @@ public class PostActivity extends AppCompatActivity {
 
             try {
                 if (!upFile.isEmpty()) {
-                    
+
                     //画像を取得
                     ByteArrayOutputStream baos;
 
