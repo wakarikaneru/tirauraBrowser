@@ -17,6 +17,7 @@ import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Set;
@@ -151,7 +152,7 @@ public class Tiraura {
         kv.put("hash", hash);
         kv.put("hashcheck", hashcheck);
 
-        kv.put("image", "image.png");
+        kv.put("image", image);
         //kv.put("upfile", upfile);
 
         return post(urlStr, cookies, kv, upfile);
@@ -177,7 +178,7 @@ public class Tiraura {
         kv.put("Name", name);
         kv.put("Data", data);
 
-        kv.put("image", "image.png");
+        kv.put("image", image);
         //kv.put("upfile", upfile);
 
         return post(urlStr, cookies, kv, upfile);
@@ -194,7 +195,7 @@ public class Tiraura {
 
         try {
             URL url = new URL(urlStr);
-            //URL url = new URL("https://en0nu00pa8oq1j.x.pipedream.net");
+            //URL url = new URL("https://enpf70ykn730n.x.pipedream.net/");
             con = (HttpURLConnection) url.openConnection();
             con.setDoInput(true);
             con.setDoOutput(true);
@@ -206,7 +207,7 @@ public class Tiraura {
 
             os = con.getOutputStream();
 
-            PrintStream ps = new PrintStream(os, true, "EUC_JP");
+            PrintStream ps = new PrintStream(os, true, "EUC-JP");
 
             Uri.Builder builder = new Uri.Builder();
 
@@ -218,10 +219,9 @@ public class Tiraura {
                 ps.print(CRLF);
 
                 ps.print(CRLF);
-                ps.print(kv.get(key));
+                ps.write(kv.get(key).getBytes(Charset.forName("EUC-JP")));
                 ps.print(CRLF);
             }
-
 
             if (upfile != null) {
                 ps.print(TWO_HYPHENS + BOUNDARY);
@@ -296,4 +296,5 @@ public class Tiraura {
 
         return str;
     }
+
 }
