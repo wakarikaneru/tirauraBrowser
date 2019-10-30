@@ -17,6 +17,7 @@ import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Set;
@@ -193,8 +194,8 @@ public class Tiraura {
         String str = "";
 
         try {
-            //URL url = new URL(urlStr);
-            URL url = new URL("https://enpf70ykn730n.x.pipedream.net/");
+            URL url = new URL(urlStr);
+            //URL url = new URL("https://enpf70ykn730n.x.pipedream.net/");
             con = (HttpURLConnection) url.openConnection();
             con.setDoInput(true);
             con.setDoOutput(true);
@@ -218,7 +219,7 @@ public class Tiraura {
                 ps.print(CRLF);
 
                 ps.print(CRLF);
-                ps.print(kv.get(key));
+                ps.write(kv.get(key).getBytes(Charset.forName("EUC-JP")));
                 ps.print(CRLF);
             }
 

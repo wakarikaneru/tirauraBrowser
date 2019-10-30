@@ -84,22 +84,6 @@ public class PostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("PostActivity", "submitButton onClick start");
 
-                Charset charset = Charset.forName("UTF-8");
-
-                String testText = text.getText().toString();
-                try {
-                    InputStream is = new ByteArrayInputStream(testText.getBytes());
-                    charset = Detector.getCharsetName(is);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                new AlertDialog.Builder(PostActivity.this)
-                        .setTitle(charset.toString())
-                        .setMessage(testText)
-                        .setPositiveButton("OK", null)
-                        .show();
-
                 String submitText = text.getText().toString();
 
                 String sageStr = "";
@@ -109,7 +93,7 @@ public class PostActivity extends AppCompatActivity {
                 new PostTask().execute(tiraURL, cookie, String.valueOf(tno), String.valueOf(myData.getMynum()), myData.getMyname(), submitText, sageStr, upFile);
                 Log.d("PostActivity", "submitButton onClick end");
 
-                //finish();
+                finish();
             }
         });
 
