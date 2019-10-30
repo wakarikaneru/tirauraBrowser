@@ -139,7 +139,7 @@ public class Tiraura {
 
         String str = "";
 
-        HashMap kv = new HashMap<String, String>();
+        HashMap<String, String> kv = new HashMap<String, String>();
         kv.put("mode", "bbs_write");
         kv.put("Category", "CT01");
         kv.put("upform", "s");
@@ -206,7 +206,7 @@ public class Tiraura {
 
             os = con.getOutputStream();
 
-            PrintStream ps = new PrintStream(os, true, "EUC-JP");
+            PrintStream ps = new PrintStream(os, true, "EUC_JP");
 
             Uri.Builder builder = new Uri.Builder();
 
