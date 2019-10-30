@@ -68,6 +68,7 @@ public class UserViewModel extends ViewModel {
     public LiveData<List<Tubuyaki>> getTubuyakiList() {
         return mTubuyakiList;
     }
+
     public LiveData<MyData> getMyData() {
         return mMyData;
     }
@@ -75,6 +76,7 @@ public class UserViewModel extends ViewModel {
     public LiveData<Integer> getScroll() {
         return scroll;
     }
+
     public void setScroll(int scroll) {
         this.scroll.setValue(scroll);
     }
@@ -82,6 +84,7 @@ public class UserViewModel extends ViewModel {
     public int getUid() {
         return uid;
     }
+
     public void setUid(int uid) {
         this.uid = uid;
     }
@@ -111,54 +114,61 @@ public class UserViewModel extends ViewModel {
             if (!lock) {
                 lock = true;
 
-                try {
-                    //tiraXMLを読み込む
-                    if (addFlag) {
-                    } else {
-                        nowEntry = 0;
-                    }
+                if (uid != 0) {
+                    try {
+                        //tiraXMLを読み込む
+                        if (addFlag) {
+                        } else {
+                            nowEntry = 0;
+                        }
 
-                    URL u = new URL(xmlURL + "?us=" + uid + "&st=" + nowEntry + "&li=" + entriesCount);
-                    TiraXMLMain tiraXML = new TiraXMLMain(u.toString(), cookie);
+                        URL u = new URL(xmlURL + "?us=" + uid + "&st=" + nowEntry + "&li=" + entriesCount);
+                        TiraXMLMain tiraXML = new TiraXMLMain(u.toString(), cookie);
 
-                    mMyData.postValue(tiraXML.getMyData());
+                        mMyData.postValue(tiraXML.getMyData());
 
-                    List<Tubuyaki> list = tiraXML.getTubuyakiList();
+                        List<Tubuyaki> list = tiraXML.getTubuyakiList();
 
-                    //レスを取得
-                    if (reply) {
-                        ExecutorService executor = Executors.newFixedThreadPool(1);
-                        List<GetResCallable> fl = new ArrayList<GetResCallable>();
+                        //レスを取得
+                        if (reply) {
+                            ExecutorService executor = Executors.newFixedThreadPool(1);
+                            List<GetResCallable> fl = new ArrayList<GetResCallable>();
 
-                        for (Tubuyaki t : list) {
-                            if (0 < t.getTres()) {
-                                fl.add(new GetResCallable(t));
+                            for (Tubuyaki t : list) {
+                                if (0 < t.getTres()) {
+                                    fl.add(new GetResCallable(t));
+                                }
                             }
+
+                            //実行＆終了待ち;
+                            try {
+                                executor.invokeAll(fl);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            executor.shutdown();
                         }
 
-                        //実行＆終了待ち;
-                        try {
-                            executor.invokeAll(fl);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                        if (addFlag) {
+                            List<Tubuyaki> listBase = mTubuyakiList.getValue();
+                            listBase.addAll(list);
+
+                            mTubuyakiList.postValue(listBase);
+                        } else {
+                            mTubuyakiList.postValue(list);
                         }
-                        executor.shutdown();
+
+                        nowEntry += entriesCount;
+
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                        mTubuyakiList.postValue(new ArrayList<Tubuyaki>());
                     }
 
-                    if (addFlag) {
-                        List<Tubuyaki> listBase = mTubuyakiList.getValue();
-                        listBase.addAll(list);
+                } else {
 
-                        mTubuyakiList.postValue(listBase);
-                    } else {
-                        mTubuyakiList.postValue(list);
-                    }
-
-                    nowEntry += entriesCount;
-
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
                     mTubuyakiList.postValue(new ArrayList<Tubuyaki>());
+
                 }
 
                 lock = false;

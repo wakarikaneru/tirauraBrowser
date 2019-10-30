@@ -125,7 +125,7 @@ public class UserFragment extends Fragment {
 
         //FAB
         FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
-        if (tiraURL.isEmpty()) {
+        if (tiraURL.isEmpty() || myData.getMynum() == 0) {
             fab.hide();
         }
         fab.setOnClickListener(new View.OnClickListener() {

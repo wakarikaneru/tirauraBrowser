@@ -1,5 +1,6 @@
 package studio.wakaru.test2;
 
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,12 +26,16 @@ import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
 
+import studio.wakaru.test2.ui.home.HomeFragment;
 import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.TiraXMLMain;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class MainActivity extends AppCompatActivity {
+
+    static final int SETTING = 1;  // The request code
+    static final int LOGIN = 1;  // The request code
 
     private String tiraURL;
     private String xmlURL;
@@ -132,14 +138,14 @@ public class MainActivity extends AppCompatActivity {
         int itemId = item.getItemId();
         switch (itemId) {
             case R.id.action_settings:
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                startActivityForResult(new Intent(MainActivity.this, SettingsActivity.class), SETTING);
 
                 return true;
 
             case R.id.action_login:
                 if (!tiraURL.isEmpty()) {
                     //ログイン
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), LOGIN);
                 }
                 return true;
 
@@ -167,6 +173,18 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        /*
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment, new HomeFragment())
+                .commit();
+         */
     }
 
     //ログイン状況を取得
