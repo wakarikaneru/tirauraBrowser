@@ -174,12 +174,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(MyData user) {
+        protected void onPostExecute(MyData myData) {
             //Here you are done with the task
 
-            if (0 < user.getMynum()) {
-                getSupportActionBar().setTitle(user.getMyname());
-                Toast.makeText(MainActivity.this, user.getMyname() + "でログインしています", Toast.LENGTH_LONG).show();
+            if (0 < myData.getMynum()) {
+                getSupportActionBar().setTitle(myData.getMyname());
+                Toast.makeText(MainActivity.this, myData.getMyname() + "でログインしています", Toast.LENGTH_LONG).show();
             } else {
                 getSupportActionBar().setTitle("ログインしていません");
                 Toast.makeText(MainActivity.this, "ログインしていません", Toast.LENGTH_LONG).show();
