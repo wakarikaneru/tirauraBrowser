@@ -11,6 +11,11 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/navigation_user"
+        android:name="studio.wakaru.test2.ui.user.UserFragment"
+        tools:layout="@layout/fragment_user" />
+
+    <fragment
         android:id="@+id/navigation_tubuyaki"
         android:name="studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment"
         tools:layout="@layout/fragment_tubuyaki" />

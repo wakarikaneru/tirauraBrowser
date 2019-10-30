@@ -1,6 +1,5 @@
 package studio.wakaru.test2.ui.tubuyaki;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -37,8 +36,9 @@ import java.util.List;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
-import studio.wakaru.test2.ui.home.HomeFragment;
+import studio.wakaru.test2.ui.user.UserFragment;
 import studio.wakaru.test2.util.Good;
+import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
@@ -46,16 +46,19 @@ public class TubuyakiFragment extends Fragment {
 
     private TubuyakiViewModel tubuyakiViewModel;
 
-    private ScrollView mScrollView;
+    private ScrollView scrollView;
 
     private String tiraURL;
     private String imgURL;
     private String cookie;
+    private MyData myData;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         tubuyakiViewModel =
                 ViewModelProviders.of(getActivity()).get(TubuyakiViewModel.class);
+
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         //設定を読み込む
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -63,18 +66,19 @@ public class TubuyakiFragment extends Fragment {
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
 
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        myData = new MyData(cookie);
 
-        mScrollView = root.findViewById(R.id.scrollView);
 
         //スクロール状態を復元
+        scrollView = root.findViewById(R.id.scrollView);
+
         tubuyakiViewModel.getScroll().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer i) {
                 if (i != null) {
-                    mScrollView.post(new Runnable() {
+                    scrollView.post(new Runnable() {
                         public void run() {
-                            mScrollView.setScrollY(tubuyakiViewModel.getScroll().getValue());
+                            scrollView.setScrollY(tubuyakiViewModel.getScroll().getValue());
                         }
                     });
                 }
@@ -99,7 +103,7 @@ public class TubuyakiFragment extends Fragment {
 
         //FAB
         FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
-        if (tiraURL.isEmpty()) {
+        if (tiraURL.isEmpty() || myData.getMynum() == 0) {
             fab.hide();
         }
         fab.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +129,8 @@ public class TubuyakiFragment extends Fragment {
 
                 } else {
                     int resCount = 0;
-                    for (Tubuyaki t : list) {
+                    for (final Tubuyaki t : list) {
+
                         LinearLayout lt;
                         if (resCount <= 0) {
                             lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
@@ -188,7 +193,7 @@ public class TubuyakiFragment extends Fragment {
                             lt.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
                                 public boolean onLongClick(View v) {
-                                    popup(v, tno, false);
+                                    popup(v, myData, t);
 
                                     return true;
                                 }
@@ -253,11 +258,11 @@ public class TubuyakiFragment extends Fragment {
 
                             final int tno = t.getTno();
 
-                            //長押しでブラウザで開く
+                            //長押しでポップアップメニューで開く
                             lt.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
                                 public boolean onLongClick(View v) {
-                                    popup(v, tno, true);
+                                    popup(v, myData, t);
                                     return true;
                                 }
                             });
@@ -305,9 +310,9 @@ public class TubuyakiFragment extends Fragment {
         return root;
     }
 
-    public void popup(View v, final int tno, boolean res) {
+    public void popup(View v, final MyData m, final Tubuyaki t) {
 
-        PopupMenu popup = new PopupMenu(getContext(), v, Gravity.END);
+        PopupMenu popup = new PopupMenu(v.getContext(), v, Gravity.END, R.attr.actionOverflowMenuStyle, 0);
         popup.getMenuInflater().inflate(R.menu.menu_tubuyaki_context, popup.getMenu());
 
         popup.show();
@@ -317,16 +322,19 @@ public class TubuyakiFragment extends Fragment {
             MenuItem item = menu.getItem(i);
             switch (item.getItemId()) {
                 case R.id.item_open:
-                    item.setEnabled(tno != 0 && !res);
+                    item.setEnabled(t.getTno() != 0 && t.getParent() == 1);
+                    break;
+                case R.id.item_useropen:
+                    item.setEnabled(t.getTno() != 0);
                     break;
                 case R.id.item_good:
-                    item.setEnabled(!tiraURL.isEmpty() && tno != 0);
+                    item.setEnabled(!tiraURL.isEmpty() && m.getMynum() != 0 && t.getTno() != 0);
                     break;
                 case R.id.item_res:
-                    item.setEnabled(!tiraURL.isEmpty() && tno != 0 && !res);
+                    item.setEnabled(!tiraURL.isEmpty() && m.getMynum() != 0 && t.getTno() != 0 && t.getParent() == 1);
                     break;
                 case R.id.item_browser:
-                    item.setEnabled(!tiraURL.isEmpty() && tno != 0 && !res);
+                    item.setEnabled(!tiraURL.isEmpty() && m.getMynum() != 0 && t.getTno() != 0 && t.getParent() == 1);
                     break;
             }
         }
@@ -337,17 +345,20 @@ public class TubuyakiFragment extends Fragment {
                 // 押されたメニュー項目名をToastで表示
                 switch (item.getItemId()) {
                     case R.id.item_open:
-                        openTubuyaki(tno);
+                        openTubuyaki(t.getTno());
+                        break;
+                    case R.id.item_useropen:
+                        openUser(t.getUid());
                         break;
                     case R.id.item_good:
-                        new GoodTask().execute(tiraURL, cookie, String.valueOf(tno));
+                        new GoodTask().execute(tiraURL, cookie, String.valueOf(t.getTno()));
                         return true;
                     case R.id.item_res:
-                        openPostActivity(tno);
+                        openPostActivity(t.getTno());
                         return true;
                     case R.id.item_browser:
                         //ブラウザ起動
-                        openBrowser(tno);
+                        openBrowser(t.getTno());
                         return true;
                     default:
                         return false;
@@ -362,7 +373,7 @@ public class TubuyakiFragment extends Fragment {
         //メニューを選択状態に変更
         BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
         Menu menu = bnv.getMenu();
-        MenuItem menuItem = menu.getItem(1);
+        MenuItem menuItem = menu.getItem(2);
         menuItem.setChecked(true);
 
         //画面遷移
@@ -375,6 +386,27 @@ public class TubuyakiFragment extends Fragment {
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.nav_host_fragment, tf)
+                .commit();
+    }
+
+    public void openUser(int uid) {
+
+        //メニューを選択状態に変更
+        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
+        Menu menu = bnv.getMenu();
+        MenuItem menuItem = menu.getItem(1);
+        menuItem.setChecked(true);
+
+        //画面遷移
+        Bundle bundle = new Bundle();
+        bundle.putInt("uid", uid);
+
+        UserFragment uf = new UserFragment();
+        uf.setArguments(bundle);
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment, uf)
                 .commit();
     }
 
@@ -396,7 +428,7 @@ public class TubuyakiFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        tubuyakiViewModel.setScroll(mScrollView.getScrollY());
+        tubuyakiViewModel.setScroll(scrollView.getScrollY());
     }
 
     //非同期でGoodをつける

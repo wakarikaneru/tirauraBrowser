@@ -1,5 +1,6 @@
 package studio.wakaru.test2;
 
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,12 +26,16 @@ import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
 
+import studio.wakaru.test2.ui.home.HomeFragment;
 import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.TiraXMLMain;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class MainActivity extends AppCompatActivity {
+
+    static final int SETTING = 1;  // The request code
+    static final int LOGIN = 1;  // The request code
 
     private String tiraURL;
     private String xmlURL;
@@ -44,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_new, R.id.navigation_tubuyaki, R.id.navigation_notifications)
+                R.id.navigation_new, R.id.navigation_user, R.id.navigation_tubuyaki, R.id.navigation_notifications)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -77,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         cookie = pref.getString("COOKIE", "");
         new LoginTask().execute();
 
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -109,6 +116,10 @@ public class MainActivity extends AppCompatActivity {
                     item.setEnabled(!tiraURL.isEmpty());
                     break;
 
+                case R.id.action_logout:
+                    item.setEnabled(!cookie.isEmpty());
+                    break;
+
                 case R.id.action_tiraura:
                     item.setEnabled(!tiraURL.isEmpty());
                     break;
@@ -127,15 +138,26 @@ public class MainActivity extends AppCompatActivity {
         int itemId = item.getItemId();
         switch (itemId) {
             case R.id.action_settings:
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                startActivityForResult(new Intent(MainActivity.this, SettingsActivity.class), SETTING);
 
                 return true;
 
             case R.id.action_login:
                 if (!tiraURL.isEmpty()) {
-                    //ブラウザ起動
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    //ログイン
+                    startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), LOGIN);
                 }
+                return true;
+
+            case R.id.action_logout:
+                //ログアウト
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("COOKIE", "");
+                editor.commit();
+
+                onResume();
                 return true;
 
             case R.id.action_tiraura:
@@ -153,6 +175,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        /*
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment, new HomeFragment())
+                .commit();
+         */
+    }
+
     //ログイン状況を取得
     private class LoginTask extends AsyncTask<String, Void, MyData> {
 
@@ -167,12 +201,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(MyData user) {
+        protected void onPostExecute(MyData myData) {
             //Here you are done with the task
 
-            if (0 < user.getMynum()) {
-                getSupportActionBar().setTitle(user.getMyname());
-                Toast.makeText(MainActivity.this, user.getMyname() + "でログインしています", Toast.LENGTH_LONG).show();
+            if (0 < myData.getMynum()) {
+                getSupportActionBar().setTitle(myData.getMyname());
+                Toast.makeText(MainActivity.this, myData.getMyname() + "でログインしています", Toast.LENGTH_LONG).show();
             } else {
                 getSupportActionBar().setTitle("ログインしていません");
                 Toast.makeText(MainActivity.this, "ログインしていません", Toast.LENGTH_LONG).show();

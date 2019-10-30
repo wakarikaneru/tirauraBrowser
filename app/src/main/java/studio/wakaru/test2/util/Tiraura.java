@@ -137,13 +137,9 @@ public class Tiraura {
 
     public static String postTubuyaki(String urlStr, String cookies, String title, String name2, String cookieid, String t_session, String data, String hash, String hashcheck, String image, byte[] upfile) {
 
-        HttpURLConnection con = null;
-        OutputStream os;
-        InputStream is = null;
-
         String str = "";
 
-        HashMap kv = new HashMap<String, String>();
+        HashMap<String, String> kv = new HashMap<String, String>();
         kv.put("mode", "bbs_write");
         kv.put("Category", "CT01");
         kv.put("upform", "s");
@@ -155,125 +151,17 @@ public class Tiraura {
         kv.put("hash", hash);
         kv.put("hashcheck", hashcheck);
 
-        //kv.put("image", "image.png");
+        kv.put("image", "image.png");
         //kv.put("upfile", upfile);
 
-        try {
-            URL url = new URL(urlStr);
-            //URL url = new URL("https://en0nu00pa8oq1j.x.pipedream.net");
-            con = (HttpURLConnection) url.openConnection();
-            con.setDoInput(true);
-            con.setDoOutput(true);
-            con.setUseCaches(false);
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
-            con.setRequestProperty("Cookie", cookies);
-
-
-            os = con.getOutputStream();
-
-            PrintStream ps = new PrintStream(os, true, "EUC-JP");
-
-            Uri.Builder builder = new Uri.Builder();
-
-            Set<String> keys = kv.keySet();
-            for (String key : keys) {
-                ps.print(TWO_HYPHENS + BOUNDARY);
-                ps.print(CRLF);
-                ps.print("Content-Disposition: form-data; name=\"" + key + "\"");
-                ps.print(CRLF);
-
-                ps.print(CRLF);
-                ps.print(kv.get(key));
-                ps.print(CRLF);
-            }
-
-
-            if (upfile != null) {
-                ps.print(TWO_HYPHENS + BOUNDARY);
-                ps.print(CRLF);
-                ps.print("Content-Disposition: form-data; name=\"upfile\"; filename=\""+image+"\"");
-                ps.print(CRLF);
-                ps.print("Content-Type: image/png");
-                ps.print(CRLF);
-
-                ps.print(CRLF);
-                ps.write(upfile);
-                ps.print(CRLF);
-
-                Log.d("Tiraura", "upfile Upload");
-            } else {
-
-                ps.print(TWO_HYPHENS + BOUNDARY);
-                ps.print("Content-Disposition: form-data; name=\"upfile\"; filename=\"\"");
-                ps.print(CRLF);
-                ps.print("Content-Type: application/octet-stream");
-                ps.print(CRLF);
-
-                ps.print(CRLF);
-                ps.print("");
-                ps.print(CRLF);
-
-                Log.d("Tiraura", "upfile null");
-            }
-
-            ps.print(TWO_HYPHENS + BOUNDARY + TWO_HYPHENS);
-
-            ps.close();
-
-            con.connect();
-
-
-            is = con.getInputStream();
-
-            // レスポンスコードの確認します。
-            int responseCode = con.getResponseCode();
-            if (responseCode != HttpURLConnection.HTTP_OK) {
-                throw new IOException("HTTP responseCode: " + responseCode);
-            }
-
-            // 文字列化します。
-            StringBuilder sb = new StringBuilder();
-
-            is = con.getInputStream();
-            if (is != null) {
-                BufferedReader br = new BufferedReader(new InputStreamReader(is, "EUC-JP"));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
-
-                str = sb.toString();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (con != null) {
-                con.disconnect();
-            }
-        }
-
-        return str;
+        return post(urlStr, cookies, kv, upfile);
     }
 
     public static String postRes(String urlStr, String cookies, String upform, String scount, String tubuid, String no, String title, String cookieid, String t_session, String nomove, String name, String data, String image, byte[] upfile) {
 
-
-        HttpURLConnection con = null;
-        OutputStream os;
-        InputStream is = null;
-
         String str = "";
 
-        HashMap kv = new HashMap<String, String>();
+        HashMap<String, String> kv = new HashMap<String, String>();
         kv.put("mode", "bbs_write");
         kv.put("Category", "CT01");
         kv.put("upform", upform);
@@ -289,8 +177,20 @@ public class Tiraura {
         kv.put("Name", name);
         kv.put("Data", data);
 
-        //kv.put("image", "image.png");
+        kv.put("image", "image.png");
         //kv.put("upfile", upfile);
+
+        return post(urlStr, cookies, kv, upfile);
+
+    }
+
+    private static String post(String urlStr, String cookies, HashMap<String, String> kv, byte[] upfile) {
+
+        HttpURLConnection con = null;
+        OutputStream os;
+        InputStream is = null;
+
+        String str = "";
 
         try {
             URL url = new URL(urlStr);
@@ -306,7 +206,7 @@ public class Tiraura {
 
             os = con.getOutputStream();
 
-            PrintStream ps = new PrintStream(os, true, "EUC-JP");
+            PrintStream ps = new PrintStream(os, true, "EUC_JP");
 
             Uri.Builder builder = new Uri.Builder();
 
@@ -326,7 +226,7 @@ public class Tiraura {
             if (upfile != null) {
                 ps.print(TWO_HYPHENS + BOUNDARY);
                 ps.print(CRLF);
-                ps.print("Content-Disposition: form-data; name=\"upfile\"; filename=\""+image+"\"");
+                ps.print("Content-Disposition: form-data; name=\"upfile\"; filename=\"" + kv.get("image") + "\"");
                 ps.print(CRLF);
                 ps.print("Content-Type: image/png");
                 ps.print(CRLF);
@@ -337,7 +237,6 @@ public class Tiraura {
 
                 Log.d("Tiraura", "upfile Upload");
             } else {
-
                 ps.print(TWO_HYPHENS + BOUNDARY);
                 ps.print("Content-Disposition: form-data; name=\"upfile\"; filename=\"\"");
                 ps.print(CRLF);
@@ -371,7 +270,7 @@ public class Tiraura {
 
             is = con.getInputStream();
             if (is != null) {
-                BufferedReader br = new BufferedReader(new InputStreamReader(is, "EUC-JP"));
+                BufferedReader br = new BufferedReader(new InputStreamReader(is, "EUC_JP"));
                 String line;
                 while ((line = br.readLine()) != null) {
                     sb.append(line);

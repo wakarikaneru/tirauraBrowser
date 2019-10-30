@@ -6,6 +6,9 @@
             android:id="@+id/item_open"
             android:title="開く" />
         <item
+            android:id="@+id/item_useropen"
+            android:title="ユーザー" />
+        <item
             android:id="@+id/item_res"
             android:title="レスする" />
         <item

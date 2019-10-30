@@ -1,12 +1,12 @@
-package studio.wakaru.test2.ui.home;
+package studio.wakaru.test2.ui.user;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,10 +21,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -36,20 +35,21 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
-import studio.wakaru.test2.ui.user.UserFragment;
 import studio.wakaru.test2.util.Good;
 import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
-public class HomeFragment extends Fragment {
+public class UserFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private UserViewModel userViewModel;
 
     private ScrollView scrollView;
 
@@ -66,10 +66,10 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(getActivity()).get(HomeViewModel.class);
+        userViewModel =
+                ViewModelProviders.of(getActivity()).get(UserViewModel.class);
 
-        final View root = inflater.inflate(R.layout.fragment_home, container, false);
+        final View root = inflater.inflate(R.layout.fragment_user, container, false);
 
         //設定を読み込む
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -94,13 +94,13 @@ public class HomeFragment extends Fragment {
         //スクロール状態を復元
         scrollView = root.findViewById(R.id.scrollView);
 
-        homeViewModel.getScroll().observe(this, new Observer<Integer>() {
+        userViewModel.getScroll().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer i) {
                 if (i != null) {
                     scrollView.post(new Runnable() {
                         public void run() {
-                            scrollView.setScrollY(homeViewModel.getScroll().getValue());
+                            scrollView.setScrollY(userViewModel.getScroll().getValue());
                         }
                     });
                 }
@@ -115,12 +115,12 @@ public class HomeFragment extends Fragment {
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                homeViewModel.refresh(getContext());
+                userViewModel.refresh(getContext());
             }
         });
 
         //スワイプで更新の操作説明
-        LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_getstart, null);
+        LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.user_getstart, null);
         tubuyakiRoot.addView(getStart);
 
         //FAB
@@ -131,12 +131,13 @@ public class HomeFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openPostActivity(0);
+                userViewModel.setUid(myData.getMynum());
+                userViewModel.refresh(getContext());
             }
         });
 
         //つぶやきデータを更新
-        homeViewModel.getTubuyakiList().observe(this, new Observer<List<Tubuyaki>>() {
+        userViewModel.getTubuyakiList().observe(this, new Observer<List<Tubuyaki>>() {
             @Override
             public void onChanged(@Nullable List<Tubuyaki> list) {
 
@@ -292,7 +293,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
 
-                            homeViewModel.add(getContext());
+                            userViewModel.add(getContext());
 
                             LinearLayout layoutLoading = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_loading, null);
                             tubuyakiRoot.addView(layoutLoading);
@@ -306,6 +307,19 @@ public class HomeFragment extends Fragment {
                 swipe.setRefreshing(false);
             }
         });
+
+        //uidを設定する
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            int prevUid = userViewModel.getUid();
+            int nowUid = bundle.getInt("uid");
+
+            if (prevUid != nowUid) {
+                userViewModel.setUid(nowUid);
+                userViewModel.setScroll(0);
+                userViewModel.refresh(getContext());
+            }
+        }
 
         //homeViewModel.refresh(getContext());
 
@@ -462,7 +476,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        homeViewModel.setScroll(scrollView.getScrollY());
+        userViewModel.setScroll(scrollView.getScrollY());
     }
 
     //非同期でGoodをつける
