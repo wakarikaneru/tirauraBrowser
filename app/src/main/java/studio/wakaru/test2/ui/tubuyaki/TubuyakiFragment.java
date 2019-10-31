@@ -58,7 +58,7 @@ public class TubuyakiFragment extends Fragment {
         tubuyakiViewModel =
                 ViewModelProviders.of(getActivity()).get(TubuyakiViewModel.class);
 
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        View root = inflater.inflate(R.layout.fragment_tubuyaki, container, false);
 
         //設定を読み込む
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
