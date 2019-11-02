@@ -21,6 +21,7 @@ import java.util.concurrent.Future;
 import studio.wakaru.test2.ui.home.HomeViewModel;
 import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.TiraXMLMain;
+import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
 public class TubuyakiViewModel extends ViewModel {
@@ -33,6 +34,7 @@ public class TubuyakiViewModel extends ViewModel {
 
     private String xmlURL;
     private String imgURL;
+    private String tiraURL;
     private String cookie;
 
     private int tno;
@@ -47,6 +49,7 @@ public class TubuyakiViewModel extends ViewModel {
 
         xmlURL = "";
         imgURL = "";
+        tiraURL = "";
         cookie = "";
 
     }
@@ -55,6 +58,7 @@ public class TubuyakiViewModel extends ViewModel {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(c);
         xmlURL = pref.getString("xml_resource", "");
         imgURL = pref.getString("img_resource", "");
+        tiraURL = pref.getString("tiraura_resource", "");
         cookie = pref.getString("COOKIE", "");
     }
 
@@ -110,6 +114,10 @@ public class TubuyakiViewModel extends ViewModel {
                         List<Tubuyaki> list = tiraXML.getTubuyakiList();
 
                         mTubuyakiList.postValue(list);
+
+                        //既読をつける
+                        URL uh = new URL(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
+                        Tiraura.getHTML(uh.toString(), cookie);
 
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
