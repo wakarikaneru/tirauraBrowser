@@ -1,4 +1,4 @@
-package studio.wakaru.test2.ui.mydata;
+package studio.wakaru.test2.ui.tubuyaki_log;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.util.Linkify;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -30,24 +28,19 @@ import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.ui.user.UserFragment;
-import studio.wakaru.test2.util.Good;
 import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.MyTubuyakiLog;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
-public class MyDataFragment extends Fragment {
+public class LogTubuyakiFragment extends Fragment {
 
-    private MyDataModel myDataModel;
+    private LogTubuyakiModel logTubuyakiModel;
 
     private ScrollView scrollView;
 
@@ -58,10 +51,10 @@ public class MyDataFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        myDataModel =
-                ViewModelProviders.of(getActivity()).get(MyDataModel.class);
+        logTubuyakiModel =
+                ViewModelProviders.of(getActivity()).get(LogTubuyakiModel.class);
 
-        View root = inflater.inflate(R.layout.fragment_tubuyaki, container, false);
+        View root = inflater.inflate(R.layout.fragment_log_tubuyaki, container, false);
 
         //設定を読み込む
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -75,13 +68,13 @@ public class MyDataFragment extends Fragment {
         //スクロール状態を復元
         scrollView = root.findViewById(R.id.scrollView);
 
-        myDataModel.getScroll().observe(this, new Observer<Integer>() {
+        logTubuyakiModel.getScroll().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer i) {
                 if (i != null) {
                     scrollView.post(new Runnable() {
                         public void run() {
-                            scrollView.setScrollY(myDataModel.getScroll().getValue());
+                            scrollView.setScrollY(logTubuyakiModel.getScroll().getValue());
                         }
                     });
                 }
@@ -96,7 +89,7 @@ public class MyDataFragment extends Fragment {
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                myDataModel.refresh(getContext());
+                logTubuyakiModel.refresh(getContext());
             }
         });
 
@@ -105,7 +98,7 @@ public class MyDataFragment extends Fragment {
         tubuyakiRoot.addView(getStart);
 
         //つぶやきデータを更新
-        myDataModel.getMyData().observe(this, new Observer<MyData>() {
+        logTubuyakiModel.getMyData().observe(this, new Observer<MyData>() {
             @Override
             public void onChanged(@Nullable MyData mydata) {
 
@@ -159,7 +152,7 @@ public class MyDataFragment extends Fragment {
             }
         });
 
-        //myDataModel.refresh(getContext());
+        //logTubuyakiModel.refresh(getContext());
 
         return root;
     }
@@ -282,7 +275,7 @@ public class MyDataFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        myDataModel.setScroll(scrollView.getScrollY());
+        logTubuyakiModel.setScroll(scrollView.getScrollY());
     }
 
     //非同期でGoodをつける

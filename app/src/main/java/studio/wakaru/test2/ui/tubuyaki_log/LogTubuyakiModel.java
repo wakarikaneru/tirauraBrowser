@@ -1,4 +1,4 @@
-package studio.wakaru.test2.ui.mydata;
+package studio.wakaru.test2.ui.tubuyaki_log;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,14 +12,11 @@ import androidx.preference.PreferenceManager;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.TiraXMLMain;
-import studio.wakaru.test2.util.Tubuyaki;
 
-public class MyDataModel extends ViewModel {
+public class LogTubuyakiModel extends ViewModel {
 
     private boolean lock;
 
@@ -32,8 +29,8 @@ public class MyDataModel extends ViewModel {
 
     private int tno;
 
-    public MyDataModel() {
-        Log.d("MyDataModel", "MyDataModel constructor");
+    public LogTubuyakiModel() {
+        Log.d("LogTubuyakiModel", "LogTubuyakiModel constructor");
         lock = false;
         mMyData = new MutableLiveData<>();
         scroll = new MutableLiveData<>();

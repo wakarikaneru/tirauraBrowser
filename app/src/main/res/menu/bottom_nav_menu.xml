@@ -16,8 +16,8 @@
         android:title="@string/title_tubuyaki" />
 
     <item
-        android:id="@+id/navigation_mydata"
+        android:id="@+id/navigation_log_tubuyaki"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_mydata" />
+        android:title="@string/title_log_tubuyaki" />
 
 </menu>
