@@ -86,6 +86,10 @@ public class PostActivity extends AppCompatActivity {
 
                 String submitText = text.getText().toString();
 
+                if (submitText.isEmpty() && !upFile.isEmpty()) {
+                    submitText = Tiraura.blank();
+                }
+
                 String sageStr = "";
                 if (sage.isChecked()) {
                     sageStr = "on";
