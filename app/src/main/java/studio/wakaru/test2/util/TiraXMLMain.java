@@ -2,6 +2,7 @@ package studio.wakaru.test2.util;
 
 import android.util.Log;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -175,13 +176,13 @@ public class TiraXMLMain {
             if (!e.getElementsByTagName("mytira").item(0).getTextContent().trim().isEmpty()) {
                 myData.setMytira(Integer.parseInt(e.getElementsByTagName("mytira").item(0).getTextContent().trim()));
             }
-            myData.setMyimg1(e.getElementsByTagName("myimg1").item(0).getTextContent().trim());
-            myData.setMyimg2(e.getElementsByTagName("myimg2").item(0).getTextContent().trim());
-            myData.setMyimg3(e.getElementsByTagName("myimg3").item(0).getTextContent().trim());
-            myData.setMybimg1(e.getElementsByTagName("mybimg1").item(0).getTextContent().trim());
-            myData.setMybimg2(e.getElementsByTagName("mybimg2").item(0).getTextContent().trim());
-            myData.setMybimg3(e.getElementsByTagName("mybimg3").item(0).getTextContent().trim());
-            myData.setMyhash(e.getElementsByTagName("myhash").item(0).getTextContent().trim());
+            myData.setMyimg1(StringUtils.defaultString(e.getElementsByTagName("myimg1").item(0).getTextContent().trim()));
+            myData.setMyimg2(StringUtils.defaultString(e.getElementsByTagName("myimg2").item(0).getTextContent().trim()));
+            myData.setMyimg3(StringUtils.defaultString(e.getElementsByTagName("myimg3").item(0).getTextContent().trim()));
+            myData.setMybimg1(StringUtils.defaultString(e.getElementsByTagName("mybimg1").item(0).getTextContent().trim()));
+            myData.setMybimg2(StringUtils.defaultString(e.getElementsByTagName("mybimg2").item(0).getTextContent().trim()));
+            myData.setMybimg3(StringUtils.defaultString(e.getElementsByTagName("mybimg3").item(0).getTextContent().trim()));
+            myData.setMyhash(StringUtils.defaultString(e.getElementsByTagName("myhash").item(0).getTextContent().trim()));
             if (!e.getElementsByTagName("mypoint").item(0).getTextContent().trim().isEmpty()) {
                 myData.setMypoint(Integer.parseInt(e.getElementsByTagName("mypoint").item(0).getTextContent().trim()));
             }
@@ -191,8 +192,8 @@ public class TiraXMLMain {
             if (!e.getElementsByTagName("mymcount2").item(0).getTextContent().trim().isEmpty()) {
                 myData.setMymcount2(Integer.parseInt(e.getElementsByTagName("mymcount2").item(0).getTextContent().trim()));
             }
-            myData.setMytubulog(e.getElementsByTagName("mytubulog").item(0).getTextContent().trim());
-            myData.setMyreslog(e.getElementsByTagName("myreslog").item(0).getTextContent().trim());
+            myData.setMytubulog(MyTubuyakiLog.getMyTubuyakiLogList(StringUtils.defaultString(e.getElementsByTagName("mytubulog").item(0).getTextContent().trim())));
+            myData.setMyreslog(MyResLog.getMyResList(StringUtils.defaultString(e.getElementsByTagName("myreslog").item(0).getTextContent().trim())));
         }
 
         return myData;

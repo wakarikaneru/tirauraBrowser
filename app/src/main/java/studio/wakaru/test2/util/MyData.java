@@ -3,6 +3,7 @@ package studio.wakaru.test2.util;
 import android.util.Log;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MyData {
@@ -20,8 +21,8 @@ public class MyData {
     private int mypoint;
     private int mymcount;
     private int mymcount2;
-    private String mytubulog;
-    private String myreslog;
+    private List<MyTubuyakiLog> mytubulog;
+    private List<MyResLog> myreslog;
 
     public MyData() {
     }
@@ -121,11 +122,11 @@ public class MyData {
         this.mymcount2 = mymcount2;
     }
 
-    public void setMytubulog(String mytubulog) {
+    public void setMytubulog(List<MyTubuyakiLog> mytubulog) {
         this.mytubulog = mytubulog;
     }
 
-    public void setMyreslog(String myreslog) {
+    public void setMyreslog(List<MyResLog> myreslog) {
         this.myreslog = myreslog;
     }
 
@@ -185,11 +186,11 @@ public class MyData {
         return mymcount2;
     }
 
-    public String getMytubulog() {
+    public List<MyTubuyakiLog> getMytubulog() {
         return mytubulog;
     }
 
-    public String getMyreslog() {
+    public List<MyResLog> getMyreslog() {
         return myreslog;
     }
 }
