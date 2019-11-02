@@ -58,7 +58,9 @@ public class MainActivity extends AppCompatActivity {
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
 
-
+        //通知開始
+        Intent intent = new Intent(getApplicationContext(), NotificationService.class);
+        startService(intent);
     }
 
     @Override
