@@ -48,7 +48,7 @@ public class MyResLog {
     public static MyResLog getMyResLog(String str) {
         MyResLog mrl = new MyResLog();
 
-        String[] params = str.split("||");
+        String[] params = str.split("\\|\\|");
 
         try {
             mrl.setTno(Integer.parseInt(params[0]));
@@ -67,7 +67,7 @@ public class MyResLog {
     public static List<MyResLog> getMyResList(String str) {
         List<MyResLog> list = new ArrayList<>();
 
-        String[] mrllStr = str.split("|-|");
+        String[] mrllStr = str.split("\\|-\\|");
 
         for (String mrlStr : mrllStr) {
             if (!mrlStr.isEmpty()) {
