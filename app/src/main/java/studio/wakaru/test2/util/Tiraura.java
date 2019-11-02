@@ -20,6 +20,7 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -297,4 +298,14 @@ public class Tiraura {
         return str;
     }
 
+    public static String blank() {
+        StringBuilder sb = new StringBuilder();
+        int count = new Random().nextInt(1024);
+
+        for (int i = 0; i < count; i++) {
+            sb.append(" ");
+        }
+
+        return sb.toString();
+    }
 }

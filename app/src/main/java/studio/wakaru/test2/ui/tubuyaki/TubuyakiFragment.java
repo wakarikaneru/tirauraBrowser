@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,7 +59,7 @@ public class TubuyakiFragment extends Fragment {
         tubuyakiViewModel =
                 ViewModelProviders.of(getActivity()).get(TubuyakiViewModel.class);
 
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        View root = inflater.inflate(R.layout.fragment_tubuyaki, container, false);
 
         //設定を読み込む
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -158,6 +159,14 @@ public class TubuyakiFragment extends Fragment {
                             //textTdata.setText(HtmlCompat.fromHtml(t.getTdata(),HtmlCompat.FROM_HTML_MODE_COMPACT));
                             textTdata.setText(Tubuyaki.format(t.getTdata()));
 
+                            if ("［画像有り］".equals(Tubuyaki.format(t.getTdata()).trim())) {
+                                textTdata.setVisibility(View.GONE);
+                                ViewGroup.LayoutParams lp = imgTupfile1.getLayoutParams();
+                                lp.height = lp.height * 3;
+                                lp.width = lp.width * 3;
+                                imgTupfile1.setLayoutParams(lp);
+                            }
+
                             textTdate.setText(t.getTdate());
                             textUname.setText(t.getUname());
                             textTres.setText("(" + t.getTres() + "レス)");
@@ -227,6 +236,14 @@ public class TubuyakiFragment extends Fragment {
                             //textTdata.setClickable(false);
                             //textTdata.setText(HtmlCompat.fromHtml(t.getTdata(),HtmlCompat.FROM_HTML_MODE_COMPACT));
                             textTdata.setText(Tubuyaki.format(t.getTdata()));
+
+                            if ("［画像有り］".equals(Tubuyaki.format(t.getTdata()).trim())) {
+                                textTdata.setVisibility(View.GONE);
+                                ViewGroup.LayoutParams lp = imgTupfile1.getLayoutParams();
+                                lp.height = lp.height * 3;
+                                lp.width = lp.width * 3;
+                                imgTupfile1.setLayoutParams(lp);
+                            }
 
                             textTdate.setText(t.getTdate());
                             textUname.setText(t.getUname());

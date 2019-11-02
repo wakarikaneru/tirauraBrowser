@@ -1,4 +1,4 @@
-package studio.wakaru.test2.ui.tubuyaki;
+package studio.wakaru.test2.ui.log_res.log_tubuyaki;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,44 +12,31 @@ import androidx.preference.PreferenceManager;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
-import studio.wakaru.test2.ui.home.HomeViewModel;
 import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.TiraXMLMain;
-import studio.wakaru.test2.util.Tiraura;
-import studio.wakaru.test2.util.Tubuyaki;
 
-public class TubuyakiViewModel extends ViewModel {
+public class LogResModel extends ViewModel {
 
     private boolean lock;
 
-    private MutableLiveData<List<Tubuyaki>> mTubuyakiList;
     private MutableLiveData<MyData> mMyData;
     private MutableLiveData<Integer> scroll;
 
     private String xmlURL;
     private String imgURL;
-    private String tiraURL;
     private String cookie;
 
     private int tno;
 
-    public TubuyakiViewModel() {
-        Log.d("TubuyakiViewModel", "TubuyakiViewModel constructor");
+    public LogResModel() {
+        Log.d("LogResModel", "LogResModel constructor");
         lock = false;
-        mTubuyakiList = new MutableLiveData<>();
         mMyData = new MutableLiveData<>();
         scroll = new MutableLiveData<>();
-        tno = 0;
 
         xmlURL = "";
         imgURL = "";
-        tiraURL = "";
         cookie = "";
 
     }
@@ -58,13 +45,7 @@ public class TubuyakiViewModel extends ViewModel {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(c);
         xmlURL = pref.getString("xml_resource", "");
         imgURL = pref.getString("img_resource", "");
-        tiraURL = pref.getString("tiraura_resource", "");
         cookie = pref.getString("COOKIE", "");
-    }
-
-
-    public LiveData<List<Tubuyaki>> getTubuyakiList() {
-        return mTubuyakiList;
     }
 
     public LiveData<MyData> getMyData() {
@@ -77,14 +58,6 @@ public class TubuyakiViewModel extends ViewModel {
 
     public void setScroll(int scroll) {
         this.scroll.setValue(scroll);
-    }
-
-    public void setTno(int i) {
-        tno = i;
-    }
-
-    public int getTno() {
-        return tno;
     }
 
     public void refresh(Context c) {
@@ -102,31 +75,16 @@ public class TubuyakiViewModel extends ViewModel {
             if (!lock) {
                 lock = true;
 
-                if (tno != 0) {
+                try {
+                    //tiraXMLを読み込む
+                    URL u = new URL(xmlURL);
+                    TiraXMLMain tiraXML = new TiraXMLMain(u.toString(), cookie);
 
-                    try {
-                        //tiraXMLを読み込む
-                        URL u = new URL(xmlURL + "?tn=" + tno);
-                        TiraXMLMain tiraXML = new TiraXMLMain(u.toString(), cookie);
+                    mMyData.postValue(tiraXML.getMyData());
 
-                        mMyData.postValue(tiraXML.getMyData());
-
-                        List<Tubuyaki> list = tiraXML.getTubuyakiList();
-
-                        mTubuyakiList.postValue(list);
-
-                        //既読をつける
-                        URL uh = new URL(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
-                        Tiraura.getHTML(uh.toString(), cookie);
-
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                        mTubuyakiList.postValue(new ArrayList<Tubuyaki>());
-                    }
-                } else {
-
-                    mTubuyakiList.postValue(new ArrayList<Tubuyaki>());
-
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                    mMyData.postValue(new MyData());
                 }
 
                 lock = false;
