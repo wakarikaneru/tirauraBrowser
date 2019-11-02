@@ -147,7 +147,7 @@ public class UserFragment extends Fragment {
                 //つぶやき一覧を表示
                 if (list.size() <= 0) {
                     //操作説明
-                    LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_help, null);
+                    LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.user_getstart, null);
                     tubuyakiRoot.addView(getStart);
 
                 } else {
