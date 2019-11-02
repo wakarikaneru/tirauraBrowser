@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.util.Linkify;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import java.util.List;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.ui.user.UserFragment;
 import studio.wakaru.test2.util.Good;
 import studio.wakaru.test2.util.MyData;
@@ -99,7 +101,7 @@ public class MyDataFragment extends Fragment {
         });
 
         //スワイプで更新の操作説明
-        LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.res_getstart, null);
+        LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_log_getstart, null);
         tubuyakiRoot.addView(getStart);
 
         //つぶやきデータを更新
@@ -113,7 +115,7 @@ public class MyDataFragment extends Fragment {
                 //つぶやき一覧を表示
                 if (mydata.getMynum() == 0) {
                     //操作説明
-                    LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.res_getstart, null);
+                    LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_log_getstart, null);
                     tubuyakiRoot.addView(getStart);
 
                 } else {
@@ -121,20 +123,35 @@ public class MyDataFragment extends Fragment {
 
                         LinearLayout lt;
 
-                        lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
+                        lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_log, null);
                         tubuyakiRoot.addView(lt);
 
-                        TextView textResNo = lt.findViewById(R.id.text_resNo);
-
+                        ImageView imageUnread = lt.findViewById(R.id.image_unread);
                         TextView textTdata = lt.findViewById(R.id.text_tdata);
                         TextView textTdate = lt.findViewById(R.id.text_tdate);
                         TextView textTres = lt.findViewById(R.id.text_tres);
 
+                        if (!t.isUnreadFlag()) {
+                            imageUnread.setVisibility(View.INVISIBLE);
+                        }
 
                         textTdata.setText(Tubuyaki.format(t.getTdata()));
+
+                        textTdata.setSingleLine();
+                        textTdata.setEllipsize(TextUtils.TruncateAt.END);
+
                         textTdate.setText(t.getTdate());
                         textTres.setText("(" + t.getTres() + "レス)");
 
+                        //タップしたらつぶやき画面に遷移
+                        final int tno = t.getTno();
+                        lt.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                openTubuyaki(tno);
+
+                            }
+                        });
                     }
 
                 }
@@ -217,7 +234,7 @@ public class MyDataFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putInt("tno", tno);
 
-        MyDataFragment tf = new MyDataFragment();
+        TubuyakiFragment tf = new TubuyakiFragment();
         tf.setArguments(bundle);
 
         getFragmentManager()
