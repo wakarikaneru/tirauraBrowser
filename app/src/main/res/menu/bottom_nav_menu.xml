@@ -17,7 +17,11 @@
 
     <item
         android:id="@+id/navigation_log_tubuyaki"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/ic_history_black_24dp"
         android:title="@string/title_log_tubuyaki" />
+    <item
+        android:id="@+id/navigation_log_res"
+        android:icon="@drawable/ic_reply_black_24dp"
+        android:title="@string/title_log_res" />
 
 </menu>

@@ -1,4 +1,4 @@
-package studio.wakaru.test2.ui.log_tubuyaki;
+package studio.wakaru.test2.ui.log_res.log_tubuyaki;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,13 +34,13 @@ import studio.wakaru.test2.R;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.ui.user.UserFragment;
 import studio.wakaru.test2.util.MyData;
-import studio.wakaru.test2.util.MyTubuyakiLog;
+import studio.wakaru.test2.util.MyResLog;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
-public class LogTubuyakiFragment extends Fragment {
+public class LogResFragment extends Fragment {
 
-    private LogTubuyakiModel logTubuyakiModel;
+    private LogResModel logResModel;
 
     private ScrollView scrollView;
 
@@ -51,8 +51,8 @@ public class LogTubuyakiFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        logTubuyakiModel =
-                ViewModelProviders.of(getActivity()).get(LogTubuyakiModel.class);
+        logResModel =
+                ViewModelProviders.of(getActivity()).get(LogResModel.class);
 
         View root = inflater.inflate(R.layout.fragment_log_tubuyaki, container, false);
 
@@ -68,13 +68,13 @@ public class LogTubuyakiFragment extends Fragment {
         //スクロール状態を復元
         scrollView = root.findViewById(R.id.scrollView);
 
-        logTubuyakiModel.getScroll().observe(this, new Observer<Integer>() {
+        logResModel.getScroll().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer i) {
                 if (i != null) {
                     scrollView.post(new Runnable() {
                         public void run() {
-                            scrollView.setScrollY(logTubuyakiModel.getScroll().getValue());
+                            scrollView.setScrollY(logResModel.getScroll().getValue());
                         }
                     });
                 }
@@ -89,16 +89,16 @@ public class LogTubuyakiFragment extends Fragment {
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                logTubuyakiModel.refresh(getContext());
+                logResModel.refresh(getContext());
             }
         });
 
         //スワイプで更新の操作説明
-        LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.log_tubuyaki_getstart, null);
+        LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.log_res_getstart, null);
         tubuyakiRoot.addView(getStart);
 
         //つぶやきデータを更新
-        logTubuyakiModel.getMyData().observe(this, new Observer<MyData>() {
+        logResModel.getMyData().observe(this, new Observer<MyData>() {
             @Override
             public void onChanged(@Nullable MyData mydata) {
 
@@ -108,15 +108,15 @@ public class LogTubuyakiFragment extends Fragment {
                 //つぶやき一覧を表示
                 if (mydata.getMynum() == 0) {
                     //操作説明
-                    LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.log_tubuyaki_getstart, null);
+                    LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.log_res_getstart, null);
                     tubuyakiRoot.addView(getStart);
 
                 } else {
-                    for (final MyTubuyakiLog t : mydata.getMytubulog()) {
+                    for (final MyResLog r : mydata.getMyreslog()) {
 
                         LinearLayout lt;
 
-                        lt = (LinearLayout) getLayoutInflater().inflate(R.layout.log_tubuyaki, null);
+                        lt = (LinearLayout) getLayoutInflater().inflate(R.layout.log_res, null);
                         tubuyakiRoot.addView(lt);
 
                         ImageView imageUnread = lt.findViewById(R.id.image_unread);
@@ -124,24 +124,22 @@ public class LogTubuyakiFragment extends Fragment {
                         TextView textTdate = lt.findViewById(R.id.text_tdate);
                         TextView textTres = lt.findViewById(R.id.text_tres);
 
-                        if (!t.isUnreadFlag()) {
+                        if (!r.isUnreadFlag()) {
                             imageUnread.setVisibility(View.INVISIBLE);
                         }
 
-                        textTdata.setText(Tubuyaki.format(t.getTdata()));
+                        textTdata.setText(Tubuyaki.format(r.getTdata()));
 
                         textTdata.setSingleLine();
                         textTdata.setEllipsize(TextUtils.TruncateAt.END);
 
-                        textTdate.setText(t.getTdate());
-                        textTres.setText("(" + t.getTres() + "レス)");
+                        textTres.setText("(" + r.getTres() + "レス)");
 
-                        //タップしたらつぶやき画面に遷移
-                        final int tno = t.getTno();
+                        //タップしたらつぶやき画面に遷移\
                         lt.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                openTubuyaki(tno);
+                                openTubuyaki(r.getTno());
 
                             }
                         });
@@ -152,7 +150,7 @@ public class LogTubuyakiFragment extends Fragment {
             }
         });
 
-        //logTubuyakiModel.refresh(getContext());
+        //logResModel.refresh(getContext());
 
         return root;
     }
@@ -275,7 +273,7 @@ public class LogTubuyakiFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        logTubuyakiModel.setScroll(scrollView.getScrollY());
+        logResModel.setScroll(scrollView.getScrollY());
     }
 
     //非同期でGoodをつける

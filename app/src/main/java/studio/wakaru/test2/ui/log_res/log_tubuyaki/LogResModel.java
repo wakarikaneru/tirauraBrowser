@@ -1,4 +1,4 @@
-package studio.wakaru.test2.ui.log_tubuyaki;
+package studio.wakaru.test2.ui.log_res.log_tubuyaki;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,7 +16,7 @@ import java.net.URL;
 import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.TiraXMLMain;
 
-public class LogTubuyakiModel extends ViewModel {
+public class LogResModel extends ViewModel {
 
     private boolean lock;
 
@@ -29,7 +29,7 @@ public class LogTubuyakiModel extends ViewModel {
 
     private int tno;
 
-    public LogTubuyakiModel() {
+    public LogResModel() {
         Log.d("LogResModel", "LogResModel constructor");
         lock = false;
         mMyData = new MutableLiveData<>();

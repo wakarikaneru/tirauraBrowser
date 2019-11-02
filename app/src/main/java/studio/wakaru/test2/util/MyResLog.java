@@ -7,7 +7,7 @@ public class MyResLog {
     //つぶやき番号||レス数||レス||未読フラグ|-|というフォーマット（||←小区切り　|-|←大区切り　適宜splitなどで処理を）フラグがたてば1　なしは0
     private int tno;
     private String tdata;
-    private String tres;
+    private int tres;
     private boolean unreadFlag;
 
     public MyResLog() {
@@ -21,7 +21,7 @@ public class MyResLog {
         this.tdata = tdata;
     }
 
-    public void setTres(String tres) {
+    public void setTres(int tres) {
         this.tres = tres;
     }
 
@@ -37,7 +37,7 @@ public class MyResLog {
         return tdata;
     }
 
-    public String getTres() {
+    public int getTres() {
         return tres;
     }
 
@@ -52,7 +52,7 @@ public class MyResLog {
 
         try {
             mrl.setTno(Integer.parseInt(params[0]));
-            mrl.setTres(params[1]);
+            mrl.setTres(Integer.parseInt(params[1]));
             mrl.setTdata(params[2]);
             mrl.setUnreadFlag("1".equals(params[3]));
 

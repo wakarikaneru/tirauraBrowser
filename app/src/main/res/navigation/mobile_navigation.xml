@@ -24,4 +24,8 @@
         android:id="@+id/navigation_log_tubuyaki"
         android:name="studio.wakaru.test2.ui.log_tubuyaki.LogTubuyakiFragment"
         tools:layout="@layout/fragment_log_tubuyaki" />
+    <fragment
+        android:id="@+id/navigation_log_res"
+        android:name="studio.wakaru.test2.ui.log_res.log_tubuyaki.LogResFragment"
+        tools:layout="@layout/fragment_log_res" />
 </navigation>
