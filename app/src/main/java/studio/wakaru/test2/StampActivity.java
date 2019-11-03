@@ -1,10 +1,12 @@
 package studio.wakaru.test2;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -75,7 +78,7 @@ public class StampActivity extends AppCompatActivity {
             iv.setImageResource(id);
 
             ViewGroup.LayoutParams lp =
-                    new LinearLayout.LayoutParams(convertDpToPx(this, 92), convertDpToPx(this, 92));
+                    new LinearLayout.LayoutParams(convertDpToPx(this, 128), convertDpToPx(this, 128));
             iv.setLayoutParams(lp);
             iv.setClickable(true);
 
@@ -86,14 +89,38 @@ public class StampActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Log.d("StampActivity", "submitButton onClick start");
 
-                    selectedImage= BitmapFactory.decodeResource(getResources(), id);
-                    new PostTask().execute(tiraURL, cookie, String.valueOf(tno), String.valueOf(scount), String.valueOf(tubuid), String.valueOf(myData.getMynum()), myData.getMyname(), Tiraura.blank(), "");
+
+                    ImageView img = new ImageView(StampActivity.this);
+                    img.setImageResource(id);
+
+                    ViewGroup.LayoutParams layoutParams =
+                            new LinearLayout.LayoutParams(convertDpToPx(StampActivity.this, 256), convertDpToPx(StampActivity.this, 256));
+
+                    img.setLayoutParams(layoutParams);
+
+                    img.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+                    AlertDialog ad = new AlertDialog.Builder(StampActivity.this)
+                            .setView(img)
+                            .setPositiveButton("送信", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // OK button pressed
+                                    BitmapFactory.Options options = new BitmapFactory.Options();
+                                    options.inScaled = false;
+                                    selectedImage = BitmapFactory.decodeResource(getResources(), id, options);
+
+                                    new PostTask().execute(tiraURL, cookie, String.valueOf(tno), String.valueOf(scount), String.valueOf(tubuid), String.valueOf(myData.getMynum()), myData.getMyname(), Tiraura.blank(), "");
+
+                                    Intent intent = getIntent();
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                }
+                            })
+                            .setCancelable(true)
+                            .show();
 
                     Log.d("StampActivity", "submitButton onClick end");
-
-                    Intent intent = getIntent();
-                    setResult(RESULT_OK, intent);
-                    finish();
                 }
             });
         }
