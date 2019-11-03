@@ -15,18 +15,57 @@
         android:orientation="vertical"
         android:padding="4dp">
 
-        <EditText
-            android:id="@+id/text_tdata"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/text_border"
-            android:ems="10"
-            android:gravity="start|top"
-            android:hint="本文"
-            android:inputType="textMultiLine"
-            android:padding="8dp"
-            android:singleLine="false" />
+            android:focusable="auto"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <EditText
+                android:id="@+id/text_tdata"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="本文"
+                android:inputType="textMultiLine"
+                android:padding="8dp"
+                android:singleLine="false">
+                <requestFocus />
+            </EditText>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="@color/colorBackground3" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:gravity="bottom"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_stamp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="8dp"
+                    android:layout_weight="0"
+                    android:tint="@color/colorText3"
+                    app:srcCompat="@drawable/ic_tag_faces_black_24dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout

@@ -41,6 +41,7 @@ import studio.wakaru.test2.util.Tiraura;
 public class PostActivity extends AppCompatActivity {
 
     private static final int REQUEST_GALLERY = 0;
+    private static final int REQUEST_STAMP = 1;
 
     private String tiraURL;
     private String imgURL;
@@ -79,7 +80,7 @@ public class PostActivity extends AppCompatActivity {
 
         final Switch sage = findViewById(R.id.switch_sage);
 
-        //送信ボタンを押したらデータを返す
+        //送信ボタンを押したら送信
         final Button submitButton = findViewById(R.id.button_submit);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +105,7 @@ public class PostActivity extends AppCompatActivity {
         });
 
 
-        //送信ボタンを押したらデータを返す
+        //画像ボタンを押したら画像選択
         final Button imageButton = findViewById(R.id.button_image);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +118,23 @@ public class PostActivity extends AppCompatActivity {
                 startActivityForResult(intentGallery, REQUEST_GALLERY);
 
                 Log.d("PostActivity", "imageButton onClick end");
+            }
+        });
+
+        //スタンプボタンを押したらスタンプ選択
+        final View stamp = findViewById(R.id.image_stamp);
+        stamp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("PostActivity", "stamp onClick start");
+
+                Intent intent = new Intent(getApplicationContext(), StampActivity.class);
+                intent.putExtra("tno", tno);
+                intent.putExtra("tubuid", tubuid);
+                intent.putExtra("scount", scount);
+                startActivityForResult(intent, REQUEST_STAMP);
+
+                Log.d("PostActivity", "stamp onClick end");
             }
         });
 
@@ -138,6 +156,16 @@ public class PostActivity extends AppCompatActivity {
                 upFile = data.getData().toString();
 
                 Log.d("PostActivity", "onActivityResult " + data.getData());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (requestCode == REQUEST_STAMP && resultCode == RESULT_OK) {
+            try {
+
+                finish();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -164,10 +192,11 @@ public class PostActivity extends AppCompatActivity {
             //画像を処理
             Bitmap image = null;
             byte[] imageByteArray = null;
-            String fileName = "image.png";
+            String fileName = "";
 
             try {
                 if (!upFile.isEmpty()) {
+                    fileName = "image.png";
 
                     //画像を取得
                     ByteArrayOutputStream baos;
