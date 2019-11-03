@@ -1,4 +1,4 @@
-package studio.wakaru.test2.ui.log_res.log_tubuyaki;
+package studio.wakaru.test2.ui.log_res;
 
 import android.content.Context;
 import android.content.SharedPreferences;
