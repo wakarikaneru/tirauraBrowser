@@ -2,6 +2,7 @@ package studio.wakaru.test2.util;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +26,12 @@ public class MyData {
     private List<MyResLog> myreslog;
 
     public MyData() {
+        mytubulog = new ArrayList<>();
+        myreslog = new ArrayList<>();
     }
 
     public MyData(String cookie) {
+
         //cookieからログイン情報を取得
         Log.d("PostActivity", cookie);
         Map<String, String> kv = new HashMap<>();
@@ -64,6 +68,9 @@ public class MyData {
                 this.myname = "";
             }
         }
+
+        mytubulog = new ArrayList<>();
+        myreslog = new ArrayList<>();
     }
 
     public void setMynum(int mynum) {

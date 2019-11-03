@@ -370,7 +370,7 @@ public class UserFragment extends Fragment {
                         new GoodTask().execute(tiraURL, cookie, String.valueOf(t.getTno()));
                         return true;
                     case R.id.item_res:
-                        openPostActivity(t.getTno());
+                        openPostActivity(t.getTno(), t.getUid(), t.getTres());
                         return true;
                     case R.id.item_browser:
                         //ブラウザ起動
@@ -426,11 +426,13 @@ public class UserFragment extends Fragment {
                 .commit();
     }
 
-    public void openPostActivity(int tno) {
+    public void openPostActivity(int tno, int tubuid, int tres) {
 
         //画面遷移
         Intent intent = new Intent(getActivity(), PostActivity.class);
         intent.putExtra("tno", tno);
+        intent.putExtra("tubuid", tubuid);
+        intent.putExtra("scount", tres);
         startActivity(intent);
 
     }

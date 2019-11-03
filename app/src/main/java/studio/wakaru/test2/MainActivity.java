@@ -1,5 +1,7 @@
 package studio.wakaru.test2;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,16 +32,26 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 public class MainActivity extends AppCompatActivity {
 
     static final int SETTING = 1;  // The request code
-    static final int LOGIN = 1;  // The request code
+    static final int LOGIN = 2;  // The request code
 
     private String tiraURL;
     private String xmlURL;
     private String imgURL;
     private String cookie;
+    private int bootCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //設定読み込み
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        tiraURL = pref.getString("tiraura_resource", "");
+        xmlURL = pref.getString("xml_resource", "");
+        imgURL = pref.getString("img_resource", "");
+        cookie = pref.getString("COOKIE", "");
+        bootCount = pref.getInt("BOOT_COUNT", 0);
+
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -51,14 +63,24 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        //設定読み込み
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        tiraURL = pref.getString("tiraura_resource", "");
-        xmlURL = pref.getString("xml_resource", "");
-        imgURL = pref.getString("img_resource", "");
+
+        if (bootCount == 0) {
+            startActivityForResult(new Intent(MainActivity.this, SettingsActivity.class), SETTING);
+        }
+
+
+        //ログイン情報を取得
         cookie = pref.getString("COOKIE", "");
+        new LoginTask().execute();
+
+        //通知開始
+        Intent intent = new Intent(getApplicationContext(), NotificationService.class);
+        startService(intent);
 
 
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt("BOOT_COUNT", ++bootCount);
+        editor.commit();
     }
 
     @Override
@@ -66,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        tiraURL = pref.getString("tiraura_resource", "");
+        xmlURL = pref.getString("xml_resource", "");
+        imgURL = pref.getString("img_resource", "");
+        cookie = pref.getString("COOKIE", "");
 
         //ダークモード
         if (pref.getBoolean("dark", false)) {
@@ -74,11 +100,12 @@ public class MainActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
-        //ログイン情報を取得
-        cookie = pref.getString("COOKIE", "");
-        new LoginTask().execute();
-
+        //メニューを更新
         invalidateOptionsMenu();
+
+        //通知を消去
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(NotificationService.NOTICE_ID);
     }
 
     @Override
@@ -130,6 +157,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        SharedPreferences pref;
+        BottomNavigationView bnv;
+
         int itemId = item.getItemId();
         switch (itemId) {
             case R.id.action_settings:
@@ -146,13 +176,19 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_logout:
                 //ログアウト
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+                pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-                SharedPreferences.Editor editor = sharedPref.edit();
+                SharedPreferences.Editor editor = pref.edit();
                 editor.putString("COOKIE", "");
                 editor.commit();
 
-                onResume();
+                //メニューを更新
+                invalidateOptionsMenu();
+
+                //Fragmentを初期化
+                bnv = findViewById(R.id.nav_view);
+                bnv.setSelectedItemId(R.id.navigation_new);
+
                 return true;
 
             case R.id.action_tiraura:
@@ -174,12 +210,45 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        /*
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, new HomeFragment())
-                .commit();
-         */
+        SharedPreferences pref;
+        BottomNavigationView bnv;
+
+        switch (requestCode) {
+            case SETTING:
+
+                //設定読み込み
+                pref = PreferenceManager.getDefaultSharedPreferences(this);
+                tiraURL = pref.getString("tiraura_resource", "");
+                xmlURL = pref.getString("xml_resource", "");
+                imgURL = pref.getString("img_resource", "");
+                cookie = pref.getString("COOKIE", "");
+
+                //メニューを更新
+                invalidateOptionsMenu();
+
+                //Fragmentを初期化
+                bnv = findViewById(R.id.nav_view);
+                bnv.setSelectedItemId(R.id.navigation_new);
+
+                break;
+            case LOGIN:
+
+                //ログイン情報を取得
+                pref = PreferenceManager.getDefaultSharedPreferences(this);
+                cookie = pref.getString("COOKIE", "");
+                new LoginTask().execute();
+
+                //メニューを更新
+                invalidateOptionsMenu();
+
+                //Fragmentを初期化
+                bnv = findViewById(R.id.nav_view);
+                bnv.setSelectedItemId(R.id.navigation_new);
+
+                break;
+            default:
+                break;
+        }
     }
 
     //ログイン状況を取得

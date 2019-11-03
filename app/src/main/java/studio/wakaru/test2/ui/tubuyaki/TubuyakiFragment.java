@@ -53,6 +53,7 @@ public class TubuyakiFragment extends Fragment {
     private String imgURL;
     private String cookie;
     private MyData myData;
+    private Tubuyaki tubuyaki;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class TubuyakiFragment extends Fragment {
         cookie = pref.getString("COOKIE", "");
 
         myData = new MyData(cookie);
-
+        tubuyaki = new Tubuyaki();
 
         //スクロール状態を復元
         scrollView = root.findViewById(R.id.scrollView);
@@ -110,7 +111,7 @@ public class TubuyakiFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openPostActivity(tubuyakiViewModel.getTno());
+                openPostActivity(tubuyaki.getTno(), tubuyaki.getUid(), tubuyaki.getTres());
             }
         });
 
@@ -130,6 +131,8 @@ public class TubuyakiFragment extends Fragment {
 
                 } else {
                     int resCount = 0;
+                    tubuyaki = list.get(0);
+
                     for (final Tubuyaki t : list) {
 
                         LinearLayout lt;
@@ -318,12 +321,17 @@ public class TubuyakiFragment extends Fragment {
         if (bundle != null) {
             int prevTno = tubuyakiViewModel.getTno();
             int nowTno = bundle.getInt("tno");
+            int uid = bundle.getInt("uid");
+            int tres = bundle.getInt("tres");
 
             if (prevTno != nowTno) {
                 tubuyakiViewModel.setTno(nowTno);
                 tubuyakiViewModel.setScroll(0);
                 tubuyakiViewModel.refresh(getContext());
             }
+            tubuyakiViewModel.setUid(uid);
+            tubuyakiViewModel.setTres(tres);
+
         }
 
         //tubuyakiViewModel.refresh(getContext());
@@ -375,7 +383,7 @@ public class TubuyakiFragment extends Fragment {
                         new GoodTask().execute(tiraURL, cookie, String.valueOf(t.getTno()));
                         return true;
                     case R.id.item_res:
-                        openPostActivity(t.getTno());
+                        openPostActivity(t.getTno(), t.getUid(), t.getTres());
                         return true;
                     case R.id.item_browser:
                         //ブラウザ起動
@@ -431,11 +439,13 @@ public class TubuyakiFragment extends Fragment {
                 .commit();
     }
 
-    public void openPostActivity(int tno) {
+    public void openPostActivity(int tno, int tubuid, int tres) {
 
         //画面遷移
         Intent intent = new Intent(getActivity(), PostActivity.class);
         intent.putExtra("tno", tno);
+        intent.putExtra("tubuid", tubuid);
+        intent.putExtra("scount", tres);
         startActivity(intent);
 
     }

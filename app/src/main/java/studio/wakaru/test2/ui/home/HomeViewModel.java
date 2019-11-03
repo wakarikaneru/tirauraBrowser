@@ -55,6 +55,7 @@ public class HomeViewModel extends ViewModel {
         cookie = "";
         entriesCount = 10;
         reply = true;
+
     }
 
     public void loadSetting(Context c) {

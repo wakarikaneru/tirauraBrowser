@@ -66,6 +66,8 @@ public class PostActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         final int tno = intent.getIntExtra("tno", 0);
+        final int tubuid = intent.getIntExtra("tubuid", 0);
+        final int scount = intent.getIntExtra("scount", 0);
 
         if (tno == 0) {
             getSupportActionBar().setTitle("新規つぶやき");
@@ -94,7 +96,7 @@ public class PostActivity extends AppCompatActivity {
                 if (sage.isChecked()) {
                     sageStr = "on";
                 }
-                new PostTask().execute(tiraURL, cookie, String.valueOf(tno), String.valueOf(myData.getMynum()), myData.getMyname(), submitText, sageStr, upFile);
+                new PostTask().execute(tiraURL, cookie, String.valueOf(tno), String.valueOf(scount), String.valueOf(tubuid), String.valueOf(myData.getMynum()), myData.getMyname(), submitText, sageStr, upFile);
                 Log.d("PostActivity", "submitButton onClick end");
 
                 finish();
@@ -151,11 +153,13 @@ public class PostActivity extends AppCompatActivity {
             String url = params[0];
             String cookie = params[1];
             String tno = params[2];
-            String myNum = params[3];
-            String myName = params[4];
-            String tData = params[5];
-            String sage = params[6];
-            String upFile = params[7];
+            String scount = params[3];
+            String tubuid = params[4];
+            String myNum = params[5];
+            String myName = params[6];
+            String tData = params[7];
+            String sage = params[8];
+            String upFile = params[9];
 
             //画像を処理
             Bitmap image = null;
@@ -197,7 +201,7 @@ public class PostActivity extends AppCompatActivity {
             if (Integer.parseInt(tno) == 0) {
                 str = Tiraura.postTubuyaki(url, cookie, "チラ裏ブラウザからのつぶやき", myName, myNum, "", tData, "tiraura", sage, fileName, imageByteArray);
             } else {
-                str = Tiraura.postRes(url, cookie, tno, "0", myNum, tno, "チラ裏ブラウザからのレス", myNum, "", sage, myName, tData, fileName, imageByteArray);
+                str = Tiraura.postRes(url, cookie, tno, scount, tubuid, tno, "チラ裏ブラウザからのレス", myNum, "", sage, myName, tData, fileName, imageByteArray);
             }
 
             return str;
