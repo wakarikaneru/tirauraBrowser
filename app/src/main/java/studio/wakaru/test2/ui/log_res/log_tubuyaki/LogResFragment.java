@@ -108,7 +108,7 @@ public class LogResFragment extends Fragment {
                 //つぶやき一覧を表示
                 if (mydata.getMynum() == 0) {
                     //操作説明
-                    LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.log_res_getstart, null);
+                    LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.log_res_help, null);
                     tubuyakiRoot.addView(getStart);
 
                 } else {
