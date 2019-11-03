@@ -1,5 +1,7 @@
 package studio.wakaru.test2;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,7 +32,7 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 public class MainActivity extends AppCompatActivity {
 
     static final int SETTING = 1;  // The request code
-    static final int LOGIN = 1;  // The request code
+    static final int LOGIN = 2;  // The request code
 
     private String tiraURL;
     private String xmlURL;
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         //通知開始
         Intent intent = new Intent(getApplicationContext(), NotificationService.class);
         startService(intent);
+
     }
 
     @Override
@@ -80,7 +83,12 @@ public class MainActivity extends AppCompatActivity {
         cookie = pref.getString("COOKIE", "");
         new LoginTask().execute();
 
+        //メニューを更新
         invalidateOptionsMenu();
+
+        //通知を消去
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(NotificationService.NOTICE_ID);
     }
 
     @Override

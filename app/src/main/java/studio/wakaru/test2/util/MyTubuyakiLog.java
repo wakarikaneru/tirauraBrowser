@@ -98,7 +98,6 @@ public class MyTubuyakiLog {
 
     public static List<MyTubuyakiLog> getMyTubuyakiLogList(String str) {
         List<MyTubuyakiLog> list = new ArrayList<>();
-        Log.d("MyTubuyakiLog", str);
 
         String[] mtllStr = str.split("\\|-\\|");
 
