@@ -7,8 +7,9 @@
     <string name="title_log_tubuyaki">つぶやきログ</string>
     <string name="title_log_res">レスログ</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="title_activity_post">Post</string>
-    <string name="title_activity_login">Login</string>
+    <string name="title_activity_post">書き込み</string>
+    <string name="title_activity_stamp">スタンプ選択</string>
+    <string name="title_activity_login">ログイン</string>
 
     <!-- Preference Titles -->
     <string name="general_header">一般</string>
