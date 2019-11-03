@@ -25,7 +25,7 @@ import studio.wakaru.test2.util.TiraXMLMain;
 
 public class NotificationService extends Service {
 
-    public static int TERM = 1 * 60 * 1000;
+    public static int TERM = 5 * 60 * 1000;
 
     //
     public static int NOTICE_ID = 0;
@@ -34,8 +34,6 @@ public class NotificationService extends Service {
     private String xmlURL;
     private String imgURL;
     private String cookie;
-
-    private boolean notified;
 
     public NotificationService() {
     }
@@ -57,8 +55,6 @@ public class NotificationService extends Service {
         xmlURL = pref.getString("xml_resource", "");
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
-
-        notified = false;
 
         new NoticeTask().execute();
 
@@ -126,12 +122,7 @@ public class NotificationService extends Service {
             }
 
             if (notify) {
-                if (!notified) {
-                    notice();
-                    notified = true;
-                }
-            } else {
-                notified = false;
+                notice();
             }
         }
 
@@ -165,6 +156,7 @@ public class NotificationService extends Service {
                         .setSmallIcon(R.drawable.ic_notify)
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
+                        .setOnlyAlertOnce(true)
                         .build();
             } else {
                 //APIが「25」以下の場合
@@ -175,6 +167,7 @@ public class NotificationService extends Service {
                         .setSmallIcon(R.drawable.ic_notify)
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
+                        .setOnlyAlertOnce(true)
                         .build();
             }
             //通知の発行
