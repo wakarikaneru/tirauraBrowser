@@ -129,7 +129,7 @@ public class NotificationService extends Service {
         private void notice() {
 
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
 
             Notification notification = null;
