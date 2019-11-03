@@ -12,7 +12,7 @@
         android:title="@string/title_user" />
     <item
         android:id="@+id/navigation_tubuyaki"
-        android:icon="@drawable/ic_comment_black_24dp"
+        android:icon="@drawable/ic_chat_bubble_black_24dp"
         android:title="@string/title_tubuyaki" />
 
     <item

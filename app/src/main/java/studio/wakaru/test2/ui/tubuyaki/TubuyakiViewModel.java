@@ -38,6 +38,8 @@ public class TubuyakiViewModel extends ViewModel {
     private String cookie;
 
     private int tno;
+    private int uid;
+    private int tres;
 
     public TubuyakiViewModel() {
         Log.d("TubuyakiViewModel", "TubuyakiViewModel constructor");
@@ -46,6 +48,8 @@ public class TubuyakiViewModel extends ViewModel {
         mMyData = new MutableLiveData<>();
         scroll = new MutableLiveData<>();
         tno = 0;
+        uid = 0;
+        tres = 0;
 
         xmlURL = "";
         imgURL = "";
@@ -85,6 +89,22 @@ public class TubuyakiViewModel extends ViewModel {
 
     public int getTno() {
         return tno;
+    }
+
+    public void setUid(int i) {
+        uid = i;
+    }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setTres(int i) {
+        tres = i;
+    }
+
+    public int getTres() {
+        return tres;
     }
 
     public void refresh(Context c) {

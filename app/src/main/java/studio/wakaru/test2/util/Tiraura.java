@@ -196,12 +196,15 @@ public class Tiraura {
 
         try {
             URL url = new URL(urlStr);
-            //URL url = new URL("https://enpf70ykn730n.x.pipedream.net/");
+            //URL url = new URL("https://en9dcm5enx2il.x.pipedream.net/");
             con = (HttpURLConnection) url.openConnection();
             con.setDoInput(true);
             con.setDoOutput(true);
             con.setUseCaches(false);
             con.setRequestMethod("POST");
+            con.setRequestProperty("Host",url.getHost());
+            con.setRequestProperty("Origin",url.getHost());
+            con.setRequestProperty("Referer",url.getHost());
             con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
             con.setRequestProperty("Cookie", cookies);
 
