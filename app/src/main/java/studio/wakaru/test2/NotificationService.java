@@ -123,6 +123,8 @@ public class NotificationService extends Service {
 
             if (notify) {
                 notice();
+            }else{
+                removeNotice();
             }
         }
 
@@ -175,5 +177,10 @@ public class NotificationService extends Service {
 
         }
 
+        private void removeNotice() {
+            //通知を消去
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(NotificationService.NOTICE_ID);
+        }
     }
 }
