@@ -93,13 +93,6 @@ public class StampActivity extends AppCompatActivity {
                     ImageView img = new ImageView(StampActivity.this);
                     img.setImageResource(id);
 
-                    ViewGroup.LayoutParams layoutParams =
-                            new LinearLayout.LayoutParams(convertDpToPx(StampActivity.this, 256), convertDpToPx(StampActivity.this, 256));
-
-                    img.setLayoutParams(layoutParams);
-
-                    img.setScaleType(ImageView.ScaleType.FIT_CENTER);
-
                     AlertDialog ad = new AlertDialog.Builder(StampActivity.this)
                             .setView(img)
                             .setPositiveButton("送信", new DialogInterface.OnClickListener() {
