@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_new, R.id.navigation_user, R.id.navigation_tubuyaki, R.id.navigation_log_tubuyaki, R.id.navigation_log_res)
+                R.id.navigation_new, R.id.navigation_search, R.id.navigation_user, R.id.navigation_tubuyaki, R.id.navigation_log_tubuyaki, R.id.navigation_log_res)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -103,9 +103,6 @@ public class MainActivity extends AppCompatActivity {
         //メニューを更新
         invalidateOptionsMenu();
 
-        //通知を消去
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(NotificationService.NOTICE_ID);
     }
 
     @Override
@@ -181,6 +178,8 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putString("COOKIE", "");
                 editor.commit();
+
+                cookie = "";
 
                 //メニューを更新
                 invalidateOptionsMenu();

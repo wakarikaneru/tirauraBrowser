@@ -2,6 +2,7 @@ package studio.wakaru.test2;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.exifinterface.media.ExifInterface;
 import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
@@ -26,6 +27,8 @@ import android.widget.Toast;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +40,10 @@ import studio.wakaru.test2.util.Detector;
 import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.TiraXMLMain;
 import studio.wakaru.test2.util.Tiraura;
+
+import static androidx.exifinterface.media.ExifInterface.ORIENTATION_NORMAL;
+import static androidx.exifinterface.media.ExifInterface.ORIENTATION_UNDEFINED;
+import static androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION;
 
 public class PostActivity extends AppCompatActivity {
 
@@ -149,10 +156,32 @@ public class PostActivity extends AppCompatActivity {
             try {
                 final ImageView image_upfile = findViewById(R.id.image_upfile);
 
-                BufferedInputStream inputStream = new BufferedInputStream(getContentResolver().openInputStream(data.getData()));
-                Bitmap image = BitmapFactory.decodeStream(inputStream);
+                //ファイルサイズ取得
 
-                image_upfile.setImageBitmap(image);
+                InputStream file = getContentResolver().openInputStream(data.getData());
+                long size = file.available();
+
+                Log.d("PostActivity", "data.getData().toString() " + data.getData().toString());
+                Log.d("PostActivity", "size " + size);
+
+                //画像取得設定
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inScaled = false;
+                if (1 * 1024 * 1024 < size) {
+                    Log.d("PostActivity", "1 * 1024 * 1024 " + size);
+                    options.inSampleSize = 8;
+                }
+
+                //画像の向きを取得
+                ExifInterface exif = new ExifInterface(getContentResolver().openInputStream(data.getData()));
+                int orientation = exif.getAttributeInt(TAG_ORIENTATION, ORIENTATION_NORMAL);
+
+                BufferedInputStream inputStream = new BufferedInputStream(getContentResolver().openInputStream(data.getData()));
+                Bitmap image = BitmapFactory.decodeStream(inputStream, null, options);
+
+                Bitmap rotatedImage = rotateBitmap(image, orientation);
+
+                image_upfile.setImageBitmap(rotatedImage);
                 upFile = data.getData().toString();
 
                 Log.d("PostActivity", "onActivityResult " + data.getData());
@@ -191,6 +220,7 @@ public class PostActivity extends AppCompatActivity {
 
             //画像を処理
             Bitmap image = null;
+            Bitmap rotatedImage = null;
             byte[] imageByteArray = null;
             String fileName = "";
 
@@ -198,14 +228,24 @@ public class PostActivity extends AppCompatActivity {
                 if (!upFile.isEmpty()) {
                     fileName = "image.png";
 
+                    //画像取得設定
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inScaled = false;
+
+                    //画像の向きを取得
+                    ExifInterface exif = new ExifInterface(getContentResolver().openInputStream(Uri.parse(upFile)));
+                    int orientation = exif.getAttributeInt(TAG_ORIENTATION, ORIENTATION_NORMAL);
+
                     //画像を取得
                     ByteArrayOutputStream baos;
 
                     BufferedInputStream inputStream = new BufferedInputStream(getContentResolver().openInputStream(Uri.parse(upFile)));
-                    image = BitmapFactory.decodeStream(inputStream);
+                    image = BitmapFactory.decodeStream(inputStream, null, options);
+
+                    rotatedImage = rotateBitmap(image, orientation);
 
                     baos = new ByteArrayOutputStream();
-                    image.compress(Bitmap.CompressFormat.PNG, 0, baos);
+                    rotatedImage.compress(Bitmap.CompressFormat.PNG, 0, baos);
                     imageByteArray = baos.toByteArray();
 
                     //ファイルサイズを取得
@@ -213,7 +253,7 @@ public class PostActivity extends AppCompatActivity {
                     Log.d("PostActivity", "imageSize " + imageSize / 1024 + "KB");
 
                     //ファイルサイズが大きい場合、圧縮をかける
-                    int targetFileSize = (int) Math.floor(1024.0 * 1024.0 * 0.9);
+                    int targetFileSize = (int) Math.floor(0.9 * 1024.0 * 1024.0);
                     imageByteArray = imageCompress(targetFileSize, imageByteArray);
 
                     //圧縮後のファイルサイズを取得
@@ -222,6 +262,8 @@ public class PostActivity extends AppCompatActivity {
 
                 }
             } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -241,6 +283,29 @@ public class PostActivity extends AppCompatActivity {
             //Here you are done with the task
             Toast.makeText(getApplicationContext(), "送信しました", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
+        int degree;
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                degree = 90;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                degree = 180;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                degree = 270;
+                break;
+            default:
+                degree = 0;
+                break;
+        }
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+
+        Bitmap rotateBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        return rotateBitmap;
     }
 
     public static byte[] imageCompress(int targetBytes, byte[] imageByteArray) {
@@ -265,7 +330,8 @@ public class PostActivity extends AppCompatActivity {
             if (compressedImageSize <= targetBytes) {
                 break;
             } else {
-                scale = scale / 2;
+                //画像サイズに応じて縮小率を設定
+                scale = (float) (scale / Math.sqrt((double) compressedImageSize / ((double) targetBytes * 0.9)));
             }
         }
 

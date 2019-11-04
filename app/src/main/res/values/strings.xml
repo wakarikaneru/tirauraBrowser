@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">チラブラ</string>
     <string name="title_new">新着</string>
+    <string name="title_search">検索</string>
+    <string name="title_user">ユーザー</string>
     <string name="title_tubuyaki">つぶやき</string>
     <string name="title_notifications">通知</string>
-    <string name="title_user">ユーザー</string>
     <string name="title_log_tubuyaki">つぶやきログ</string>
     <string name="title_log_res">レスログ</string>
     <string name="title_activity_settings">Settings</string>

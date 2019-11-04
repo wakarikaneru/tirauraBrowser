@@ -4,6 +4,7 @@ package studio.wakaru.test2.util;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Tubuyaki {
@@ -37,6 +38,7 @@ public class Tubuyaki {
     private String uimg1;
     private String uimg2;
     private String uimg3;
+    private String ttitle;
     private String tdata;
     private int tres;
     private int tview;
@@ -106,6 +108,10 @@ public class Tubuyaki {
 
     public void setUimg3(String uimg3) {
         this.uimg3 = uimg3;
+    }
+
+    public void setTtitle(String ttitle) {
+        this.ttitle = ttitle;
     }
 
     public void setTdata(String tdata) {
@@ -184,6 +190,10 @@ public class Tubuyaki {
         return uimg3;
     }
 
+    public String getTtitle() {
+        return ttitle;
+    }
+
     public String getTdata() {
         return tdata;
     }
@@ -228,4 +238,46 @@ public class Tubuyaki {
         return gooder;
     }
 
+
+    public static class TnoComparator implements Comparator<Tubuyaki> {
+        @Override
+        public int compare(Tubuyaki t1, Tubuyaki t2) {
+            return t1.getTno() - t2.getTno();
+        }
+    }
+
+    public static class TdateComparator implements Comparator<Tubuyaki> {
+        @Override
+        public int compare(Tubuyaki t1, Tubuyaki t2) {
+            return t1.getTdate().compareTo(t2.getTdate());
+        }
+    }
+
+    public static class Tdate2Comparator implements Comparator<Tubuyaki> {
+        @Override
+        public int compare(Tubuyaki t1, Tubuyaki t2) {
+            return t1.getTdate2().compareTo(t2.getTdate2());
+        }
+    }
+
+    public static class TresComparator implements Comparator<Tubuyaki> {
+        @Override
+        public int compare(Tubuyaki t1, Tubuyaki t2) {
+            return t1.getTres() - t2.getTres();
+        }
+    }
+
+    public static class TviewComparator implements Comparator<Tubuyaki> {
+        @Override
+        public int compare(Tubuyaki t1, Tubuyaki t2) {
+            return t1.getTview() - t2.getTview();
+        }
+    }
+
+    public static class TgoodComparator implements Comparator<Tubuyaki> {
+        @Override
+        public int compare(Tubuyaki t1, Tubuyaki t2) {
+            return t1.getTgood() - t2.getTgood();
+        }
+    }
 }

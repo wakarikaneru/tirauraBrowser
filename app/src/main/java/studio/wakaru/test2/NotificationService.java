@@ -109,7 +109,8 @@ public class NotificationService extends Service {
 
             boolean notify = false;
 
-            MyData m = new TiraXMLMain(xmlURL, cookie).getMyData();
+            String url = xmlURL + "?tn=2";
+            MyData m = new TiraXMLMain(url, cookie).getMyData();
             for (MyTubuyakiLog tubuLog : m.getMytubulog()) {
                 if (tubuLog.isUnreadFlag()) {
                     notify = true;
@@ -123,6 +124,8 @@ public class NotificationService extends Service {
 
             if (notify) {
                 notice();
+            } else {
+                removeNotice();
             }
         }
 
@@ -175,5 +178,10 @@ public class NotificationService extends Service {
 
         }
 
+        private void removeNotice() {
+            //通知を消去
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(NotificationService.NOTICE_ID);
+        }
     }
 }

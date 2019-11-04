@@ -31,6 +31,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.ui.search.SearchFragment;
+import studio.wakaru.test2.ui.search.SearchViewModel;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.ui.user.UserFragment;
 import studio.wakaru.test2.util.MyData;
@@ -195,7 +197,8 @@ public class LogTubuyakiFragment extends Fragment {
                         openTubuyaki(t.getTno());
                         break;
                     case R.id.item_useropen:
-                        openUser(t.getUid());
+                        //openUser(t.getUid());
+                        openSearch(SearchViewModel.SEARCH_MODE_UID, String.valueOf(t.getUid()), SearchViewModel.SORT_MODE_TDATE2, true);
                         break;
                     case R.id.item_good:
                         new GoodTask().execute(tiraURL, cookie, String.valueOf(t.getTno()));
@@ -233,6 +236,30 @@ public class LogTubuyakiFragment extends Fragment {
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.nav_host_fragment, tf)
+                .commit();
+    }
+
+    public void openSearch(int searchMode, String searchString, int sortMode, boolean sortReverse) {
+
+        //メニューを選択状態に変更
+        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
+        Menu menu = bnv.getMenu();
+        MenuItem menuItem = menu.getItem(1);
+        menuItem.setChecked(true);
+
+        //画面遷移
+        Bundle bundle = new Bundle();
+        bundle.putInt("searchMode", searchMode);
+        bundle.putString("searchString", searchString);
+        bundle.putInt("sortMode", sortMode);
+        bundle.putBoolean("sortReverse", sortReverse);
+
+        SearchFragment sf = new SearchFragment();
+        sf.setArguments(bundle);
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment, sf)
                 .commit();
     }
 
