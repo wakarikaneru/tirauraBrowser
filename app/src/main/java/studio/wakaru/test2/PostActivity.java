@@ -253,7 +253,7 @@ public class PostActivity extends AppCompatActivity {
                     Log.d("PostActivity", "imageSize " + imageSize / 1024 + "KB");
 
                     //ファイルサイズが大きい場合、圧縮をかける
-                    int targetFileSize = (int) Math.floor(1024.0 * 1024.0 * 0.9);
+                    int targetFileSize = (int) Math.floor(0.9 * 1024.0 * 1024.0);
                     imageByteArray = imageCompress(targetFileSize, imageByteArray);
 
                     //圧縮後のファイルサイズを取得
