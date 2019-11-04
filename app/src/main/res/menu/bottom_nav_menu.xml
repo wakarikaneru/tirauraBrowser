@@ -5,16 +5,20 @@
         android:id="@+id/navigation_new"
         android:icon="@drawable/ic_new_releases_black_24dp"
         android:title="@string/title_new" />
-
+    <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="@string/title_search" />
+    <!--
     <item
         android:id="@+id/navigation_user"
         android:icon="@drawable/ic_people_black_24dp"
         android:title="@string/title_user" />
+        -->
     <item
         android:id="@+id/navigation_tubuyaki"
         android:icon="@drawable/ic_chat_bubble_black_24dp"
         android:title="@string/title_tubuyaki" />
-
     <item
         android:id="@+id/navigation_log_tubuyaki"
         android:icon="@drawable/ic_history_black_24dp"
