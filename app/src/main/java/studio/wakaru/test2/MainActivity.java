@@ -179,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("COOKIE", "");
                 editor.commit();
 
+                cookie="";
+
                 //メニューを更新
                 invalidateOptionsMenu();
 
