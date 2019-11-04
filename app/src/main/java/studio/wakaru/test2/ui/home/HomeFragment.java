@@ -125,6 +125,7 @@ public class HomeFragment extends Fragment {
 
         //FAB
         FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
+        fab.bringToFront();
         if (tiraURL.isEmpty() || myData.getMynum() == 0) {
             fab.hide();
         }
