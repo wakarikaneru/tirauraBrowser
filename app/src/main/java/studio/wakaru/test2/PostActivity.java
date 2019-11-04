@@ -330,6 +330,7 @@ public class PostActivity extends AppCompatActivity {
             if (compressedImageSize <= targetBytes) {
                 break;
             } else {
+                //画像サイズに応じて縮小率を設定
                 scale = (float) (scale / Math.sqrt((double) compressedImageSize / ((double) targetBytes * 0.9)));
             }
         }
