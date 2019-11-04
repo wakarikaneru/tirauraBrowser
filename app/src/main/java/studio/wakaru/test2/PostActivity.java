@@ -330,7 +330,7 @@ public class PostActivity extends AppCompatActivity {
             if (compressedImageSize <= targetBytes) {
                 break;
             } else {
-                scale = scale / 2;
+                scale = (float) (scale / Math.sqrt((double) compressedImageSize / ((double) targetBytes * 0.9)));
             }
         }
 
