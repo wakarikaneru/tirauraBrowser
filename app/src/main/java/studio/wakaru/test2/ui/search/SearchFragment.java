@@ -1,5 +1,6 @@
 package studio.wakaru.test2.ui.search;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -14,9 +15,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +44,6 @@ import java.util.List;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
-import studio.wakaru.test2.ui.home.HomeViewModel;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.ui.user.UserFragment;
 import studio.wakaru.test2.util.Good;
@@ -69,12 +74,12 @@ public class SearchFragment extends Fragment {
     private int entryLineLimit;
     private int replyLineLimit;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
+    public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         searchViewModel =
                 ViewModelProviders.of(getActivity()).get(SearchViewModel.class);
 
-        final View root = inflater.inflate(R.layout.fragment_home, container, false);
+        final View root = inflater.inflate(R.layout.fragment_search, container, false);
 
         //設定を読み込む
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -137,13 +142,93 @@ public class SearchFragment extends Fragment {
         //FAB
         FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
         fab.bringToFront();
-        if (tiraURL.isEmpty() || myData.getMynum() == 0) {
+        if (false) {
             fab.hide();
         }
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openPostActivity(0, 0, 0);
+
+                View searchOption = inflater.inflate(R.layout.dialog_search, null);
+
+                final Spinner searchModeSpinner = searchOption.findViewById(R.id.spinner_search_mode);
+                final TextView seachStringTextView = searchOption.findViewById(R.id.text_search_string);
+                final Spinner sortModeSpinner = searchOption.findViewById(R.id.spinner_sort_mode);
+                final CheckBox sortReverseCheck = searchOption.findViewById(R.id.check_sort_reverse);
+
+                String[] searchModeList = {"すべて", "ユーザー名", "ユーザーID", "つぶやき", "ハッシュ"};
+                SpinnerAdapter searchModeSpinnerAdapter = new ArrayAdapter<String>(getActivity(), R.layout.row_text, searchModeList);
+                searchModeSpinner.setAdapter(searchModeSpinnerAdapter);
+
+                String[] sortModeList = {"デフォルト", "つぶやきID", "つぶやき作成日時", "つぶやき更新日時", "チラ見", "Good"};
+                SpinnerAdapter sortModeSpinnerAdapter = new ArrayAdapter<String>(getActivity(), R.layout.row_text, sortModeList);
+                sortModeSpinner.setAdapter(sortModeSpinnerAdapter);
+
+                AlertDialog ad = new AlertDialog.Builder(getActivity())
+                        .setView(searchOption)
+                        .setPositiveButton("検索", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // OK button pressed
+
+                                int seachModeInt = SearchViewModel.SEARCH_MODE_NONE;
+                                switch (searchModeSpinner.getSelectedItemPosition()) {
+                                    case 0:
+                                        seachModeInt = SearchViewModel.SEARCH_MODE_NONE;
+                                        break;
+                                    case 1:
+                                        seachModeInt = SearchViewModel.SEARCH_MODE_UNAME;
+                                        break;
+                                    case 2:
+                                        seachModeInt = SearchViewModel.SEARCH_MODE_UID;
+                                        break;
+                                    case 3:
+                                        seachModeInt = SearchViewModel.SEARCH_MODE_TDATA;
+                                        break;
+                                    case 4:
+                                        seachModeInt = SearchViewModel.SEARCH_MODE_THASH;
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                int sortModeInt = SearchViewModel.SORT_MODE_NONE;
+                                switch (searchModeSpinner.getSelectedItemPosition()) {
+                                    case 0:
+                                        sortModeInt = SearchViewModel.SORT_MODE_NONE;
+                                        break;
+                                    case 1:
+                                        sortModeInt = SearchViewModel.SORT_MODE_TNO;
+                                        break;
+                                    case 2:
+                                        sortModeInt = SearchViewModel.SORT_MODE_TDATE;
+                                        break;
+                                    case 3:
+                                        sortModeInt = SearchViewModel.SORT_MODE_TDATE2;
+                                        break;
+                                    case 4:
+                                        sortModeInt = SearchViewModel.SORT_MODE_TVIEW;
+                                        break;
+                                    case 5:
+                                        sortModeInt = SearchViewModel.SORT_MODE_TGOOD;
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                searchMode = seachModeInt;
+                                searchString = seachStringTextView.getText().toString().trim();
+                                sortMode = sortModeInt;
+                                sortReverse = sortReverseCheck.isChecked();
+
+                                searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
+
+                                swipe.setRefreshing(true);
+                            }
+                        })
+                        .setCancelable(true)
+                        .show();
+
             }
         });
 

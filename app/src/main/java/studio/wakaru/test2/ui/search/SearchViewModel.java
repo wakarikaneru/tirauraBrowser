@@ -178,7 +178,7 @@ public class SearchViewModel extends ViewModel {
                                     hit = true;
                                     break;
                                 case SEARCH_MODE_UNAME:
-                                    if (searchString.equals(t.getUname())) {
+                                    if (t.getUname().contains(searchString)) {
                                         hit = true;
                                     }
                                     break;
