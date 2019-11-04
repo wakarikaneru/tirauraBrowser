@@ -103,9 +103,6 @@ public class MainActivity extends AppCompatActivity {
         //メニューを更新
         invalidateOptionsMenu();
 
-        //通知を消去
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(NotificationService.NOTICE_ID);
     }
 
     @Override
