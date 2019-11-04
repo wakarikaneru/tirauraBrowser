@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            public void onPageFinished(WebView view, String url) {
                 // Cookieを取得
                 String cookie = CookieManager.getInstance().getCookie(url);
 
