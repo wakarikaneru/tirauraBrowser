@@ -37,6 +37,7 @@ public class Tubuyaki {
     private String uimg1;
     private String uimg2;
     private String uimg3;
+    private String ttitle;
     private String tdata;
     private int tres;
     private int tview;
@@ -106,6 +107,10 @@ public class Tubuyaki {
 
     public void setUimg3(String uimg3) {
         this.uimg3 = uimg3;
+    }
+
+    public void setTtitle(String ttitle) {
+        this.ttitle = ttitle;
     }
 
     public void setTdata(String tdata) {
@@ -182,6 +187,10 @@ public class Tubuyaki {
 
     public String getUimg3() {
         return uimg3;
+    }
+
+    public String getTtitle() {
+        return ttitle;
     }
 
     public String getTdata() {

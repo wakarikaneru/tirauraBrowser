@@ -135,6 +135,7 @@ public class TiraXMLMain {
             t.setGooder(e.getElementsByTagName("gooder").item(0).getTextContent().trim());
             t.setNanashiid(e.getElementsByTagName("nanashiid").item(0).getTextContent().trim());
             t.setParent(Integer.parseInt(e.getElementsByTagName("parent").item(0).getTextContent().trim()));
+            t.setTtitle(e.getElementsByTagName("ttitle").item(0).getTextContent().trim());
             t.setTdata(e.getElementsByTagName("tdata").item(0).getTextContent().trim());
             t.setTdate(e.getElementsByTagName("tdate").item(0).getTextContent().trim());
             t.setTdate2(e.getElementsByTagName("tdate2").item(0).getTextContent().trim());
@@ -152,8 +153,11 @@ public class TiraXMLMain {
             t.setUimg3(e.getElementsByTagName("uimg3").item(0).getTextContent().trim());
             t.setUname(e.getElementsByTagName("uname").item(0).getTextContent().trim());
 
+            t.setTtitle(StringEscapeUtils.unescapeXml(t.getTtitle()));
             t.setTdata(StringEscapeUtils.unescapeXml(t.getTdata()));
             t.setThash(StringEscapeUtils.unescapeXml(t.getThash()));
+            t.setGooder(StringEscapeUtils.unescapeXml(t.getGooder()));
+            t.setUname(StringEscapeUtils.unescapeXml(t.getUname()));
             list.add(t);
         }
 
@@ -192,8 +196,11 @@ public class TiraXMLMain {
             if (!e.getElementsByTagName("mymcount2").item(0).getTextContent().trim().isEmpty()) {
                 myData.setMymcount2(Integer.parseInt(e.getElementsByTagName("mymcount2").item(0).getTextContent().trim()));
             }
-            myData.setMytubulog(MyTubuyakiLog.getMyTubuyakiLogList(StringUtils.defaultString(e.getElementsByTagName("mytubulog").item(0).getTextContent().trim())));
-            myData.setMyreslog(MyResLog.getMyResList(StringUtils.defaultString(e.getElementsByTagName("myreslog").item(0).getTextContent().trim())));
+            myData.setMytubulog(MyTubuyakiLog.getMyTubuyakiLogList(StringUtils.defaultString(StringEscapeUtils.unescapeXml(e.getElementsByTagName("mytubulog").item(0).getTextContent().trim()))));
+            myData.setMyreslog(MyResLog.getMyResList(StringUtils.defaultString(StringEscapeUtils.unescapeXml(e.getElementsByTagName("myreslog").item(0).getTextContent().trim()))));
+
+            myData.setMyname(StringEscapeUtils.unescapeXml(myData.getMyname()));
+            myData.setMyhash(StringEscapeUtils.unescapeXml(myData.getMyhash()));
         }
 
         return myData;
