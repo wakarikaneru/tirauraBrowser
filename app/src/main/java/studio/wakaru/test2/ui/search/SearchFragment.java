@@ -193,7 +193,7 @@ public class SearchFragment extends Fragment {
                                 }
 
                                 int sortModeInt = SearchViewModel.SORT_MODE_NONE;
-                                switch (searchModeSpinner.getSelectedItemPosition()) {
+                                switch (sortModeSpinner.getSelectedItemPosition()) {
                                     case 0:
                                         sortModeInt = SearchViewModel.SORT_MODE_NONE;
                                         break;
