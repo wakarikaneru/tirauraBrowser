@@ -25,7 +25,7 @@ import studio.wakaru.test2.util.TiraXMLMain;
 
 public class NotificationService extends Service {
 
-    public static int TERM = 1 * 60 * 1000;
+    public static int TERM = 5 * 60 * 1000;
 
     //
     public static int NOTICE_ID = 0;
@@ -109,7 +109,8 @@ public class NotificationService extends Service {
 
             boolean notify = false;
 
-            MyData m = new TiraXMLMain(xmlURL, cookie).getMyData();
+            String url = xmlURL + "?tn=2";
+            MyData m = new TiraXMLMain(url, cookie).getMyData();
             for (MyTubuyakiLog tubuLog : m.getMytubulog()) {
                 if (tubuLog.isUnreadFlag()) {
                     notify = true;
@@ -123,7 +124,7 @@ public class NotificationService extends Service {
 
             if (notify) {
                 notice();
-            }else{
+            } else {
                 removeNotice();
             }
         }
