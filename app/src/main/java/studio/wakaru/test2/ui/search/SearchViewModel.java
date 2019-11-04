@@ -14,7 +14,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,13 +28,35 @@ import studio.wakaru.test2.util.Tubuyaki;
 
 public class SearchViewModel extends ViewModel {
 
+    public static final int SEARCH_MODE_NONE = 0;
+    public static final int SEARCH_MODE_UNAME = 1;
+    public static final int SEARCH_MODE_UID = 2;
+    public static final int SEARCH_MODE_TDATA = 4;
+    public static final int SEARCH_MODE_THASH = 8;
+
+    public static final int SORT_MODE_NONE = 0;
+    public static final int SORT_MODE_TNO = 1;
+    public static final int SORT_MODE_TDATE = 2;
+    public static final int SORT_MODE_TDATE2 = 4;
+    public static final int SORT_MODE_TVIEW = 8;
+    public static final int SORT_MODE_TGOOD = 16;
+
     private boolean lock;
 
     private MutableLiveData<List<Tubuyaki>> mAllTubuyakiList;
     private MutableLiveData<List<Tubuyaki>> mTubuyakiList;
     private MutableLiveData<MyData> mMyData;
     private MutableLiveData<Integer> scroll;
+
     private int nowEntry;
+
+    Map<Integer, Comparator<Tubuyaki>> sortObj;
+
+    private int searchMode;
+    private String searchString;
+
+    private int sortMode;
+    private boolean sortReverse;
 
     private String xmlURL;
     private String imgURL;
@@ -48,6 +73,21 @@ public class SearchViewModel extends ViewModel {
         mMyData = new MutableLiveData<>();
         scroll = new MutableLiveData<>();
         nowEntry = 0;
+
+        sortObj = new HashMap<>();
+        sortObj.put(SORT_MODE_NONE, new Tubuyaki.Tdate2Comparator());
+        sortObj.put(SORT_MODE_TNO, new Tubuyaki.TnoComparator());
+        sortObj.put(SORT_MODE_TDATE, new Tubuyaki.TdateComparator());
+        sortObj.put(SORT_MODE_TDATE2, new Tubuyaki.Tdate2Comparator());
+        sortObj.put(SORT_MODE_TVIEW, new Tubuyaki.TviewComparator());
+        sortObj.put(SORT_MODE_TGOOD, new Tubuyaki.TgoodComparator());
+
+
+        searchMode = SEARCH_MODE_NONE;
+        searchString = "";
+
+        sortMode = SORT_MODE_NONE;
+        sortReverse = true;
 
         xmlURL = "";
         imgURL = "";
@@ -82,8 +122,17 @@ public class SearchViewModel extends ViewModel {
         this.scroll.setValue(scroll);
     }
 
-    public void refresh(Context c) {
+    public void refresh(Context c, int searchMode, String searchString, int sortMode, boolean sortReverse) {
         Log.d("SearchViewModel", "SearchViewModel refresh");
+
+        this.searchMode = searchMode;
+        this.searchString = searchString;
+
+        this.sortMode = sortMode;
+        this.sortReverse = sortReverse;
+
+        Log.d("SearchViewModel", this.searchMode + " " + this.searchString + " " + this.sortMode + " " + this.sortReverse);
+
         loadSetting(c);
         new LoadXML().execute(false);
     }
@@ -119,11 +168,38 @@ public class SearchViewModel extends ViewModel {
                         List<Tubuyaki> allList = tiraXML.getTubuyakiList();
 
                         List<Tubuyaki> searchList = new ArrayList<>();
+
                         //フィルタ
                         for (Tubuyaki t : allList) {
                             boolean hit = false;
-                            if ("チラ裏HOTWORD".equals(t.getThash())) {
-                                hit = true;
+
+                            switch (searchMode) {
+                                case SEARCH_MODE_NONE:
+                                    hit = true;
+                                    break;
+                                case SEARCH_MODE_UNAME:
+                                    if (searchString.equals(t.getUname())) {
+                                        hit = true;
+                                    }
+                                    break;
+                                case SEARCH_MODE_UID:
+                                    if (searchString.equals(String.valueOf(t.getUid()))) {
+                                        hit = true;
+                                    }
+                                    break;
+                                case SEARCH_MODE_TDATA:
+                                    if (t.getTdata().contains(searchString)) {
+                                        hit = true;
+                                    }
+                                    break;
+                                case SEARCH_MODE_THASH:
+                                    if (searchString.equals(t.getThash())) {
+                                        hit = true;
+                                    }
+                                    break;
+                                default:
+                                    hit = false;
+                                    break;
                             }
 
                             if (hit) {
@@ -132,8 +208,13 @@ public class SearchViewModel extends ViewModel {
                         }
 
                         //ソート
-                        Collections.sort(searchList, new Tubuyaki.Tdate2Comparator());
-                        Collections.reverse(searchList);
+                        Comparator<Tubuyaki> c = sortObj.get(sortMode);
+                        if (c != null) {
+                            Collections.sort(searchList, c);
+                        }
+                        if (sortReverse) {
+                            Collections.reverse(searchList);
+                        }
 
 
                         mAllTubuyakiList.postValue(searchList);
