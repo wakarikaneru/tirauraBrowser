@@ -30,6 +30,12 @@
             app:title="@string/general_img_resource_title"
             app:useSimpleSummaryProvider="true" />
 
+        <EditTextPreference
+            app:defaultValue="http://tiraura.orz.hm/rbbs.cgi"
+            app:key="tiraura_resource"
+            app:title="@string/general_tiraura_resource_title"
+            app:useSimpleSummaryProvider="true" />
+
         <SwitchPreferenceCompat
             app:key="dark"
             app:summaryOff="@string/general_dark_summary_off"
@@ -81,12 +87,19 @@
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/notice_header">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="notice_tubuyaki"
+            app:title="@string/notice_tubuyaki_title" />
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="notice_res"
+            app:title="@string/notice_res_title" />
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/detail_header">
-        <EditTextPreference
-            app:defaultValue="http://tiraura.orz.hm/rbbs.cgi"
-            app:key="tiraura_resource"
-            app:title="@string/general_tiraura_resource_title"
-            app:useSimpleSummaryProvider="true" />
 
         <Preference
             app:defaultValue="0"

@@ -25,7 +25,7 @@ import studio.wakaru.test2.util.TiraXMLMain;
 
 public class NotificationService extends Service {
 
-    public static int TERM = 1 * 60 * 1000;
+    public static int TERM = 5 * 60 * 1000;
 
     //
     public static int NOTICE_ID = 0;
@@ -34,6 +34,9 @@ public class NotificationService extends Service {
     private String xmlURL;
     private String imgURL;
     private String cookie;
+
+    private boolean checkTubuyaki;
+    private boolean checkRes;
 
     public NotificationService() {
     }
@@ -50,11 +53,14 @@ public class NotificationService extends Service {
         Log.d("NotificationService", "onStartCommand");
 
         //設定読み込み
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         tiraURL = pref.getString("tiraura_resource", "");
         xmlURL = pref.getString("xml_resource", "");
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
+
+        checkTubuyaki = pref.getBoolean("notice_tubuyaki", false);
+        checkRes = pref.getBoolean("notice_res", false);
 
         new NoticeTask().execute();
 
@@ -103,33 +109,69 @@ public class NotificationService extends Service {
         }
 
 
+        public void loadSetting(Context c) {
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(c);
+            xmlURL = pref.getString("xml_resource", "");
+            imgURL = pref.getString("img_resource", "");
+            cookie = pref.getString("COOKIE", "");
+
+            checkTubuyaki = pref.getBoolean("notice_tubuyaki", false);
+            checkRes = pref.getBoolean("notice_res", false);
+        }
+
         private void checkUnread() {
 
             Log.d("NotificationService", "checkUnread");
 
+            loadSetting(NotificationService.this);
+
             boolean notify = false;
+            boolean tubu = false;
+            boolean res = false;
+
 
             String url = xmlURL + "?tn=2";
             MyData m = new TiraXMLMain(url, cookie).getMyData();
-            for (MyTubuyakiLog tubuLog : m.getMytubulog()) {
-                if (tubuLog.isUnreadFlag()) {
-                    notify = true;
+            if (checkTubuyaki) {
+                for (MyTubuyakiLog tubuLog : m.getMytubulog()) {
+                    if (tubuLog.isUnreadFlag()) {
+                        notify = true;
+                        tubu = true;
+                    }
                 }
             }
-            for (MyResLog resLog : m.getMyreslog()) {
-                if (resLog.isUnreadFlag()) {
-                    notify = true;
+            if (checkRes) {
+                for (MyResLog resLog : m.getMyreslog()) {
+                    if (resLog.isUnreadFlag()) {
+                        notify = true;
+                        res = true;
+                    }
                 }
             }
 
             if (notify) {
-                notice();
+
+                StringBuilder sb = new StringBuilder();
+                if (tubu) {
+                    if (!sb.toString().isEmpty()) {
+                        sb.append(System.lineSeparator());
+                    }
+                    sb.append("あなたのつぶやきにレスがつきました！！");
+                }
+                if (res) {
+                    if (!sb.toString().isEmpty()) {
+                        sb.append(System.lineSeparator());
+                    }
+                    sb.append("レスしたつぶやきにレスがつきました！！");
+                }
+                
+                notice(sb.toString());
             } else {
                 removeNotice();
             }
         }
 
-        private void notice() {
+        private void notice(String message) {
 
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -155,7 +197,7 @@ public class NotificationService extends Service {
                 //通知の生成と設定とビルド
                 notification = new Notification.Builder(getApplicationContext(), appID)
                         .setContentTitle(getString(R.string.app_name))
-                        .setContentText("チラ裏が呼んでいます！！")
+                        .setContentText(message)
                         .setSmallIcon(R.drawable.ic_notify)
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
@@ -166,7 +208,7 @@ public class NotificationService extends Service {
                 //通知の生成と設定とビルド
                 notification = new Notification.Builder(getApplicationContext())
                         .setContentTitle(getString(R.string.app_name))
-                        .setContentText("チラ裏が呼んでいます！！")
+                        .setContentText(message)
                         .setSmallIcon(R.drawable.ic_notify)
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
