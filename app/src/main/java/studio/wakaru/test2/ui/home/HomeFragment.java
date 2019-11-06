@@ -54,6 +54,7 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
 
     private ScrollView scrollView;
+    private SwipeRefreshLayout swipe;
 
     private String tiraURL;
     private String xmlURL;
@@ -112,7 +113,7 @@ public class HomeFragment extends Fragment {
         final LinearLayout tubuyakiRoot = root.findViewById(R.id.tubuyaki_root);
 
         //スワイプで更新
-        final SwipeRefreshLayout swipe = root.findViewById(R.id.swipe_refresh_layout);
+        swipe = root.findViewById(R.id.swipe_refresh_layout);
         swipe.setColorSchemeResources(R.color.colorPrimaryDark);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

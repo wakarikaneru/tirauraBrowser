@@ -56,6 +56,7 @@ public class SearchFragment extends Fragment {
     private SearchViewModel searchViewModel;
 
     private ScrollView scrollView;
+    private SwipeRefreshLayout swipe;
 
     private String tiraURL;
     private String xmlURL;
@@ -127,7 +128,7 @@ public class SearchFragment extends Fragment {
         final LinearLayout searchInfoRoot = root.findViewById(R.id.search_info);
 
         //スワイプで更新
-        final SwipeRefreshLayout swipe = root.findViewById(R.id.swipe_refresh_layout);
+        swipe = root.findViewById(R.id.swipe_refresh_layout);
         swipe.setColorSchemeResources(R.color.colorPrimaryDark);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -430,6 +431,8 @@ public class SearchFragment extends Fragment {
             sortReverse = bundle.getBoolean("sortReverse", true);
 
             searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
+
+            swipe.setRefreshing(true);
         }
 
         //searchViewModel.refresh(getContext());
