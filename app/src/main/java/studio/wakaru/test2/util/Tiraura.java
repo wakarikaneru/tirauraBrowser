@@ -2,8 +2,9 @@ package studio.wakaru.test2.util;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Base64;
 import android.util.Log;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -18,7 +19,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
@@ -202,9 +205,9 @@ public class Tiraura {
             con.setDoOutput(true);
             con.setUseCaches(false);
             con.setRequestMethod("POST");
-            con.setRequestProperty("Host",url.getHost());
-            con.setRequestProperty("Origin",url.getHost());
-            con.setRequestProperty("Referer",url.getHost());
+            con.setRequestProperty("Host", url.getHost());
+            con.setRequestProperty("Origin", url.getHost());
+            con.setRequestProperty("Referer", url.getHost());
             con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
             con.setRequestProperty("Cookie", cookies);
 
@@ -223,7 +226,7 @@ public class Tiraura {
                 ps.print(CRLF);
 
                 ps.print(CRLF);
-                ps.write(kv.get(key).getBytes(Charset.forName("EUC-JP")));
+                ps.write(escape(kv.get(key), Charset.forName("EUC-JP")).getBytes(Charset.forName("EUC-JP")));
                 ps.print(CRLF);
             }
 
@@ -299,6 +302,26 @@ public class Tiraura {
         }
 
         return str;
+    }
+
+    private static String escape(String str, Charset charset) {
+        StringBuilder sb = new StringBuilder();
+        CharsetEncoder encorder = charset.newEncoder();
+
+        for (String s : str.split("")) {
+            Log.d("Tiraura", s);
+
+            if (encorder.canEncode(s)) {
+                sb.append(s);
+            } else {
+                Log.d("Tiraura", "Can't Encode");
+                sb.append("&#x" + Integer.toHexString(s.codePointAt(0)) + ";");
+                Log.d("Tiraura", "Escape To " + "&#x" + Integer.toHexString(s.codePointAt(0)) + ";");
+            }
+
+        }
+
+        return sb.toString();
     }
 
     public static String blank() {

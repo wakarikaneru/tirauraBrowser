@@ -4,5 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/colorBackground3"
     android:padding="8dp"
     android:textSize="18dp" />

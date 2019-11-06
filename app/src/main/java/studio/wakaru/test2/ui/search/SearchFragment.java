@@ -56,6 +56,7 @@ public class SearchFragment extends Fragment {
     private SearchViewModel searchViewModel;
 
     private ScrollView scrollView;
+    private SwipeRefreshLayout swipe;
 
     private String tiraURL;
     private String xmlURL;
@@ -101,11 +102,11 @@ public class SearchFragment extends Fragment {
         myData = new MyData(cookie);
 
         //検索条件のリセット
-        searchMode = SearchViewModel.SEARCH_MODE_NONE;
-        searchString = "";
+        searchMode = searchViewModel.getSearchMode();
+        searchString = searchViewModel.getSearchString();
 
-        sortMode = SearchViewModel.SORT_MODE_NONE;
-        sortReverse = true;
+        sortMode = searchViewModel.getSortMode();
+        sortReverse = searchViewModel.isSortReverse();
 
         //スクロール状態を復元
         scrollView = root.findViewById(R.id.scrollView);
@@ -124,9 +125,10 @@ public class SearchFragment extends Fragment {
         });
 
         final LinearLayout tubuyakiRoot = root.findViewById(R.id.tubuyaki_root);
+        final LinearLayout searchInfoRoot = root.findViewById(R.id.search_info);
 
         //スワイプで更新
-        final SwipeRefreshLayout swipe = root.findViewById(R.id.swipe_refresh_layout);
+        swipe = root.findViewById(R.id.swipe_refresh_layout);
         swipe.setColorSchemeResources(R.color.colorPrimaryDark);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -237,13 +239,28 @@ public class SearchFragment extends Fragment {
             @Override
             public void onChanged(@Nullable List<Tubuyaki> list) {
 
+                //検索条件を表示
+                searchInfoRoot.removeAllViews();
+                LinearLayout searchInfo = (LinearLayout) getLayoutInflater().inflate(R.layout.search_info, null);
+                ((TextView) searchInfo.findViewById(R.id.search_mode)).setText(SearchViewModel.getSearchModeString(searchMode));
+                ((TextView) searchInfo.findViewById(R.id.search_text)).setText(searchString);
+
+                ((TextView) searchInfo.findViewById(R.id.sort_mode)).setText(SearchViewModel.getSortModeString(sortMode));
+                if (sortReverse) {
+                    ((ImageView) searchInfo.findViewById(R.id.sort_reverse)).setImageResource(R.drawable.ic_arrow_downward_black_24dp);
+                } else {
+                    ((ImageView) searchInfo.findViewById(R.id.sort_reverse)).setImageResource(R.drawable.ic_arrow_upward_black_24dp);
+                }
+
+                searchInfoRoot.addView(searchInfo);
+
                 //つぶやき一覧を消去
                 tubuyakiRoot.removeAllViews();
 
                 //つぶやき一覧を表示
                 if (list.size() <= 0) {
                     //操作説明
-                    LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_help, null);
+                    LinearLayout getStart = (LinearLayout) getLayoutInflater().inflate(R.layout.search_help, null);
                     tubuyakiRoot.addView(getStart);
 
                 } else {
@@ -414,6 +431,8 @@ public class SearchFragment extends Fragment {
             sortReverse = bundle.getBoolean("sortReverse", true);
 
             searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
+
+            swipe.setRefreshing(true);
         }
 
         //searchViewModel.refresh(getContext());

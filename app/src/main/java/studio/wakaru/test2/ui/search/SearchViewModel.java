@@ -118,6 +118,22 @@ public class SearchViewModel extends ViewModel {
         return scroll;
     }
 
+    public int getSearchMode() {
+        return searchMode;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public int getSortMode() {
+        return sortMode;
+    }
+
+    public boolean isSortReverse() {
+        return sortReverse;
+    }
+
     public void setScroll(int scroll) {
         this.scroll.setValue(scroll);
     }
@@ -307,6 +323,42 @@ public class SearchViewModel extends ViewModel {
                 e.printStackTrace();
             }
             return tubuyaki;
+        }
+    }
+
+    public static String getSearchModeString(int id) {
+        switch (id) {
+            case SEARCH_MODE_NONE:
+                return "すべて";
+            case SEARCH_MODE_UNAME:
+                return "ユーザー名";
+            case SEARCH_MODE_UID:
+                return "ユーザーID";
+            case SEARCH_MODE_TDATA:
+                return "つぶやき";
+            case SEARCH_MODE_THASH:
+                return "ハッシュ";
+            default:
+                return "不明";
+        }
+    }
+
+    public static String getSortModeString(int id) {
+        switch (id) {
+            case SORT_MODE_NONE:
+                return "デフォルト";
+            case SORT_MODE_TNO:
+                return "つぶやきID";
+            case SORT_MODE_TDATE:
+                return "つぶやき作成日時";
+            case SORT_MODE_TDATE2:
+                return "つぶやき更新日時";
+            case SORT_MODE_TVIEW:
+                return "チラ見";
+            case SORT_MODE_TGOOD:
+                return "Good";
+            default:
+                return "不明";
         }
     }
 }

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryAlpha"
+    android:clickable="true"
+    android:focusable="auto"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:clickable="false"
+                android:text="検索:"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:visibility="visible" />
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0" />
+
+            <TextView
+                android:id="@+id/search_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:clickable="false"
+                android:ellipsize="end"
+                android:text="search_mode"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:visibility="visible" />
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0" />
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/search_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:clickable="false"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="search_text"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:clickable="false"
+                android:text="並べ替え:"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:visibility="visible" />
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0" />
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/sort_reverse"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:tint="@color/colorText3"
+                app:srcCompat="@drawable/ic_arrow_upward_black_24dp" />
+
+            <TextView
+                android:id="@+id/sort_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:clickable="false"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="sort_mode"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -17,6 +17,7 @@
     <string name="detail_header">詳細</string>
     <string name="new_header">新着</string>
     <string name="new_detail_header">新着(詳細)</string>
+    <string name="notice_header">通知</string>
 
     <!-- Messages Preferences -->
     <string name="general_xml_resource_title">tiraXMLのURL</string>
@@ -35,5 +36,8 @@
 
     <string name="new_detail_entry_line_title">つぶやき表示行数制限</string>
     <string name="new_detail_reply_line_title">レス表示行数制限</string>
+
+    <string name="notice_tubuyaki_title">つぶやき通知</string>
+    <string name="notice_res_title">レス通知</string>
 
 </resources>

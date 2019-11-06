@@ -50,6 +50,7 @@ public class TubuyakiFragment extends Fragment {
     private TubuyakiViewModel tubuyakiViewModel;
 
     private ScrollView scrollView;
+    private SwipeRefreshLayout swipe;
 
     private String tiraURL;
     private String imgURL;
@@ -92,7 +93,7 @@ public class TubuyakiFragment extends Fragment {
         final LinearLayout tubuyakiRoot = root.findViewById(R.id.tubuyaki_root);
 
         //スワイプで更新
-        final SwipeRefreshLayout swipe = root.findViewById(R.id.swipe_refresh_layout);
+        swipe = root.findViewById(R.id.swipe_refresh_layout);
         swipe.setColorSchemeResources(R.color.colorPrimaryDark);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -308,6 +309,8 @@ public class TubuyakiFragment extends Fragment {
 
                             tubuyakiViewModel.refresh(getContext());
 
+                            swipe.setRefreshing(true);
+
                             LinearLayout layoutLoading = (LinearLayout) getLayoutInflater().inflate(R.layout.res_loading, null);
                             tubuyakiRoot.addView(layoutLoading);
 
@@ -331,6 +334,8 @@ public class TubuyakiFragment extends Fragment {
                 tubuyakiViewModel.setTno(nowTno);
                 tubuyakiViewModel.setScroll(0);
                 tubuyakiViewModel.refresh(getContext());
+
+                swipe.setRefreshing(true);
             }
             tubuyakiViewModel.setUid(uid);
             tubuyakiViewModel.setTres(tres);
