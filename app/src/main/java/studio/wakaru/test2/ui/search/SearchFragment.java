@@ -408,6 +408,8 @@ public class SearchFragment extends Fragment {
 
                             searchViewModel.add(getContext());
 
+                            swipe.setRefreshing(true);
+
                             LinearLayout layoutLoading = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_loading, null);
                             tubuyakiRoot.addView(layoutLoading);
 
