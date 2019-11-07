@@ -298,6 +298,8 @@ public class HomeFragment extends Fragment {
 
                             homeViewModel.add(getContext());
 
+                            swipe.setRefreshing(true);
+
                             LinearLayout layoutLoading = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_loading, null);
                             tubuyakiRoot.addView(layoutLoading);
 
