@@ -139,6 +139,12 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        //初回起動時の更新
+        if (!homeViewModel.isInitialized()) {
+            homeViewModel.refresh(getContext());
+            swipe.setRefreshing(true);
+        }
+
         //つぶやきデータを更新
         homeViewModel.getTubuyakiList().observe(this, new Observer<List<Tubuyaki>>() {
             @Override
@@ -316,6 +322,12 @@ public class HomeFragment extends Fragment {
         //homeViewModel.refresh(getContext());
 
         return root;
+    }
+
+    public void refresh() {
+
+        homeViewModel.refresh(getContext());
+        swipe.setRefreshing(true);
     }
 
     public void popup(View v, final MyData m, final Tubuyaki t) {
