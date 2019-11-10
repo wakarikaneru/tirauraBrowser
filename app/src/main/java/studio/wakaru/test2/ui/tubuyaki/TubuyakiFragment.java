@@ -26,6 +26,8 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -44,6 +46,7 @@ import java.util.Map;
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
 import studio.wakaru.test2.ui.RefreshableFragment;
+import studio.wakaru.test2.ui.home.HomeFragmentDirections;
 import studio.wakaru.test2.ui.search.SearchFragment;
 import studio.wakaru.test2.ui.search.SearchViewModel;
 import studio.wakaru.test2.ui.user.UserFragment;
@@ -462,71 +465,13 @@ public class TubuyakiFragment extends RefreshableFragment {
     }
 
     public void openTubuyaki(int tno, int uid, int tres) {
-
-        //メニューを選択状態に変更
-        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
-        Menu menu = bnv.getMenu();
-        MenuItem menuItem = menu.getItem(2);
-        menuItem.setChecked(true);
-
-        //画面遷移
-        Bundle bundle = new Bundle();
-        bundle.putInt("tno", tno);
-        bundle.putInt("uid", uid);
-        bundle.putInt("tres", tres);
-
-        TubuyakiFragment tf = new TubuyakiFragment();
-        tf.setArguments(bundle);
-
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, tf)
-                .commit();
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationTubuyaki(tno, uid, tres));
     }
 
     public void openSearch(int searchMode, String searchString, int sortMode, boolean sortReverse) {
-
-        //メニューを選択状態に変更
-        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
-        Menu menu = bnv.getMenu();
-        MenuItem menuItem = menu.getItem(1);
-        menuItem.setChecked(true);
-
-        //画面遷移
-        Bundle bundle = new Bundle();
-        bundle.putInt("searchMode", searchMode);
-        bundle.putString("searchString", searchString);
-        bundle.putInt("sortMode", sortMode);
-        bundle.putBoolean("sortReverse", sortReverse);
-
-        SearchFragment sf = new SearchFragment();
-        sf.setArguments(bundle);
-
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, sf)
-                .commit();
-    }
-
-    public void openUser(int uid) {
-
-        //メニューを選択状態に変更
-        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
-        Menu menu = bnv.getMenu();
-        MenuItem menuItem = menu.getItem(1);
-        menuItem.setChecked(true);
-
-        //画面遷移
-        Bundle bundle = new Bundle();
-        bundle.putInt("uid", uid);
-
-        UserFragment uf = new UserFragment();
-        uf.setArguments(bundle);
-
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, uf)
-                .commit();
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationSearch(searchMode, searchString, sortMode, sortReverse));
     }
 
     public void openPostActivity(int tno, int tubuid, int tres) {
