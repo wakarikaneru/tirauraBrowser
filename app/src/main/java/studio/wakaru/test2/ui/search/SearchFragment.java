@@ -239,6 +239,7 @@ public class SearchFragment extends RefreshableFragment {
                                 sortMode = sortModeInt;
                                 sortReverse = sortReverseCheck.isChecked();
 
+                                searchViewModel.setScroll(0);
                                 searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
                                 swipe.setRefreshing(true);
                             }
