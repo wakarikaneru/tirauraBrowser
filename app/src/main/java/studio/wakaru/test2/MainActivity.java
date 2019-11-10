@@ -68,6 +68,34 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        //ナビゲーションを2度押しで更新
+        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                Log.d("TEST", "item.isChecked() " + String.valueOf(item.isChecked()));
+                NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment);
+
+                switch(item.getItemId()){
+                    case R.id.navigation_new:
+                        navController.navigate(R.id.action_global_navigation_new);
+                        return true;
+                    case R.id.navigation_search:
+                        navController.navigate(R.id.action_global_navigation_search);
+                        return true;
+                    case R.id.navigation_tubuyaki:
+                        navController.navigate(R.id.action_global_navigation_tubuyaki);
+                        return true;
+                    case R.id.navigation_log_tubuyaki:
+                        navController.navigate(R.id.action_global_navigation_log_tubuyaki);
+                        return true;
+                    case R.id.navigation_log_res:
+                        navController.navigate(R.id.action_global_navigation_log_res);
+                        return true;
+                }
+                return false;
+            }
+        });
+
 
         if (bootCount == 0) {
             startActivityForResult(new Intent(MainActivity.this, SettingsActivity.class), SETTING);

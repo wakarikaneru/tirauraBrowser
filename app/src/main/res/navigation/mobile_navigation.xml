@@ -9,43 +9,78 @@
         android:id="@+id/navigation_new"
         android:name="studio.wakaru.test2.ui.home.HomeFragment"
         tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_navigation_new_self2"
-            app:destination="@id/navigation_new" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_search"
         android:name="studio.wakaru.test2.ui.search.SearchFragment"
         tools:layout="@layout/fragment_search" >
-        <action
-            android:id="@+id/action_navigation_search_self"
-            app:destination="@id/navigation_search" />
+        <argument
+            android:name="searchMode"
+            app:argType="integer" />
+        <argument android:name="searchString"
+            app:argType="string" />
+        <argument
+            android:name="sortMode"
+            app:argType="integer" />
+        <argument
+            android:name="sortReverse"
+            app:argType="boolean" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_tubuyaki"
         android:name="studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment"
         tools:layout="@layout/fragment_tubuyaki" >
-        <action
-            android:id="@+id/action_navigation_tubuyaki_self"
-            app:destination="@id/navigation_tubuyaki" />
+        <argument
+            android:name="tno"
+            app:argType="integer" />
+        <argument
+            android:name="uid"
+            app:argType="integer" />
+        <argument
+            android:name="tres"
+            app:argType="integer" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_log_tubuyaki"
         android:name="studio.wakaru.test2.ui.log_tubuyaki.LogTubuyakiFragment"
         tools:layout="@layout/fragment_log_tubuyaki" >
-        <action
-            android:id="@+id/action_navigation_log_tubuyaki_self"
-            app:destination="@id/navigation_log_tubuyaki" />
     </fragment>
     <fragment
         android:id="@+id/navigation_log_res"
         android:name="studio.wakaru.test2.ui.log_res.LogResFragment"
         tools:layout="@layout/fragment_log_res" >
-        <action
-            android:id="@+id/action_navigation_log_res_self"
-            app:destination="@id/navigation_log_res" />
     </fragment>
+    <action
+        android:id="@+id/action_global_navigation_log_res"
+        app:destination="@id/navigation_log_res"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:launchSingleTop="true" />
+    <action
+        android:id="@+id/action_global_navigation_log_tubuyaki"
+        app:destination="@id/navigation_log_tubuyaki"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:launchSingleTop="true" />
+    <action
+        android:id="@+id/action_global_navigation_new"
+        app:destination="@id/navigation_new"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:launchSingleTop="true" />
+    <action
+        android:id="@+id/action_global_navigation_search"
+        app:destination="@id/navigation_search"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:launchSingleTop="true" />
+    <action
+        android:id="@+id/action_global_navigation_tubuyaki"
+        app:destination="@id/navigation_tubuyaki"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:launchSingleTop="true" />
 </navigation>
