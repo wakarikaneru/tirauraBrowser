@@ -254,6 +254,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+        //メニューを選択状態に変更
+        BottomNavigationView bnv = findViewById(R.id.nav_view);
+
+        if (R.id.navigation_new == bnv.getSelectedItemId()) {
+            finish();
+        } else {
+            bnv.setSelectedItemId(R.id.navigation_new);
+        }
+    }
+
     //ログイン状況を取得
     private class LoginTask extends AsyncTask<String, Void, MyData> {
 
