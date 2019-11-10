@@ -87,6 +87,14 @@
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/tubuyaki_header">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="rich_text"
+            app:title="@string/tubuyaki_rich_text_title" />
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/post_header">
 
         <SwitchPreferenceCompat
