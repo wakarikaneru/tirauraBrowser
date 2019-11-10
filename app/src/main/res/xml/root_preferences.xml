@@ -87,8 +87,29 @@
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/post_header">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="post_sage_memory_tubuyaki"
+            app:title="@string/post_sage_memory_tubuyaki_title" />
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="post_sage_memory_res"
+            app:title="@string/post_sage_memory_res_title" />
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/notice_header">
 
+        <!--
+        <ListPreference
+            app:defaultValue="5"
+            app:entries="@array/notice_tarm"
+            app:entryValues="@array/notice_tarm_value"
+            app:key="notice_tarm"
+            app:title="@string/notice_tarm_title"
+            app:useSimpleSummaryProvider="true" />
+        -->
         <SwitchPreferenceCompat
             app:defaultValue="true"
             app:key="notice_tubuyaki"
@@ -97,6 +118,14 @@
             app:defaultValue="false"
             app:key="notice_res"
             app:title="@string/notice_res_title" />
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="notice_notice"
+            app:title="@string/notice_notice_title" />
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="notice_message"
+            app:title="@string/notice_message_title" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/detail_header">

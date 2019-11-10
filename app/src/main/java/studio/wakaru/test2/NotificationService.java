@@ -37,6 +37,8 @@ public class NotificationService extends Service {
 
     private boolean checkTubuyaki;
     private boolean checkRes;
+    private boolean checkNotice;
+    private boolean checkMessage;
 
     public NotificationService() {
     }
@@ -60,7 +62,10 @@ public class NotificationService extends Service {
         cookie = pref.getString("COOKIE", "");
 
         checkTubuyaki = pref.getBoolean("notice_tubuyaki", false);
+        checkTubuyaki = pref.getBoolean("notice_tubuyaki", false);
         checkRes = pref.getBoolean("notice_res", false);
+        checkNotice = pref.getBoolean("notice_notice", false);
+        checkMessage = pref.getBoolean("notice_message", false);
 
         new NoticeTask().execute();
 
@@ -117,6 +122,8 @@ public class NotificationService extends Service {
 
             checkTubuyaki = pref.getBoolean("notice_tubuyaki", false);
             checkRes = pref.getBoolean("notice_res", false);
+            checkNotice = pref.getBoolean("notice_notice", false);
+            checkMessage = pref.getBoolean("notice_message", false);
         }
 
         private void checkUnread() {
@@ -128,6 +135,8 @@ public class NotificationService extends Service {
             boolean notify = false;
             boolean tubu = false;
             boolean res = false;
+            boolean notice = false;
+            boolean message = false;
 
 
             String url = xmlURL + "?tn=2";
@@ -148,6 +157,18 @@ public class NotificationService extends Service {
                     }
                 }
             }
+            if (checkNotice) {
+                if (0 < m.getMymcount2()) {
+                    notify = true;
+                    notice = true;
+                }
+            }
+            if (checkMessage) {
+                if (0 < m.getMymcount()) {
+                    notify = true;
+                    message = true;
+                }
+            }
 
             if (notify) {
 
@@ -164,7 +185,19 @@ public class NotificationService extends Service {
                     }
                     sb.append("レスしたつぶやきにレスがつきました！！");
                 }
-                
+                if (notice) {
+                    if (!sb.toString().isEmpty()) {
+                        sb.append(System.lineSeparator());
+                    }
+                    sb.append("未読のおしらせがあります！！");
+                }
+                if (message) {
+                    if (!sb.toString().isEmpty()) {
+                        sb.append(System.lineSeparator());
+                    }
+                    sb.append("未読のメッセージがあります！！");
+                }
+
                 notice(sb.toString());
             } else {
                 removeNotice();

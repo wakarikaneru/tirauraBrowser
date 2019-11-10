@@ -17,6 +17,7 @@
     <string name="detail_header">詳細</string>
     <string name="new_header">新着</string>
     <string name="new_detail_header">新着(詳細)</string>
+    <string name="post_header">書き込み</string>
     <string name="notice_header">通知</string>
 
     <!-- Messages Preferences -->
@@ -37,7 +38,13 @@
     <string name="new_detail_entry_line_title">つぶやき表示行数制限</string>
     <string name="new_detail_reply_line_title">レス表示行数制限</string>
 
+    <string name="post_sage_memory_tubuyaki_title">非表示記憶(つぶやき)</string>
+    <string name="post_sage_memory_res_title">sage記憶(レス)</string>
+
+    <string name="notice_tarm_title">通知間隔</string>
     <string name="notice_tubuyaki_title">つぶやき通知</string>
     <string name="notice_res_title">レス通知</string>
+    <string name="notice_notice_title">おしらせ通知(beta)</string>
+    <string name="notice_message_title">メッセージ通知(beta)</string>
 
 </resources>
