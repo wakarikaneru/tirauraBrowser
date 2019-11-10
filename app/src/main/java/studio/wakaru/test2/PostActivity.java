@@ -17,6 +17,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,6 +56,11 @@ public class PostActivity extends AppCompatActivity {
     private String cookie;
     private MyData myData;
 
+    private boolean sage_memory_tubuyaki;
+    private boolean sage_tubuyaki;
+    private boolean sage_memory_res;
+    private boolean sage_res;
+
     private String upFile;
 
     @Override
@@ -63,10 +69,15 @@ public class PostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post);
 
         //設定を読み込む
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         tiraURL = pref.getString("tiraura_resource", "");
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
+
+        sage_memory_tubuyaki = pref.getBoolean("post_sage_memory_tubuyaki", false);
+        sage_tubuyaki = pref.getBoolean("post_sage_tubuyaki", false);
+        sage_memory_res = pref.getBoolean("post_sage_memory_res", false);
+        sage_res = pref.getBoolean("post_sage_res", false);
 
         myData = new MyData(cookie);
 
@@ -85,7 +96,17 @@ public class PostActivity extends AppCompatActivity {
 
         final TextView text = findViewById(R.id.text_tdata);
 
-        final Switch sage = findViewById(R.id.switch_sage);
+        //sage記憶
+        final CheckBox sage = findViewById(R.id.check_sage);
+        if (tno == 0) {
+            if (sage_memory_tubuyaki) {
+                sage.setChecked(sage_tubuyaki);
+            }
+        } else {
+            if (sage_memory_res) {
+                sage.setChecked(sage_res);
+            }
+        }
 
         //送信ボタンを押したら送信
         final Button submitButton = findViewById(R.id.button_submit);
@@ -104,6 +125,22 @@ public class PostActivity extends AppCompatActivity {
                 if (sage.isChecked()) {
                     sageStr = "on";
                 }
+
+                //sage記憶
+                if (tno == 0) {
+                    if (sage_memory_tubuyaki) {
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putBoolean("post_sage_tubuyaki", sage.isChecked());
+                        editor.commit();
+                    }
+                } else {
+                    if (sage_memory_res) {
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putBoolean("post_sage_res", sage.isChecked());
+                        editor.commit();
+                    }
+                }
+
                 new PostTask().execute(tiraURL, cookie, String.valueOf(tno), String.valueOf(scount), String.valueOf(tubuid), String.valueOf(myData.getMynum()), myData.getMyname(), submitText, sageStr, upFile);
                 Log.d("PostActivity", "submitButton onClick end");
 

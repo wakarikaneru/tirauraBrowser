@@ -10,7 +10,7 @@ public class MyTubuyakiLog {
     private int tno;
     private String tdata;
     private String tdate;
-    private String tres;
+    private int tres;
     private boolean unreadFlag;
     private boolean imageFlag;
     private boolean soundFlag;
@@ -30,7 +30,7 @@ public class MyTubuyakiLog {
         this.tdate = tdate;
     }
 
-    public void setTres(String tres) {
+    public void setTres(int tres) {
         this.tres = tres;
     }
 
@@ -58,7 +58,7 @@ public class MyTubuyakiLog {
         return tdate;
     }
 
-    public String getTres() {
+    public int getTres() {
         return tres;
     }
 
@@ -83,7 +83,7 @@ public class MyTubuyakiLog {
             mtl.setTno(Integer.parseInt(params[0]));
             mtl.setTdata(params[1]);
             mtl.setTdate(params[2]);
-            mtl.setTres(params[3]);
+            mtl.setTres(Integer.parseInt(params[3]));
             mtl.setUnreadFlag("1".equals(params[4]));
             mtl.setImageFlag("1".equals(params[5]));
             mtl.setSoundFlag("1".equals(params[6]));

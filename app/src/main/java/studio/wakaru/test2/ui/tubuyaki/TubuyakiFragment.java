@@ -26,17 +26,27 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.ui.RefreshableFragment;
+import studio.wakaru.test2.ui.home.HomeFragmentDirections;
 import studio.wakaru.test2.ui.search.SearchFragment;
 import studio.wakaru.test2.ui.search.SearchViewModel;
 import studio.wakaru.test2.ui.user.UserFragment;
@@ -45,7 +55,7 @@ import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
-public class TubuyakiFragment extends Fragment {
+public class TubuyakiFragment extends RefreshableFragment {
 
     private TubuyakiViewModel tubuyakiViewModel;
 
@@ -55,6 +65,7 @@ public class TubuyakiFragment extends Fragment {
     private String tiraURL;
     private String imgURL;
     private String cookie;
+    private Map<Integer, Boolean> abayoMap;
     private MyData myData;
     private Tubuyaki tubuyaki;
 
@@ -66,10 +77,17 @@ public class TubuyakiFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_tubuyaki, container, false);
 
         //設定を読み込む
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         tiraURL = pref.getString("tiraura_resource", "");
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
+        String abayoMapString = pref.getString("ABAYO_MAP", "{}");
+        //Log.d("TubuyakiFragment", abayoMapString);
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<Integer, Boolean>>() {
+        }.getType();
+        abayoMap = gson.fromJson(abayoMapString, type);
 
         myData = new MyData(cookie);
         tubuyaki = new Tubuyaki();
@@ -137,12 +155,21 @@ public class TubuyakiFragment extends Fragment {
                     int resCount = 0;
                     tubuyaki = list.get(0);
 
+                    //あばよチェック
+                    abayoMap.put(tubuyakiViewModel.getUid(), tubuyakiViewModel.isAbayo());
+                    SharedPreferences.Editor editor = pref.edit();
+                    Gson gson = new Gson();
+                    editor.putString("ABAYO_MAP", gson.toJson(abayoMap));
+                    editor.commit();
+
                     for (final Tubuyaki t : list) {
 
                         LinearLayout lt;
-                        if (resCount <= 0) {
+                        if (resCount == 0) {
                             lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
                             tubuyakiRoot.addView(lt);
+
+                            ImageView imgAbayo = lt.findViewById(R.id.img_abayo);
 
                             TextView textResNo = lt.findViewById(R.id.text_resNo);
 
@@ -151,6 +178,7 @@ public class TubuyakiFragment extends Fragment {
                             TextView textUname = lt.findViewById(R.id.text_uname);
                             TextView textTres = lt.findViewById(R.id.text_tres);
                             TextView textTview = lt.findViewById(R.id.text_tview);
+                            TextView textTsage = lt.findViewById(R.id.text_tsage);
                             TextView textTgood = lt.findViewById(R.id.text_tgood);
                             TextView textTgood2 = lt.findViewById(R.id.text_tgood2);
 
@@ -160,13 +188,19 @@ public class TubuyakiFragment extends Fragment {
 
                             textResNo.setText(String.valueOf(resCount));
 
+                            if (abayoMap.containsKey(t.getUid())) {
+                                if (abayoMap.get(t.getUid())) {
+                                    imgAbayo.setVisibility(View.VISIBLE);
+                                }
+                            }
+
                             textTdata.setAutoLinkMask(Linkify.WEB_URLS);
                             //textTdata.setLinksClickable(true);
                             //textTdata.setClickable(false);
                             //textTdata.setText(HtmlCompat.fromHtml(t.getTdata(),HtmlCompat.FROM_HTML_MODE_COMPACT));
                             textTdata.setText(Tubuyaki.format(t.getTdata()));
 
-                            if ("［画像有り］".equals(Tubuyaki.format(t.getTdata()).trim())) {
+                            if (t.getTtitle().contains("［スタンプ］")) {
                                 textTdata.setVisibility(View.GONE);
                                 ViewGroup.LayoutParams lp = imgTupfile1.getLayoutParams();
                                 lp.height = lp.height * 3;
@@ -178,6 +212,11 @@ public class TubuyakiFragment extends Fragment {
                             textUname.setText(t.getUname());
                             textTres.setText("(" + t.getTres() + "レス)");
                             textTview.setText("(" + t.getTview() + "チラ見)");
+                            if (1 == t.getTsage() || 1 == t.getTstealth()) {
+                                textTsage.setVisibility(View.VISIBLE);
+                            } else {
+                                textTsage.setVisibility(View.GONE);
+                            }
                             textTgood.setText("(" + t.getTgood() + "Good)");
                             textTgood2.setText(Good.good("♡", t.getTgood()));
 
@@ -222,6 +261,8 @@ public class TubuyakiFragment extends Fragment {
                             lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
                             tubuyakiRoot.addView(lt);
 
+                            ImageView imgAbayo = lt.findViewById(R.id.img_abayo);
+
                             TextView textResNo = lt.findViewById(R.id.text_resNo);
 
                             TextView textTdata = lt.findViewById(R.id.text_tdata);
@@ -229,6 +270,7 @@ public class TubuyakiFragment extends Fragment {
                             TextView textUname = lt.findViewById(R.id.text_uname);
                             TextView textTres = lt.findViewById(R.id.text_tres);
                             TextView textTview = lt.findViewById(R.id.text_tview);
+                            TextView textTsage = lt.findViewById(R.id.text_tsage);
                             TextView textTgood = lt.findViewById(R.id.text_tgood);
                             TextView textTgood2 = lt.findViewById(R.id.text_tgood2);
 
@@ -237,6 +279,12 @@ public class TubuyakiFragment extends Fragment {
 
 
                             textResNo.setText(String.valueOf(resCount));
+
+                            if (abayoMap.containsKey(t.getUid())) {
+                                if (abayoMap.get(t.getUid())) {
+                                    imgAbayo.setVisibility(View.VISIBLE);
+                                }
+                            }
 
                             textTdata.setAutoLinkMask(Linkify.WEB_URLS);
                             //textTdata.setLinksClickable(true);
@@ -256,6 +304,11 @@ public class TubuyakiFragment extends Fragment {
                             textUname.setText(t.getUname());
                             textTres.setVisibility(View.GONE);//textTres.setText("(" + t.getTres() + "レス)");
                             textTview.setVisibility(View.GONE);//textTview.setText("(" + t.getTview() + "チラ見)");
+                            if (1 == t.getTsage() || 1 == t.getTstealth()) {
+                                textTsage.setVisibility(View.VISIBLE);
+                            } else {
+                                textTsage.setVisibility(View.GONE);
+                            }
                             textTgood.setText("(" + t.getTgood() + "Good)");
                             textTgood2.setText(Good.good("♡", t.getTgood()));
 
@@ -298,7 +351,6 @@ public class TubuyakiFragment extends Fragment {
                         resCount++;
                     }
 
-
                     //続きを取得する
                     LinearLayout layoutContinue = (LinearLayout) getLayoutInflater().inflate(R.layout.res_continue, null);
                     tubuyakiRoot.addView(layoutContinue);
@@ -308,7 +360,6 @@ public class TubuyakiFragment extends Fragment {
                         public void onClick(View v) {
 
                             tubuyakiViewModel.refresh(getContext());
-
                             swipe.setRefreshing(true);
 
                             LinearLayout layoutLoading = (LinearLayout) getLayoutInflater().inflate(R.layout.res_loading, null);
@@ -332,19 +383,26 @@ public class TubuyakiFragment extends Fragment {
 
             if (prevTno != nowTno) {
                 tubuyakiViewModel.setTno(nowTno);
+                tubuyakiViewModel.setUid(uid);
+                tubuyakiViewModel.setTres(tres);
+
                 tubuyakiViewModel.setScroll(0);
                 tubuyakiViewModel.refresh(getContext());
-
                 swipe.setRefreshing(true);
             }
-            tubuyakiViewModel.setUid(uid);
-            tubuyakiViewModel.setTres(tres);
 
         }
 
         //tubuyakiViewModel.refresh(getContext());
 
         return root;
+    }
+
+    @Override
+    public void refresh() {
+        tubuyakiViewModel.setScroll(0);
+        tubuyakiViewModel.refresh(getContext());
+        swipe.setRefreshing(true);
     }
 
     public void popup(View v, final MyData m, final Tubuyaki t) {
@@ -382,7 +440,7 @@ public class TubuyakiFragment extends Fragment {
                 // 押されたメニュー項目名をToastで表示
                 switch (item.getItemId()) {
                     case R.id.item_open:
-                        openTubuyaki(t.getTno());
+                        openTubuyaki(t.getTno(), t.getUid(), t.getTres());
                         break;
                     case R.id.item_useropen:
                         //openUser(t.getUid());
@@ -406,70 +464,14 @@ public class TubuyakiFragment extends Fragment {
         });
     }
 
-    public void openTubuyaki(int tno) {
-
-        //メニューを選択状態に変更
-        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
-        Menu menu = bnv.getMenu();
-        MenuItem menuItem = menu.getItem(2);
-        menuItem.setChecked(true);
-
-        //画面遷移
-        Bundle bundle = new Bundle();
-        bundle.putInt("tno", tno);
-
-        TubuyakiFragment tf = new TubuyakiFragment();
-        tf.setArguments(bundle);
-
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, tf)
-                .commit();
+    public void openTubuyaki(int tno, int uid, int tres) {
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationTubuyaki(tno, uid, tres));
     }
 
     public void openSearch(int searchMode, String searchString, int sortMode, boolean sortReverse) {
-
-        //メニューを選択状態に変更
-        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
-        Menu menu = bnv.getMenu();
-        MenuItem menuItem = menu.getItem(1);
-        menuItem.setChecked(true);
-
-        //画面遷移
-        Bundle bundle = new Bundle();
-        bundle.putInt("searchMode", searchMode);
-        bundle.putString("searchString", searchString);
-        bundle.putInt("sortMode", sortMode);
-        bundle.putBoolean("sortReverse", sortReverse);
-
-        SearchFragment sf = new SearchFragment();
-        sf.setArguments(bundle);
-
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, sf)
-                .commit();
-    }
-
-    public void openUser(int uid) {
-
-        //メニューを選択状態に変更
-        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
-        Menu menu = bnv.getMenu();
-        MenuItem menuItem = menu.getItem(1);
-        menuItem.setChecked(true);
-
-        //画面遷移
-        Bundle bundle = new Bundle();
-        bundle.putInt("uid", uid);
-
-        UserFragment uf = new UserFragment();
-        uf.setArguments(bundle);
-
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, uf)
-                .commit();
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationSearch(searchMode, searchString, sortMode, sortReverse));
     }
 
     public void openPostActivity(int tno, int tubuid, int tres) {

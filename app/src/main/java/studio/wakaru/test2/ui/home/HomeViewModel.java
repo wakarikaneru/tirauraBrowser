@@ -29,6 +29,7 @@ import studio.wakaru.test2.util.Tubuyaki;
 public class HomeViewModel extends ViewModel {
 
     private boolean lock;
+    private boolean isInitialized;
 
     private MutableLiveData<List<Tubuyaki>> mTubuyakiList;
     private MutableLiveData<MyData> mMyData;
@@ -45,6 +46,7 @@ public class HomeViewModel extends ViewModel {
     public HomeViewModel() {
         Log.d("HomeViewModel", "HomeViewModel constructor");
         lock = false;
+        isInitialized = false;
         mTubuyakiList = new MutableLiveData<>();
         mMyData = new MutableLiveData<>();
         scroll = new MutableLiveData<>();
@@ -67,9 +69,18 @@ public class HomeViewModel extends ViewModel {
         cookie = pref.getString("COOKIE", "");
     }
 
+    public boolean isInitialized() {
+        return isInitialized;
+    }
+
+    public void setInitialized(boolean initialized) {
+        isInitialized = initialized;
+    }
+
     public LiveData<List<Tubuyaki>> getTubuyakiList() {
         return mTubuyakiList;
     }
+
     public LiveData<MyData> getMyData() {
         return mMyData;
     }
@@ -77,6 +88,7 @@ public class HomeViewModel extends ViewModel {
     public LiveData<Integer> getScroll() {
         return scroll;
     }
+
     public void setScroll(int scroll) {
         this.scroll.setValue(scroll);
     }
@@ -85,6 +97,8 @@ public class HomeViewModel extends ViewModel {
         Log.d("HomeViewModel", "HomeViewModel refresh");
         loadSetting(c);
         new LoadXML().execute(false);
+
+        isInitialized = true;
     }
 
     public void add(Context c) {

@@ -143,6 +143,12 @@ public class TiraXMLMain {
             t.setThash(e.getElementsByTagName("thash").item(0).getTextContent().trim());
             t.setTno(Integer.parseInt(e.getElementsByTagName("tno").item(0).getTextContent().trim()));
             t.setTres(Integer.parseInt(e.getElementsByTagName("tres").item(0).getTextContent().trim()));
+            if (!e.getElementsByTagName("tsage").item(0).getTextContent().trim().isEmpty()) {
+                t.setTsage(Integer.parseInt(e.getElementsByTagName("tsage").item(0).getTextContent().trim()));
+            }
+            if (!e.getElementsByTagName("tstealth").item(0).getTextContent().trim().isEmpty()) {
+                t.setTstealth(Integer.parseInt(e.getElementsByTagName("tstealth").item(0).getTextContent().trim()));
+            }
             t.setTupfile1(e.getElementsByTagName("tupfile1").item(0).getTextContent().trim());
             t.setTupfile2(e.getElementsByTagName("tupfile2").item(0).getTextContent().trim());
             t.setTupfile3(e.getElementsByTagName("tupfile3").item(0).getTextContent().trim());

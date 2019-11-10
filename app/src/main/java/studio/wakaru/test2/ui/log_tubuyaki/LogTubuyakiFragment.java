@@ -24,6 +24,8 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -31,6 +33,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.ui.RefreshableFragment;
+import studio.wakaru.test2.ui.home.HomeFragmentDirections;
 import studio.wakaru.test2.ui.search.SearchFragment;
 import studio.wakaru.test2.ui.search.SearchViewModel;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
@@ -40,7 +44,7 @@ import studio.wakaru.test2.util.MyTubuyakiLog;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
-public class LogTubuyakiFragment extends Fragment {
+public class LogTubuyakiFragment extends RefreshableFragment {
 
     private LogTubuyakiModel logTubuyakiModel;
 
@@ -60,7 +64,7 @@ public class LogTubuyakiFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_log_tubuyaki, container, false);
 
         //設定を読み込む
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         tiraURL = pref.getString("tiraura_resource", "");
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
@@ -103,7 +107,7 @@ public class LogTubuyakiFragment extends Fragment {
         //つぶやきデータを更新
         logTubuyakiModel.getMyData().observe(this, new Observer<MyData>() {
             @Override
-            public void onChanged(@Nullable MyData mydata) {
+            public void onChanged(@Nullable final MyData mydata) {
 
                 //つぶやき一覧を消去
                 tubuyakiRoot.removeAllViews();
@@ -144,7 +148,7 @@ public class LogTubuyakiFragment extends Fragment {
                         lt.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                openTubuyaki(tno);
+                                openTubuyaki(t.getTno(), mydata.getMynum(), t.getTres());
 
                             }
                         });
@@ -158,6 +162,13 @@ public class LogTubuyakiFragment extends Fragment {
         //logTubuyakiModel.refresh(getContext());
 
         return root;
+    }
+
+    @Override
+    public void refresh() {
+        logTubuyakiModel.setScroll(0);
+        logTubuyakiModel.refresh(getContext());
+        swipe.setRefreshing(true);
     }
 
     public void popup(View v, final MyData m, final Tubuyaki t) {
@@ -195,7 +206,7 @@ public class LogTubuyakiFragment extends Fragment {
                 // 押されたメニュー項目名をToastで表示
                 switch (item.getItemId()) {
                     case R.id.item_open:
-                        openTubuyaki(t.getTno());
+                        openTubuyaki(t.getTno(), t.getUid(), t.getTres());
                         break;
                     case R.id.item_useropen:
                         //openUser(t.getUid());
@@ -219,70 +230,14 @@ public class LogTubuyakiFragment extends Fragment {
         });
     }
 
-    public void openTubuyaki(int tno) {
-
-        //メニューを選択状態に変更
-        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
-        Menu menu = bnv.getMenu();
-        MenuItem menuItem = menu.getItem(2);
-        menuItem.setChecked(true);
-
-        //画面遷移
-        Bundle bundle = new Bundle();
-        bundle.putInt("tno", tno);
-
-        TubuyakiFragment tf = new TubuyakiFragment();
-        tf.setArguments(bundle);
-
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, tf)
-                .commit();
+    public void openTubuyaki(int tno, int uid, int tres) {
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationTubuyaki(tno, uid, tres));
     }
 
     public void openSearch(int searchMode, String searchString, int sortMode, boolean sortReverse) {
-
-        //メニューを選択状態に変更
-        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
-        Menu menu = bnv.getMenu();
-        MenuItem menuItem = menu.getItem(1);
-        menuItem.setChecked(true);
-
-        //画面遷移
-        Bundle bundle = new Bundle();
-        bundle.putInt("searchMode", searchMode);
-        bundle.putString("searchString", searchString);
-        bundle.putInt("sortMode", sortMode);
-        bundle.putBoolean("sortReverse", sortReverse);
-
-        SearchFragment sf = new SearchFragment();
-        sf.setArguments(bundle);
-
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, sf)
-                .commit();
-    }
-
-    public void openUser(int uid) {
-
-        //メニューを選択状態に変更
-        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
-        Menu menu = bnv.getMenu();
-        MenuItem menuItem = menu.getItem(1);
-        menuItem.setChecked(true);
-
-        //画面遷移
-        Bundle bundle = new Bundle();
-        bundle.putInt("uid", uid);
-
-        UserFragment uf = new UserFragment();
-        uf.setArguments(bundle);
-
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, uf)
-                .commit();
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationSearch(searchMode, searchString, sortMode, sortReverse));
     }
 
     public void openPostActivity(int tno, int tubuid, int tres) {

@@ -8,8 +8,10 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -17,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -24,6 +27,10 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 
+import java.util.List;
+
+import studio.wakaru.test2.ui.RefreshableFragment;
+import studio.wakaru.test2.ui.home.HomeFragment;
 import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.TiraXMLMain;
 
@@ -57,11 +64,49 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_new, R.id.navigation_search, R.id.navigation_user, R.id.navigation_tubuyaki, R.id.navigation_log_tubuyaki, R.id.navigation_log_res)
+                R.id.navigation_new, R.id.navigation_search, R.id.navigation_tubuyaki, R.id.navigation_log_tubuyaki, R.id.navigation_log_res)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        //ナビゲーションを2度押しで更新
+        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                Log.d("TEST", "item.isChecked() " + String.valueOf(item.isChecked()));
+                NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment);
+
+                if (item.isChecked()) {
+                    List<Fragment> fs = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment).getChildFragmentManager().getFragments();
+                    for (Fragment f : fs) {
+                        if (f != null && f instanceof RefreshableFragment) {
+                            ((RefreshableFragment) f).refresh();
+                        }
+                    }
+                    return true;
+                } else {
+                    switch (item.getItemId()) {
+                        case R.id.navigation_new:
+                            navController.navigate(R.id.action_global_navigation_new);
+                            return true;
+                        case R.id.navigation_search:
+                            navController.navigate(R.id.action_global_navigation_search);
+                            return true;
+                        case R.id.navigation_tubuyaki:
+                            navController.navigate(R.id.action_global_navigation_tubuyaki);
+                            return true;
+                        case R.id.navigation_log_tubuyaki:
+                            navController.navigate(R.id.action_global_navigation_log_tubuyaki);
+                            return true;
+                        case R.id.navigation_log_res:
+                            navController.navigate(R.id.action_global_navigation_log_res);
+                            return true;
+                    }
+                }
+                return false;
+            }
+        });
 
 
         if (bootCount == 0) {
@@ -81,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt("BOOT_COUNT", ++bootCount);
         editor.commit();
+
     }
 
     @Override
@@ -103,6 +149,17 @@ public class MainActivity extends AppCompatActivity {
         //メニューを更新
         invalidateOptionsMenu();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        BottomNavigationView bnv = findViewById(R.id.nav_view);
+
+        if (R.id.navigation_new == bnv.getSelectedItemId()) {
+            finish();
+        } else {
+            bnv.setSelectedItemId(R.id.navigation_new);
+        }
     }
 
     @Override

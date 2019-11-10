@@ -33,17 +33,25 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.ui.RefreshableFragment;
+import studio.wakaru.test2.ui.home.HomeFragmentDirections;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.ui.user.UserFragment;
 import studio.wakaru.test2.util.Good;
@@ -51,7 +59,7 @@ import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends RefreshableFragment {
 
     private SearchViewModel searchViewModel;
 
@@ -63,6 +71,7 @@ public class SearchFragment extends Fragment {
     private String imgURL;
     private String cookie;
     private MyData myData;
+    private Map<Integer, Boolean> abayoMap;
 
     private int searchMode;
     private String searchString;
@@ -83,12 +92,19 @@ public class SearchFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_search, container, false);
 
         //設定を読み込む
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         tiraURL = pref.getString("tiraura_resource", "");
         xmlURL = pref.getString("xml_resource", "");
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
         replyCount = Integer.parseInt(pref.getString("reply_count", "0"));
+        String abayoMapString = pref.getString("ABAYO_MAP", "{}");
+        //Log.d("TubuyakiFragment", abayoMapString);
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<Integer, Boolean>>() {
+        }.getType();
+        abayoMap = gson.fromJson(abayoMapString, type);
 
         entryLineLimit = Integer.parseInt(pref.getString("entry_line_limit", "0"));
         replyLineLimit = Integer.parseInt(pref.getString("reply_line_limit", "0"));
@@ -224,7 +240,6 @@ public class SearchFragment extends Fragment {
                                 sortReverse = sortReverseCheck.isChecked();
 
                                 searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
-
                                 swipe.setRefreshing(true);
                             }
                         })
@@ -268,6 +283,8 @@ public class SearchFragment extends Fragment {
                         LinearLayout lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
                         tubuyakiRoot.addView(lt);
 
+                        ImageView imgAbayo = lt.findViewById(R.id.img_abayo);
+
                         TextView textResNo = lt.findViewById(R.id.text_resNo);
 
                         TextView textTdata = lt.findViewById(R.id.text_tdata);
@@ -275,6 +292,7 @@ public class SearchFragment extends Fragment {
                         TextView textUname = lt.findViewById(R.id.text_uname);
                         TextView textTres = lt.findViewById(R.id.text_tres);
                         TextView textTview = lt.findViewById(R.id.text_tview);
+                        TextView textTsage = lt.findViewById(R.id.text_tsage);
                         TextView textTgood = lt.findViewById(R.id.text_tgood);
                         TextView textTgood2 = lt.findViewById(R.id.text_tgood2);
 
@@ -282,6 +300,12 @@ public class SearchFragment extends Fragment {
                         ImageView imgTupfile1 = lt.findViewById(R.id.img_tupfile1);
 
                         textResNo.setVisibility(View.GONE);
+
+                        if (abayoMap.containsKey(t.getUid())) {
+                            if (abayoMap.get(t.getUid())) {
+                                imgAbayo.setVisibility(View.VISIBLE);
+                            }
+                        }
 
                         // つぶやきを簡易表示
 
@@ -300,6 +324,11 @@ public class SearchFragment extends Fragment {
                         textUname.setText(t.getUname());
                         textTres.setText("(" + t.getTres() + "レス)");
                         textTview.setText("(" + t.getTview() + "チラ見)");
+                        if (1 == t.getTsage() || 1 == t.getTstealth()) {
+                            textTsage.setVisibility(View.VISIBLE);
+                        } else {
+                            textTsage.setVisibility(View.GONE);
+                        }
                         textTgood.setText("(" + t.getTgood() + "Good)");
                         textTgood2.setText(Good.good("♡", t.getTgood()));
 
@@ -380,7 +409,7 @@ public class SearchFragment extends Fragment {
                         lt.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                openTubuyaki(t.getTno());
+                                openTubuyaki(t.getTno(), t.getUid(), t.getTres());
 
                             }
                         });
@@ -407,7 +436,6 @@ public class SearchFragment extends Fragment {
                         public void onClick(View v) {
 
                             searchViewModel.add(getContext());
-
                             swipe.setRefreshing(true);
 
                             LinearLayout layoutLoading = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_loading, null);
@@ -433,13 +461,19 @@ public class SearchFragment extends Fragment {
             sortReverse = bundle.getBoolean("sortReverse", true);
 
             searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
-
             swipe.setRefreshing(true);
         }
 
         //searchViewModel.refresh(getContext());
 
         return root;
+    }
+
+    @Override
+    public void refresh() {
+        searchViewModel.setScroll(0);
+        searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
+        swipe.setRefreshing(true);
     }
 
     public void popup(View v, final MyData m, final Tubuyaki t) {
@@ -477,7 +511,7 @@ public class SearchFragment extends Fragment {
                 // 押されたメニュー項目名をToastで表示
                 switch (item.getItemId()) {
                     case R.id.item_open:
-                        openTubuyaki(t.getTno());
+                        openTubuyaki(t.getTno(), t.getUid(), t.getTres());
                         break;
                     case R.id.item_useropen:
                         //openUser(t.getUid());
@@ -501,70 +535,14 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    public void openTubuyaki(int tno) {
-
-        //メニューを選択状態に変更
-        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
-        Menu menu = bnv.getMenu();
-        MenuItem menuItem = menu.getItem(2);
-        menuItem.setChecked(true);
-
-        //画面遷移
-        Bundle bundle = new Bundle();
-        bundle.putInt("tno", tno);
-
-        TubuyakiFragment tf = new TubuyakiFragment();
-        tf.setArguments(bundle);
-
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, tf)
-                .commit();
+    public void openTubuyaki(int tno, int uid, int tres) {
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationTubuyaki(tno, uid, tres));
     }
 
     public void openSearch(int searchMode, String searchString, int sortMode, boolean sortReverse) {
-
-        //メニューを選択状態に変更
-        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
-        Menu menu = bnv.getMenu();
-        MenuItem menuItem = menu.getItem(1);
-        menuItem.setChecked(true);
-
-        //画面遷移
-        Bundle bundle = new Bundle();
-        bundle.putInt("searchMode", searchMode);
-        bundle.putString("searchString", searchString);
-        bundle.putInt("sortMode", sortMode);
-        bundle.putBoolean("sortReverse", sortReverse);
-
-        SearchFragment sf = new SearchFragment();
-        sf.setArguments(bundle);
-
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, sf)
-                .commit();
-    }
-
-    public void openUser(int uid) {
-
-        //メニューを選択状態に変更
-        BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
-        Menu menu = bnv.getMenu();
-        MenuItem menuItem = menu.getItem(1);
-        menuItem.setChecked(true);
-
-        //画面遷移
-        Bundle bundle = new Bundle();
-        bundle.putInt("uid", uid);
-
-        UserFragment uf = new UserFragment();
-        uf.setArguments(bundle);
-
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment, uf)
-                .commit();
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationSearch(searchMode, searchString, sortMode, sortReverse));
     }
 
     public void openPostActivity(int tno, int tubuid, int tres) {
