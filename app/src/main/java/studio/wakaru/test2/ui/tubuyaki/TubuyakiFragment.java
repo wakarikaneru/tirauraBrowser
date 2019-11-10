@@ -320,7 +320,6 @@ public class TubuyakiFragment extends Fragment {
                         public void onClick(View v) {
 
                             tubuyakiViewModel.refresh(getContext());
-
                             swipe.setRefreshing(true);
 
                             LinearLayout layoutLoading = (LinearLayout) getLayoutInflater().inflate(R.layout.res_loading, null);
@@ -344,13 +343,13 @@ public class TubuyakiFragment extends Fragment {
 
             if (prevTno != nowTno) {
                 tubuyakiViewModel.setTno(nowTno);
+                tubuyakiViewModel.setUid(uid);
+                tubuyakiViewModel.setTres(tres);
+
                 tubuyakiViewModel.setScroll(0);
                 tubuyakiViewModel.refresh(getContext());
-
                 swipe.setRefreshing(true);
             }
-            tubuyakiViewModel.setUid(uid);
-            tubuyakiViewModel.setTres(tres);
 
         }
 

@@ -224,7 +224,6 @@ public class SearchFragment extends Fragment {
                                 sortReverse = sortReverseCheck.isChecked();
 
                                 searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
-
                                 swipe.setRefreshing(true);
                             }
                         })
@@ -413,7 +412,6 @@ public class SearchFragment extends Fragment {
                         public void onClick(View v) {
 
                             searchViewModel.add(getContext());
-
                             swipe.setRefreshing(true);
 
                             LinearLayout layoutLoading = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_loading, null);
@@ -439,7 +437,6 @@ public class SearchFragment extends Fragment {
             sortReverse = bundle.getBoolean("sortReverse", true);
 
             searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
-
             swipe.setRefreshing(true);
         }
 

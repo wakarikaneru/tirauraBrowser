@@ -110,6 +110,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        BottomNavigationView bnv = findViewById(R.id.nav_view);
+
+        if (R.id.navigation_new == bnv.getSelectedItemId()) {
+            finish();
+        } else {
+            bnv.setSelectedItemId(R.id.navigation_new);
+        }
+    }
+
+    @Override
     public void finish() {
         new AlertDialog.Builder(this)
                 .setTitle("終了しますか？")
@@ -251,18 +262,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             default:
                 break;
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        BottomNavigationView bnv = findViewById(R.id.nav_view);
-
-        if (R.id.navigation_new == bnv.getSelectedItemId()) {
-            finish();
-        } else {
-            bnv.setSelectedItemId(R.id.navigation_new);
         }
     }
 

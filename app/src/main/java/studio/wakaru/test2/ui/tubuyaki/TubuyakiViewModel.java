@@ -32,6 +32,8 @@ public class TubuyakiViewModel extends ViewModel {
     private MutableLiveData<MyData> mMyData;
     private MutableLiveData<Integer> scroll;
 
+    private MutableLiveData<Boolean> abayo;
+
     private String xmlURL;
     private String imgURL;
     private String tiraURL;
@@ -47,6 +49,8 @@ public class TubuyakiViewModel extends ViewModel {
         mTubuyakiList = new MutableLiveData<>();
         mMyData = new MutableLiveData<>();
         scroll = new MutableLiveData<>();
+        abayo = new MutableLiveData<>();
+
         tno = 0;
         uid = 0;
         tres = 0;
@@ -107,6 +111,14 @@ public class TubuyakiViewModel extends ViewModel {
         return tres;
     }
 
+    public MutableLiveData<Boolean> getAbayo() {
+        return abayo;
+    }
+
+    public void setAbayo(MutableLiveData<Boolean> abayo) {
+        this.abayo = abayo;
+    }
+
     public void refresh(Context c) {
         loadSetting(c);
         new LoadXML().execute();
@@ -136,8 +148,18 @@ public class TubuyakiViewModel extends ViewModel {
                         mTubuyakiList.postValue(list);
 
                         //既読をつける
-                        URL uh = new URL(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
-                        Tiraura.getHTML(uh.toString(), cookie);
+                        URL read = new URL(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
+                        Tiraura.getHTML(read.toString(), cookie);
+
+                        //あばよチェック
+                        URL abayoCheck = new URL(tiraURL + "?mode=mail_form&mid=" + uid);
+                        String abayoCheckResult = Tiraura.getHTML(abayoCheck.toString(), cookie);
+
+                        if (abayoCheckResult.contains("残念ながらメッセージが送信できません")) {
+                            abayo.postValue(true);
+                        }else{
+                            abayo.postValue(false);
+                        }
 
                     } catch (MalformedURLException e) {
                         e.printStackTrace();

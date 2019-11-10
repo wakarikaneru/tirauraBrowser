@@ -309,7 +309,6 @@ public class HomeFragment extends Fragment {
                         public void onClick(View v) {
 
                             homeViewModel.add(getContext());
-
                             swipe.setRefreshing(true);
 
                             LinearLayout layoutLoading = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki_loading, null);
@@ -331,7 +330,6 @@ public class HomeFragment extends Fragment {
     }
 
     public void refresh() {
-
         homeViewModel.refresh(getContext());
         swipe.setRefreshing(true);
     }
