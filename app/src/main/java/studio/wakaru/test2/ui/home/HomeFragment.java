@@ -44,6 +44,7 @@ import java.util.Map;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.ui.RefreshableFragment;
 import studio.wakaru.test2.ui.search.SearchFragment;
 import studio.wakaru.test2.ui.search.SearchViewModel;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
@@ -53,7 +54,7 @@ import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends RefreshableFragment {
 
     private HomeViewModel homeViewModel;
 
@@ -349,8 +350,11 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    @Override
     public void refresh() {
+        homeViewModel.setScroll(0);
         homeViewModel.refresh(getContext());
+
         swipe.setRefreshing(true);
     }
 

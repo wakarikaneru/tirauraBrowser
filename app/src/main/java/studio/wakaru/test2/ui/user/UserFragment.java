@@ -41,6 +41,7 @@ import java.util.Map;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.ui.RefreshableFragment;
 import studio.wakaru.test2.ui.search.SearchFragment;
 import studio.wakaru.test2.ui.search.SearchViewModel;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
@@ -49,7 +50,7 @@ import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
-public class UserFragment extends Fragment {
+public class UserFragment extends RefreshableFragment {
 
     private UserViewModel userViewModel;
 

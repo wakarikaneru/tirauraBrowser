@@ -31,6 +31,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.ui.RefreshableFragment;
 import studio.wakaru.test2.ui.search.SearchFragment;
 import studio.wakaru.test2.ui.search.SearchViewModel;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
@@ -40,7 +41,7 @@ import studio.wakaru.test2.util.MyTubuyakiLog;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
-public class LogTubuyakiFragment extends Fragment {
+public class LogTubuyakiFragment extends RefreshableFragment {
 
     private LogTubuyakiModel logTubuyakiModel;
 
@@ -158,6 +159,13 @@ public class LogTubuyakiFragment extends Fragment {
         //logTubuyakiModel.refresh(getContext());
 
         return root;
+    }
+
+    @Override
+    public void refresh() {
+        logTubuyakiModel.setScroll(0);
+        logTubuyakiModel.refresh(getContext());
+        swipe.setRefreshing(true);
     }
 
     public void popup(View v, final MyData m, final Tubuyaki t) {

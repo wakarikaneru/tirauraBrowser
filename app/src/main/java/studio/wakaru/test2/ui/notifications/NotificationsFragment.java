@@ -13,8 +13,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.ui.RefreshableFragment;
 
-public class NotificationsFragment extends Fragment {
+public class NotificationsFragment extends RefreshableFragment {
 
     private NotificationsViewModel notificationsViewModel;
 

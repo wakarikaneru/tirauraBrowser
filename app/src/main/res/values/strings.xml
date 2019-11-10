@@ -47,4 +47,7 @@
     <string name="notice_notice_title">おしらせ通知(beta)</string>
     <string name="notice_message_title">メッセージ通知(beta)</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

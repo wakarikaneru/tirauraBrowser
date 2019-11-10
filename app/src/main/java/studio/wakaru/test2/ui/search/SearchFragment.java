@@ -48,6 +48,7 @@ import java.util.Map;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
+import studio.wakaru.test2.ui.RefreshableFragment;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
 import studio.wakaru.test2.ui.user.UserFragment;
 import studio.wakaru.test2.util.Good;
@@ -55,7 +56,7 @@ import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.Tiraura;
 import studio.wakaru.test2.util.Tubuyaki;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends RefreshableFragment {
 
     private SearchViewModel searchViewModel;
 
@@ -463,6 +464,13 @@ public class SearchFragment extends Fragment {
         //searchViewModel.refresh(getContext());
 
         return root;
+    }
+
+    @Override
+    public void refresh() {
+        searchViewModel.setScroll(0);
+        searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
+        swipe.setRefreshing(true);
     }
 
     public void popup(View v, final MyData m, final Tubuyaki t) {
