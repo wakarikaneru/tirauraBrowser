@@ -38,9 +38,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
@@ -63,6 +67,7 @@ public class SearchFragment extends Fragment {
     private String imgURL;
     private String cookie;
     private MyData myData;
+    private Map<Integer, Boolean> abayoMap;
 
     private int searchMode;
     private String searchString;
@@ -83,12 +88,19 @@ public class SearchFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_search, container, false);
 
         //設定を読み込む
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         tiraURL = pref.getString("tiraura_resource", "");
         xmlURL = pref.getString("xml_resource", "");
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
         replyCount = Integer.parseInt(pref.getString("reply_count", "0"));
+        String abayoMapString = pref.getString("ABAYO_MAP", "{}");
+        //Log.d("TubuyakiFragment", abayoMapString);
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<Integer, Boolean>>() {
+        }.getType();
+        abayoMap = gson.fromJson(abayoMapString, type);
 
         entryLineLimit = Integer.parseInt(pref.getString("entry_line_limit", "0"));
         replyLineLimit = Integer.parseInt(pref.getString("reply_line_limit", "0"));
@@ -267,6 +279,8 @@ public class SearchFragment extends Fragment {
                         LinearLayout lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
                         tubuyakiRoot.addView(lt);
 
+                        ImageView imgAbayo = lt.findViewById(R.id.img_abayo);
+
                         TextView textResNo = lt.findViewById(R.id.text_resNo);
 
                         TextView textTdata = lt.findViewById(R.id.text_tdata);
@@ -282,6 +296,12 @@ public class SearchFragment extends Fragment {
                         ImageView imgTupfile1 = lt.findViewById(R.id.img_tupfile1);
 
                         textResNo.setVisibility(View.GONE);
+
+                        if (abayoMap.containsKey(t.getUid())) {
+                            if (abayoMap.get(t.getUid())) {
+                                imgAbayo.setVisibility(View.VISIBLE);
+                            }
+                        }
 
                         // つぶやきを簡易表示
 
@@ -385,7 +405,7 @@ public class SearchFragment extends Fragment {
                         lt.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                openTubuyaki(t.getTno());
+                                openTubuyaki(t.getTno(), t.getUid(), t.getTres());
 
                             }
                         });
@@ -480,7 +500,7 @@ public class SearchFragment extends Fragment {
                 // 押されたメニュー項目名をToastで表示
                 switch (item.getItemId()) {
                     case R.id.item_open:
-                        openTubuyaki(t.getTno());
+                        openTubuyaki(t.getTno(), t.getUid(), t.getTres());
                         break;
                     case R.id.item_useropen:
                         //openUser(t.getUid());
@@ -504,7 +524,7 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    public void openTubuyaki(int tno) {
+    public void openTubuyaki(int tno, int uid, int tres) {
 
         //メニューを選択状態に変更
         BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
@@ -515,6 +535,8 @@ public class SearchFragment extends Fragment {
         //画面遷移
         Bundle bundle = new Bundle();
         bundle.putInt("tno", tno);
+        bundle.putInt("uid", uid);
+        bundle.putInt("tres", tres);
 
         TubuyakiFragment tf = new TubuyakiFragment();
         tf.setArguments(bundle);

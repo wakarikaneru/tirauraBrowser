@@ -31,9 +31,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import studio.wakaru.test2.PostActivity;
 import studio.wakaru.test2.R;
@@ -55,6 +61,7 @@ public class TubuyakiFragment extends Fragment {
     private String tiraURL;
     private String imgURL;
     private String cookie;
+    private Map<Integer, Boolean> abayoMap;
     private MyData myData;
     private Tubuyaki tubuyaki;
 
@@ -66,10 +73,17 @@ public class TubuyakiFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_tubuyaki, container, false);
 
         //設定を読み込む
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         tiraURL = pref.getString("tiraura_resource", "");
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
+        String abayoMapString = pref.getString("ABAYO_MAP", "{}");
+        //Log.d("TubuyakiFragment", abayoMapString);
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<Integer, Boolean>>() {
+        }.getType();
+        abayoMap = gson.fromJson(abayoMapString, type);
 
         myData = new MyData(cookie);
         tubuyaki = new Tubuyaki();
@@ -137,12 +151,21 @@ public class TubuyakiFragment extends Fragment {
                     int resCount = 0;
                     tubuyaki = list.get(0);
 
+                    //あばよチェック
+                    abayoMap.put(tubuyakiViewModel.getUid(), tubuyakiViewModel.isAbayo());
+                    SharedPreferences.Editor editor = pref.edit();
+                    Gson gson = new Gson();
+                    editor.putString("ABAYO_MAP", gson.toJson(abayoMap));
+                    editor.commit();
+
                     for (final Tubuyaki t : list) {
 
                         LinearLayout lt;
-                        if (resCount <= 0) {
+                        if (resCount == 0) {
                             lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
                             tubuyakiRoot.addView(lt);
+
+                            ImageView imgAbayo = lt.findViewById(R.id.img_abayo);
 
                             TextView textResNo = lt.findViewById(R.id.text_resNo);
 
@@ -161,13 +184,19 @@ public class TubuyakiFragment extends Fragment {
 
                             textResNo.setText(String.valueOf(resCount));
 
+                            if (abayoMap.containsKey(t.getUid())) {
+                                if (abayoMap.get(t.getUid())) {
+                                    imgAbayo.setVisibility(View.VISIBLE);
+                                }
+                            }
+
                             textTdata.setAutoLinkMask(Linkify.WEB_URLS);
                             //textTdata.setLinksClickable(true);
                             //textTdata.setClickable(false);
                             //textTdata.setText(HtmlCompat.fromHtml(t.getTdata(),HtmlCompat.FROM_HTML_MODE_COMPACT));
                             textTdata.setText(Tubuyaki.format(t.getTdata()));
 
-                            if ("［画像有り］".equals(Tubuyaki.format(t.getTdata()).trim())) {
+                            if (t.getTtitle().contains("［スタンプ］")) {
                                 textTdata.setVisibility(View.GONE);
                                 ViewGroup.LayoutParams lp = imgTupfile1.getLayoutParams();
                                 lp.height = lp.height * 3;
@@ -228,6 +257,8 @@ public class TubuyakiFragment extends Fragment {
                             lt = (LinearLayout) getLayoutInflater().inflate(R.layout.tubuyaki, null);
                             tubuyakiRoot.addView(lt);
 
+                            ImageView imgAbayo = lt.findViewById(R.id.img_abayo);
+
                             TextView textResNo = lt.findViewById(R.id.text_resNo);
 
                             TextView textTdata = lt.findViewById(R.id.text_tdata);
@@ -244,6 +275,12 @@ public class TubuyakiFragment extends Fragment {
 
 
                             textResNo.setText(String.valueOf(resCount));
+
+                            if (abayoMap.containsKey(t.getUid())) {
+                                if (abayoMap.get(t.getUid())) {
+                                    imgAbayo.setVisibility(View.VISIBLE);
+                                }
+                            }
 
                             textTdata.setAutoLinkMask(Linkify.WEB_URLS);
                             //textTdata.setLinksClickable(true);
@@ -309,7 +346,6 @@ public class TubuyakiFragment extends Fragment {
                         }
                         resCount++;
                     }
-
 
                     //続きを取得する
                     LinearLayout layoutContinue = (LinearLayout) getLayoutInflater().inflate(R.layout.res_continue, null);
@@ -393,7 +429,7 @@ public class TubuyakiFragment extends Fragment {
                 // 押されたメニュー項目名をToastで表示
                 switch (item.getItemId()) {
                     case R.id.item_open:
-                        openTubuyaki(t.getTno());
+                        openTubuyaki(t.getTno(), t.getUid(), t.getTres());
                         break;
                     case R.id.item_useropen:
                         //openUser(t.getUid());
@@ -417,7 +453,7 @@ public class TubuyakiFragment extends Fragment {
         });
     }
 
-    public void openTubuyaki(int tno) {
+    public void openTubuyaki(int tno, int uid, int tres) {
 
         //メニューを選択状態に変更
         BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
@@ -428,6 +464,8 @@ public class TubuyakiFragment extends Fragment {
         //画面遷移
         Bundle bundle = new Bundle();
         bundle.putInt("tno", tno);
+        bundle.putInt("uid", uid);
+        bundle.putInt("tres", tres);
 
         TubuyakiFragment tf = new TubuyakiFragment();
         tf.setArguments(bundle);

@@ -32,8 +32,6 @@ public class TubuyakiViewModel extends ViewModel {
     private MutableLiveData<MyData> mMyData;
     private MutableLiveData<Integer> scroll;
 
-    private MutableLiveData<Boolean> abayo;
-
     private String xmlURL;
     private String imgURL;
     private String tiraURL;
@@ -43,13 +41,14 @@ public class TubuyakiViewModel extends ViewModel {
     private int uid;
     private int tres;
 
+    private boolean abayo;
+
     public TubuyakiViewModel() {
         Log.d("TubuyakiViewModel", "TubuyakiViewModel constructor");
         lock = false;
         mTubuyakiList = new MutableLiveData<>();
         mMyData = new MutableLiveData<>();
         scroll = new MutableLiveData<>();
-        abayo = new MutableLiveData<>();
 
         tno = 0;
         uid = 0;
@@ -60,6 +59,7 @@ public class TubuyakiViewModel extends ViewModel {
         tiraURL = "";
         cookie = "";
 
+        abayo = false;
     }
 
     public void loadSetting(Context c) {
@@ -111,11 +111,11 @@ public class TubuyakiViewModel extends ViewModel {
         return tres;
     }
 
-    public MutableLiveData<Boolean> getAbayo() {
+    public boolean isAbayo() {
         return abayo;
     }
 
-    public void setAbayo(MutableLiveData<Boolean> abayo) {
+    public void setAbayo(boolean abayo) {
         this.abayo = abayo;
     }
 
@@ -137,6 +137,21 @@ public class TubuyakiViewModel extends ViewModel {
                 if (tno != 0) {
 
                     try {
+
+                        //既読をつける
+                        URL readURL = new URL(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
+                        Tiraura.getHTML(readURL.toString(), cookie);
+
+                        //あばよチェック
+                        URL abayoCheckURL = new URL(tiraURL + "?mode=mail_form&mid=" + uid);
+                        String abayoCheckResult = Tiraura.getHTML(abayoCheckURL.toString(), cookie);
+
+                        if (abayoCheckResult.contains("残念ながらメッセージが送信できません")) {
+                            abayo = true;
+                        } else {
+                            abayo = false;
+                        }
+
                         //tiraXMLを読み込む
                         URL u = new URL(xmlURL + "?tn=" + tno);
                         TiraXMLMain tiraXML = new TiraXMLMain(u.toString(), cookie);
@@ -146,20 +161,6 @@ public class TubuyakiViewModel extends ViewModel {
                         List<Tubuyaki> list = tiraXML.getTubuyakiList();
 
                         mTubuyakiList.postValue(list);
-
-                        //既読をつける
-                        URL read = new URL(tiraURL + "?mode=bbsdata_view&Category=CT01&newdata=1&id=" + tno);
-                        Tiraura.getHTML(read.toString(), cookie);
-
-                        //あばよチェック
-                        URL abayoCheck = new URL(tiraURL + "?mode=mail_form&mid=" + uid);
-                        String abayoCheckResult = Tiraura.getHTML(abayoCheck.toString(), cookie);
-
-                        if (abayoCheckResult.contains("残念ながらメッセージが送信できません")) {
-                            abayo.postValue(true);
-                        }else{
-                            abayo.postValue(false);
-                        }
 
                     } catch (MalformedURLException e) {
                         e.printStackTrace();

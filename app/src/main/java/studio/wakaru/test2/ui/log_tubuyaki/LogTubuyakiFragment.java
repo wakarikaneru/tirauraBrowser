@@ -60,7 +60,7 @@ public class LogTubuyakiFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_log_tubuyaki, container, false);
 
         //設定を読み込む
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         tiraURL = pref.getString("tiraura_resource", "");
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
@@ -103,7 +103,7 @@ public class LogTubuyakiFragment extends Fragment {
         //つぶやきデータを更新
         logTubuyakiModel.getMyData().observe(this, new Observer<MyData>() {
             @Override
-            public void onChanged(@Nullable MyData mydata) {
+            public void onChanged(@Nullable final MyData mydata) {
 
                 //つぶやき一覧を消去
                 tubuyakiRoot.removeAllViews();
@@ -144,7 +144,7 @@ public class LogTubuyakiFragment extends Fragment {
                         lt.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                openTubuyaki(tno);
+                                openTubuyaki(t.getTno(), mydata.getMynum(), t.getTres());
 
                             }
                         });
@@ -195,7 +195,7 @@ public class LogTubuyakiFragment extends Fragment {
                 // 押されたメニュー項目名をToastで表示
                 switch (item.getItemId()) {
                     case R.id.item_open:
-                        openTubuyaki(t.getTno());
+                        openTubuyaki(t.getTno(), t.getUid(), t.getTres());
                         break;
                     case R.id.item_useropen:
                         //openUser(t.getUid());
@@ -219,7 +219,7 @@ public class LogTubuyakiFragment extends Fragment {
         });
     }
 
-    public void openTubuyaki(int tno) {
+    public void openTubuyaki(int tno, int uid, int tres) {
 
         //メニューを選択状態に変更
         BottomNavigationView bnv = getActivity().findViewById(R.id.nav_view);
@@ -230,6 +230,8 @@ public class LogTubuyakiFragment extends Fragment {
         //画面遷移
         Bundle bundle = new Bundle();
         bundle.putInt("tno", tno);
+        bundle.putInt("uid", uid);
+        bundle.putInt("tres", tres);
 
         TubuyakiFragment tf = new TubuyakiFragment();
         tf.setArguments(bundle);
