@@ -72,15 +72,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:gravity="end"
-        android:orientation="vertical">
+        android:gravity="end">
 
-        <Switch
-            android:id="@+id/switch_sage"
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <CheckBox
+            android:id="@+id/check_sage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0"
             android:text="sage"
-            android:textColor="@color/colorText2" />
+            android:textColor="@color/tertiary_text_color_selector" />
     </LinearLayout>
 
     <LinearLayout
