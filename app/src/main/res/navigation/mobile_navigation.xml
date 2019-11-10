@@ -8,29 +8,44 @@
     <fragment
         android:id="@+id/navigation_new"
         android:name="studio.wakaru.test2.ui.home.HomeFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_new_self2"
+            app:destination="@id/navigation_new" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_search"
         android:name="studio.wakaru.test2.ui.search.SearchFragment"
-        tools:layout="@layout/fragment_search" />
-
-    <fragment
-        android:id="@+id/navigation_user"
-        android:name="studio.wakaru.test2.ui.user.UserFragment"
-        tools:layout="@layout/fragment_user" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navigation_search_self"
+            app:destination="@id/navigation_search" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_tubuyaki"
         android:name="studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment"
-        tools:layout="@layout/fragment_tubuyaki" />
+        tools:layout="@layout/fragment_tubuyaki" >
+        <action
+            android:id="@+id/action_navigation_tubuyaki_self"
+            app:destination="@id/navigation_tubuyaki" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_log_tubuyaki"
         android:name="studio.wakaru.test2.ui.log_tubuyaki.LogTubuyakiFragment"
-        tools:layout="@layout/fragment_log_tubuyaki" />
+        tools:layout="@layout/fragment_log_tubuyaki" >
+        <action
+            android:id="@+id/action_navigation_log_tubuyaki_self"
+            app:destination="@id/navigation_log_tubuyaki" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_log_res"
         android:name="studio.wakaru.test2.ui.log_res.LogResFragment"
-        tools:layout="@layout/fragment_log_res" />
+        tools:layout="@layout/fragment_log_res" >
+        <action
+            android:id="@+id/action_navigation_log_res_self"
+            app:destination="@id/navigation_log_res" />
+    </fragment>
 </navigation>
