@@ -42,6 +42,8 @@ public class Tubuyaki {
     private String tdata;
     private int tres;
     private int tview;
+    private int tsage;
+    private int tstealth;
     private String thash;
     private int parent;
     private String tupfile1;
@@ -126,6 +128,14 @@ public class Tubuyaki {
         this.tview = tview;
     }
 
+    public void setTsage(int tsage) {
+        this.tsage = tsage;
+    }
+
+    public void setTstealth(int tstealth) {
+        this.tstealth = tstealth;
+    }
+
     public void setThash(String thash) {
         this.thash = thash;
     }
@@ -204,6 +214,14 @@ public class Tubuyaki {
 
     public int getTview() {
         return tview;
+    }
+
+    public int getTsage() {
+        return tsage;
+    }
+
+    public int getTstealth() {
+        return tstealth;
     }
 
     public String getThash() {

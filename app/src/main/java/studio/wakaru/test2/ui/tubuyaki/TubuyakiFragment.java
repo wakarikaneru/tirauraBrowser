@@ -151,6 +151,7 @@ public class TubuyakiFragment extends Fragment {
                             TextView textUname = lt.findViewById(R.id.text_uname);
                             TextView textTres = lt.findViewById(R.id.text_tres);
                             TextView textTview = lt.findViewById(R.id.text_tview);
+                            TextView textTsage = lt.findViewById(R.id.text_tsage);
                             TextView textTgood = lt.findViewById(R.id.text_tgood);
                             TextView textTgood2 = lt.findViewById(R.id.text_tgood2);
 
@@ -178,6 +179,11 @@ public class TubuyakiFragment extends Fragment {
                             textUname.setText(t.getUname());
                             textTres.setText("(" + t.getTres() + "レス)");
                             textTview.setText("(" + t.getTview() + "チラ見)");
+                            if (1 == t.getTsage() || 1 == t.getTstealth()) {
+                                textTsage.setVisibility(View.VISIBLE);
+                            } else {
+                                textTsage.setVisibility(View.GONE);
+                            }
                             textTgood.setText("(" + t.getTgood() + "Good)");
                             textTgood2.setText(Good.good("♡", t.getTgood()));
 
@@ -229,6 +235,7 @@ public class TubuyakiFragment extends Fragment {
                             TextView textUname = lt.findViewById(R.id.text_uname);
                             TextView textTres = lt.findViewById(R.id.text_tres);
                             TextView textTview = lt.findViewById(R.id.text_tview);
+                            TextView textTsage = lt.findViewById(R.id.text_tsage);
                             TextView textTgood = lt.findViewById(R.id.text_tgood);
                             TextView textTgood2 = lt.findViewById(R.id.text_tgood2);
 
@@ -256,6 +263,11 @@ public class TubuyakiFragment extends Fragment {
                             textUname.setText(t.getUname());
                             textTres.setVisibility(View.GONE);//textTres.setText("(" + t.getTres() + "レス)");
                             textTview.setVisibility(View.GONE);//textTview.setText("(" + t.getTview() + "チラ見)");
+                            if (1 == t.getTsage() || 1 == t.getTstealth()) {
+                                textTsage.setVisibility(View.VISIBLE);
+                            } else {
+                                textTsage.setVisibility(View.GONE);
+                            }
                             textTgood.setText("(" + t.getTgood() + "Good)");
                             textTgood2.setText(Good.good("♡", t.getTgood()));
 
