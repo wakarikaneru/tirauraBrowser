@@ -257,7 +257,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        //メニューを選択状態に変更
         BottomNavigationView bnv = findViewById(R.id.nav_view);
 
         if (R.id.navigation_new == bnv.getSelectedItemId()) {
