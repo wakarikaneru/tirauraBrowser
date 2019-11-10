@@ -27,6 +27,8 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 
+import java.util.List;
+
 import studio.wakaru.test2.ui.RefreshableFragment;
 import studio.wakaru.test2.ui.home.HomeFragment;
 import studio.wakaru.test2.util.MyData;
@@ -75,22 +77,32 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("TEST", "item.isChecked() " + String.valueOf(item.isChecked()));
                 NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment);
 
-                switch(item.getItemId()){
-                    case R.id.navigation_new:
-                        navController.navigate(R.id.action_global_navigation_new);
-                        return true;
-                    case R.id.navigation_search:
-                        navController.navigate(R.id.action_global_navigation_search);
-                        return true;
-                    case R.id.navigation_tubuyaki:
-                        navController.navigate(R.id.action_global_navigation_tubuyaki);
-                        return true;
-                    case R.id.navigation_log_tubuyaki:
-                        navController.navigate(R.id.action_global_navigation_log_tubuyaki);
-                        return true;
-                    case R.id.navigation_log_res:
-                        navController.navigate(R.id.action_global_navigation_log_res);
-                        return true;
+                if (item.isChecked()) {
+                    List<Fragment> fs = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment).getChildFragmentManager().getFragments();
+                    for (Fragment f : fs) {
+                        if (f != null && f instanceof RefreshableFragment) {
+                            ((RefreshableFragment) f).refresh();
+                        }
+                    }
+                    return true;
+                } else {
+                    switch (item.getItemId()) {
+                        case R.id.navigation_new:
+                            navController.navigate(R.id.action_global_navigation_new);
+                            return true;
+                        case R.id.navigation_search:
+                            navController.navigate(R.id.action_global_navigation_search);
+                            return true;
+                        case R.id.navigation_tubuyaki:
+                            navController.navigate(R.id.action_global_navigation_tubuyaki);
+                            return true;
+                        case R.id.navigation_log_tubuyaki:
+                            navController.navigate(R.id.action_global_navigation_log_tubuyaki);
+                            return true;
+                        case R.id.navigation_log_res:
+                            navController.navigate(R.id.action_global_navigation_log_res);
+                            return true;
+                    }
                 }
                 return false;
             }
