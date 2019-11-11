@@ -138,6 +138,14 @@
 
     <PreferenceCategory app:title="@string/detail_header">
 
+        <ListPreference
+            app:defaultValue="128"
+            app:entries="@array/cache_size"
+            app:entryValues="@array/cache_size_value"
+            app:key="cache_size"
+            app:title="@string/detail_cache_size_title"
+            app:useSimpleSummaryProvider="true" />
+
         <Preference
             app:defaultValue="0"
             app:key="setting_version"
