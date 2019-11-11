@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/flexbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            app:alignContent="stretch"
+            app:alignItems="stretch"
+            app:flexDirection="row"
+            app:flexWrap="wrap"
+            app:justifyContent="space_around"
+            app:layout_flexGrow="1">
+
+            <Button
+                android:id="@+id/button_bk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="黒色"
+                android:textColor="#000000" />
+
+            <Button
+                android:id="@+id/button_b6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="灰色"
+                android:textColor="#666666" />
+
+            <Button
+                android:id="@+id/button_wh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="白色"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/button_lb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="水色"
+                android:textColor="#0099FF" />
+
+            <Button
+                android:id="@+id/button_bl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="青色"
+                android:textColor="#0000FF" />
+
+            <Button
+                android:id="@+id/button_re"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="赤色"
+                android:textColor="#FF0000" />
+
+            <Button
+                android:id="@+id/button_or"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="橙色"
+                android:textColor="#FFA500" />
+
+            <Button
+                android:id="@+id/button_ye"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="黄色"
+                android:textColor="#ffcc00" />
+
+            <Button
+                android:id="@+id/button_lg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="黄緑色"
+                android:textColor="#ccff66" />
+
+            <Button
+                android:id="@+id/button_gr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="緑色"
+                android:textColor="#008000" />
+
+            <Button
+                android:id="@+id/button_pk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="桃色"
+                android:textColor="#ff66cc" />
+
+            <Button
+                android:id="@+id/button_pu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="紫色"
+                android:textColor="#660099" />
+
+            <Button
+                android:id="@+id/button_br"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="茶色"
+                android:textColor="#996633" />
+
+            <Button
+                android:id="@+id/button_i"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="斜体"
+                android:textColor="@color/tertiary_text_color_selector"
+                android:textStyle="italic" />
+
+            <Button
+                android:id="@+id/button_b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="太字"
+                android:textColor="@color/tertiary_text_color_selector"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/button_rand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="【ランダム数字】"
+                android:textColor="#FF00FF" />
+
+            <Button
+                android:id="@+id/button_srand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="【ランダム文字】"
+                android:textColor="#FF00FF" />
+
+            <Button
+                android:id="@+id/button_rand100"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="【ランダム100】"
+                android:textColor="#FF00FF" />
+
+            <Button
+                android:id="@+id/button_mbrand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="【○×】"
+                android:textColor="#FF00FF" />
+
+            <Button
+                android:id="@+id/button_mbrand2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="【す！/せん！】"
+                android:textColor="#FF00FF" />
+
+            <Button
+                android:id="@+id/button_omikuji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="【おみくじ】"
+                android:textColor="#FF00FF" />
+
+            <Button
+                android:id="@+id/button_mkuji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="【おみくじ作成数】"
+                android:textColor="#FF00FF" />
+
+            <Button
+                android:id="@+id/button_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="【ステータス】"
+                android:textColor="#FF00FF" />
+
+            <Button
+                android:id="@+id/button_iroate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="【色当て結果】"
+                android:textColor="#FF00FF" />
+
+            <Button
+                android:id="@+id/button_turiage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="【売り上げ】"
+                android:textColor="#FF00FF" />
+
+            <Button
+                android:id="@+id/button_tpoint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="#7f7f7f"
+                android:text="【全ポイント】"
+                android:textColor="#FF00FF" />
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+    </ScrollView>
+</LinearLayout>
