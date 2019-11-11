@@ -192,6 +192,10 @@ public class PostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("PostActivity", "tag onClick start");
 
+                final AlertDialog ad = new AlertDialog.Builder(v.getContext())
+                        .setCancelable(true)
+                        .create();
+
                 View.OnClickListener ocl = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -279,7 +283,9 @@ public class PostActivity extends AppCompatActivity {
                             default:
                                 break;
                         }
-
+                        if (ad != null) {
+                            ad.dismiss();
+                        }
                     }
                 };
 
@@ -294,10 +300,8 @@ public class PostActivity extends AppCompatActivity {
                     }
                 }
 
-                AlertDialog ad = new AlertDialog.Builder(v.getContext())
-                        .setView(tagDialog)
-                        .setCancelable(true)
-                        .show();
+                ad.setView(tagDialog);
+                ad.show();
 
                 Log.d("PostActivity", "tag onClick end");
             }
