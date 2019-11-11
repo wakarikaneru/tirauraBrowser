@@ -1,5 +1,6 @@
 package studio.wakaru.test2;
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +16,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.squareup.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -107,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
 
         if (bootCount == 0) {
             startActivityForResult(new Intent(MainActivity.this, SettingsActivity.class), SETTING);
