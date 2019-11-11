@@ -395,6 +395,8 @@ public class SearchFragment extends RefreshableFragment {
                             public void onClick(View v) {
                                 ImageView img = new ImageView(getActivity());
                                 Picasso.get().load(imgTupfile1Url).into(img);
+                                img.setScaleType(ImageView.ScaleType.FIT_XY);
+                                img.setAdjustViewBounds(true);
 
                                 AlertDialog ad = new AlertDialog.Builder(getActivity())
                                         .setView(img)
