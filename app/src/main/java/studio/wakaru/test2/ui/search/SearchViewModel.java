@@ -265,7 +265,7 @@ public class SearchViewModel extends ViewModel {
                         List<Tubuyaki> list = allList.subList(Math.min(allList.size(), nowEntry), Math.min(allList.size(), nowEntry + entriesCount));
 
                         if (reply) {
-                            ExecutorService executor = Executors.newFixedThreadPool(1);
+                            ExecutorService executor = Executors.newFixedThreadPool(6);
                             List<GetResCallable> fl = new ArrayList<GetResCallable>();
 
                             for (Tubuyaki t : list) {
