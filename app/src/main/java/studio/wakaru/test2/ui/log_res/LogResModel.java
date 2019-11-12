@@ -77,7 +77,7 @@ public class LogResModel extends ViewModel {
 
                 try {
                     //tiraXMLを読み込む
-                    URL u = new URL(xmlURL);
+                    URL u = new URL(xmlURL + "?tn=2");
                     TiraXMLMain tiraXML = new TiraXMLMain(u.toString(), cookie);
 
                     mMyData.postValue(tiraXML.getMyData());
