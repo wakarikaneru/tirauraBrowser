@@ -178,7 +178,7 @@ public class SearchFragment extends RefreshableFragment {
                 SpinnerAdapter searchModeSpinnerAdapter = new ArrayAdapter<String>(getActivity(), R.layout.row_text, searchModeList);
                 searchModeSpinner.setAdapter(searchModeSpinnerAdapter);
 
-                String[] sortModeList = {"デフォルト", "つぶやきID", "つぶやき作成日時", "つぶやき更新日時", "チラ見", "Good"};
+                String[] sortModeList = {"デフォルト", "つぶやきID", "つぶやき作成日時", "つぶやき更新日時", "チラ見", "Good", "レス"};
                 SpinnerAdapter sortModeSpinnerAdapter = new ArrayAdapter<String>(getActivity(), R.layout.row_text, sortModeList);
                 sortModeSpinner.setAdapter(sortModeSpinnerAdapter);
 
@@ -229,6 +229,9 @@ public class SearchFragment extends RefreshableFragment {
                                         break;
                                     case 5:
                                         sortModeInt = SearchViewModel.SORT_MODE_TGOOD;
+                                        break;
+                                    case 6:
+                                        sortModeInt = SearchViewModel.SORT_MODE_TRES;
                                         break;
                                     default:
                                         break;
