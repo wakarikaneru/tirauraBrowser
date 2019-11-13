@@ -309,6 +309,7 @@ public class SearchFragment extends RefreshableFragment {
 
                         textResNo.setVisibility(View.GONE);
 
+                        /*
                         if (abayoMap.containsKey(t.getUid())) {
                             if (abayoMap.get(t.getUid())) {
                                 if (antiAbayoTubuyaki) {
@@ -317,6 +318,8 @@ public class SearchFragment extends RefreshableFragment {
                                 imgAbayo.setVisibility(View.VISIBLE);
                             }
                         }
+
+                         */
 
                         // つぶやきを簡易表示
 

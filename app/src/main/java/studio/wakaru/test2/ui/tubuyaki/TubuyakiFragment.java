@@ -197,6 +197,7 @@ public class TubuyakiFragment extends RefreshableFragment {
 
                             textResNo.setText(String.valueOf(resCount));
 
+                            /*
                             if (abayoMap.containsKey(t.getUid())) {
                                 if (abayoMap.get(t.getUid())) {
                                     if (antiAbayoTubuyaki) {
@@ -205,6 +206,8 @@ public class TubuyakiFragment extends RefreshableFragment {
                                     imgAbayo.setVisibility(View.VISIBLE);
                                 }
                             }
+
+                             */
 
                             textTdata.setAutoLinkMask(Linkify.WEB_URLS);
                             if (richText) {
