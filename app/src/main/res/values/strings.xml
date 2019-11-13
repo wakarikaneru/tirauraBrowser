@@ -18,6 +18,7 @@
     <string name="new_header">新着</string>
     <string name="new_detail_header">新着(詳細)</string>
     <string name="tubuyaki_header">つぶやき</string>
+    <string name="hide_header">非表示</string>
     <string name="post_header">書き込み</string>
     <string name="notice_header">通知</string>
 
@@ -40,6 +41,9 @@
     <string name="new_detail_reply_line_title">レス表示行数制限</string>
 
     <string name="tubuyaki_rich_text_title">リッチテキスト</string>
+
+    <string name="hide_anti_abayo_tubuyaki_title">アンチあばよ(つぶやき)</string>
+    <string name="hide_anti_abayo_res_title">アンチあばよ(レス)</string>
 
     <string name="post_sage_memory_tubuyaki_title">非表示記憶(つぶやき)</string>
     <string name="post_sage_memory_res_title">sage記憶(レス)</string>

@@ -69,7 +69,6 @@
             app:key="reply_count"
             app:title="@string/new_reply_count_title"
             app:useSimpleSummaryProvider="true" />
-
         <ListPreference
             app:defaultValue="5"
             app:entries="@array/line_limit_count"
@@ -93,6 +92,18 @@
             app:defaultValue="false"
             app:key="rich_text"
             app:title="@string/tubuyaki_rich_text_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/hide_header">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="anti_abayo_tubuyaki"
+            app:title="@string/hide_anti_abayo_tubuyaki_title" />
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="anti_abayo_res"
+            app:title="@string/hide_anti_abayo_res_title" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/post_header">

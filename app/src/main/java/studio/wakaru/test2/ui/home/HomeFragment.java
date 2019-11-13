@@ -70,7 +70,10 @@ public class HomeFragment extends RefreshableFragment {
     private String imgURL;
     private String cookie;
     private MyData myData;
+
     private Map<Integer, Boolean> abayoMap;
+    private boolean antiAbayoTubuyaki;
+    private boolean antiAbayoRes;
 
     private int replyCount;
 
@@ -90,6 +93,7 @@ public class HomeFragment extends RefreshableFragment {
         xmlURL = pref.getString("xml_resource", "");
         imgURL = pref.getString("img_resource", "");
         cookie = pref.getString("COOKIE", "");
+
         replyCount = Integer.parseInt(pref.getString("reply_count", "0"));
         String abayoMapString = pref.getString("ABAYO_MAP", "{}");
         //Log.d("TubuyakiFragment", abayoMapString);
@@ -98,6 +102,8 @@ public class HomeFragment extends RefreshableFragment {
         Type type = new TypeToken<Map<Integer, Boolean>>() {
         }.getType();
         abayoMap = gson.fromJson(abayoMapString, type);
+        antiAbayoTubuyaki = pref.getBoolean("anti_abayo_tubuyaki", false);
+        antiAbayoRes = pref.getBoolean("anti_abayo_res", false);
 
         entryLineLimit = Integer.parseInt(pref.getString("entry_line_limit", "0"));
         replyLineLimit = Integer.parseInt(pref.getString("reply_line_limit", "0"));
@@ -201,6 +207,9 @@ public class HomeFragment extends RefreshableFragment {
 
                         if (abayoMap.containsKey(t.getUid())) {
                             if (abayoMap.get(t.getUid())) {
+                                if (antiAbayoTubuyaki) {
+                                    lt.setVisibility(View.GONE);
+                                }
                                 imgAbayo.setVisibility(View.VISIBLE);
                             }
                         }
@@ -263,6 +272,14 @@ public class HomeFragment extends RefreshableFragment {
                                         ImageView imgURes = lr.findViewById(R.id.img_uimg1);
 
                                         textResNoRes.setText(String.valueOf(resCount));
+
+                                        if (abayoMap.containsKey(r.getUid())) {
+                                            if (abayoMap.get(r.getUid())) {
+                                                if (antiAbayoRes) {
+                                                    lr.setVisibility(View.GONE);
+                                                }
+                                            }
+                                        }
 
                                         // レスを簡易表示
                                         textTdataRes.setText(Tubuyaki.format(r.getTdata()));

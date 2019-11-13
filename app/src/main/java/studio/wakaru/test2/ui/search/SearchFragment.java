@@ -72,6 +72,8 @@ public class SearchFragment extends RefreshableFragment {
     private String cookie;
     private MyData myData;
     private Map<Integer, Boolean> abayoMap;
+    private boolean antiAbayoTubuyaki;
+    private boolean antiAbayoRes;
 
     private int searchMode;
     private String searchString;
@@ -105,6 +107,8 @@ public class SearchFragment extends RefreshableFragment {
         Type type = new TypeToken<Map<Integer, Boolean>>() {
         }.getType();
         abayoMap = gson.fromJson(abayoMapString, type);
+        antiAbayoTubuyaki = pref.getBoolean("anti_abayo_tubuyaki", false);
+        antiAbayoRes = pref.getBoolean("anti_abayo_res", false);
 
         entryLineLimit = Integer.parseInt(pref.getString("entry_line_limit", "0"));
         replyLineLimit = Integer.parseInt(pref.getString("reply_line_limit", "0"));
@@ -307,6 +311,9 @@ public class SearchFragment extends RefreshableFragment {
 
                         if (abayoMap.containsKey(t.getUid())) {
                             if (abayoMap.get(t.getUid())) {
+                                if (antiAbayoTubuyaki) {
+                                    lt.setVisibility(View.GONE);
+                                }
                                 imgAbayo.setVisibility(View.VISIBLE);
                             }
                         }
@@ -369,6 +376,14 @@ public class SearchFragment extends RefreshableFragment {
                                         ImageView imgURes = lr.findViewById(R.id.img_uimg1);
 
                                         textResNoRes.setText(String.valueOf(resCount));
+
+                                        if (abayoMap.containsKey(r.getUid())) {
+                                            if (abayoMap.get(r.getUid())) {
+                                                if (antiAbayoRes) {
+                                                    lr.setVisibility(View.GONE);
+                                                }
+                                            }
+                                        }
 
                                         // レスを簡易表示
                                         textTdataRes.setText(Tubuyaki.format(r.getTdata()));

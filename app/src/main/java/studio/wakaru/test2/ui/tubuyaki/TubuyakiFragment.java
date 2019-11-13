@@ -69,6 +69,9 @@ public class TubuyakiFragment extends RefreshableFragment {
     private boolean richText;
     private String cookie;
     private Map<Integer, Boolean> abayoMap;
+    private boolean antiAbayoTubuyaki;
+    private boolean antiAbayoRes;
+
     private MyData myData;
     private Tubuyaki tubuyaki;
 
@@ -92,6 +95,8 @@ public class TubuyakiFragment extends RefreshableFragment {
         Type type = new TypeToken<Map<Integer, Boolean>>() {
         }.getType();
         abayoMap = gson.fromJson(abayoMapString, type);
+        antiAbayoTubuyaki = pref.getBoolean("anti_abayo_tubuyaki", false);
+        antiAbayoRes = pref.getBoolean("anti_abayo_res", false);
 
         myData = new MyData(cookie);
         tubuyaki = new Tubuyaki();
@@ -194,6 +199,9 @@ public class TubuyakiFragment extends RefreshableFragment {
 
                             if (abayoMap.containsKey(t.getUid())) {
                                 if (abayoMap.get(t.getUid())) {
+                                    if (antiAbayoTubuyaki) {
+                                        lt.setVisibility(View.GONE);
+                                    }
                                     imgAbayo.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -284,11 +292,13 @@ public class TubuyakiFragment extends RefreshableFragment {
                             ImageView imgUimg1 = lt.findViewById(R.id.img_uimg1);
                             ImageView imgTupfile1 = lt.findViewById(R.id.img_tupfile1);
 
-
                             textResNo.setText(String.valueOf(resCount));
 
                             if (abayoMap.containsKey(t.getUid())) {
                                 if (abayoMap.get(t.getUid())) {
+                                    if (antiAbayoRes) {
+                                        lt.setVisibility(View.GONE);
+                                    }
                                     imgAbayo.setVisibility(View.VISIBLE);
                                 }
                             }
