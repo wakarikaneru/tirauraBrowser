@@ -178,7 +178,7 @@ public class SearchFragment extends RefreshableFragment {
                 SpinnerAdapter searchModeSpinnerAdapter = new ArrayAdapter<String>(getActivity(), R.layout.row_text, searchModeList);
                 searchModeSpinner.setAdapter(searchModeSpinnerAdapter);
 
-                String[] sortModeList = {"デフォルト", "つぶやきID", "つぶやき作成日時", "つぶやき更新日時", "チラ見", "Good"};
+                String[] sortModeList = {"デフォルト", "つぶやきID", "つぶやき作成日時", "つぶやき更新日時", "チラ見", "Good", "レス"};
                 SpinnerAdapter sortModeSpinnerAdapter = new ArrayAdapter<String>(getActivity(), R.layout.row_text, sortModeList);
                 sortModeSpinner.setAdapter(sortModeSpinnerAdapter);
 
@@ -230,6 +230,9 @@ public class SearchFragment extends RefreshableFragment {
                                     case 5:
                                         sortModeInt = SearchViewModel.SORT_MODE_TGOOD;
                                         break;
+                                    case 6:
+                                        sortModeInt = SearchViewModel.SORT_MODE_TRES;
+                                        break;
                                     default:
                                         break;
                                 }
@@ -239,6 +242,7 @@ public class SearchFragment extends RefreshableFragment {
                                 sortMode = sortModeInt;
                                 sortReverse = sortReverseCheck.isChecked();
 
+                                searchViewModel.setScroll(0);
                                 searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
                                 swipe.setRefreshing(true);
                             }
@@ -394,6 +398,8 @@ public class SearchFragment extends RefreshableFragment {
                             public void onClick(View v) {
                                 ImageView img = new ImageView(getActivity());
                                 Picasso.get().load(imgTupfile1Url).into(img);
+                                img.setScaleType(ImageView.ScaleType.FIT_XY);
+                                img.setAdjustViewBounds(true);
 
                                 AlertDialog ad = new AlertDialog.Builder(getActivity())
                                         .setView(img)

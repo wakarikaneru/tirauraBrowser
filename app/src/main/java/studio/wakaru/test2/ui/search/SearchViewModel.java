@@ -40,6 +40,7 @@ public class SearchViewModel extends ViewModel {
     public static final int SORT_MODE_TDATE2 = 4;
     public static final int SORT_MODE_TVIEW = 8;
     public static final int SORT_MODE_TGOOD = 16;
+    public static final int SORT_MODE_TRES = 32;
 
     private boolean lock;
 
@@ -81,6 +82,7 @@ public class SearchViewModel extends ViewModel {
         sortObj.put(SORT_MODE_TDATE2, new Tubuyaki.Tdate2Comparator());
         sortObj.put(SORT_MODE_TVIEW, new Tubuyaki.TviewComparator());
         sortObj.put(SORT_MODE_TGOOD, new Tubuyaki.TgoodComparator());
+        sortObj.put(SORT_MODE_TRES, new Tubuyaki.TresComparator());
 
 
         searchMode = SEARCH_MODE_NONE;
@@ -239,7 +241,8 @@ public class SearchViewModel extends ViewModel {
 
                         //レスを取得
                         if (reply) {
-                            ExecutorService executor = Executors.newFixedThreadPool(1);
+                            //ExecutorService executor = Executors.newFixedThreadPool(6);
+                            ExecutorService executor = Executors.newCachedThreadPool();
                             List<GetResCallable> fl = new ArrayList<GetResCallable>();
 
                             for (Tubuyaki t : list) {
@@ -265,7 +268,8 @@ public class SearchViewModel extends ViewModel {
                         List<Tubuyaki> list = allList.subList(Math.min(allList.size(), nowEntry), Math.min(allList.size(), nowEntry + entriesCount));
 
                         if (reply) {
-                            ExecutorService executor = Executors.newFixedThreadPool(1);
+                            //ExecutorService executor = Executors.newFixedThreadPool(6);
+                            ExecutorService executor = Executors.newCachedThreadPool();
                             List<GetResCallable> fl = new ArrayList<GetResCallable>();
 
                             for (Tubuyaki t : list) {
@@ -357,6 +361,8 @@ public class SearchViewModel extends ViewModel {
                 return "チラ見";
             case SORT_MODE_TGOOD:
                 return "Good";
+            case SORT_MODE_TRES:
+                return "レス";
             default:
                 return "不明";
         }

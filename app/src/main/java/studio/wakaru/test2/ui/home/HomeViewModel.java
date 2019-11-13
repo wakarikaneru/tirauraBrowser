@@ -136,7 +136,8 @@ public class HomeViewModel extends ViewModel {
 
                     //レスを取得
                     if (reply) {
-                        ExecutorService executor = Executors.newFixedThreadPool(1);
+                        //ExecutorService executor = Executors.newFixedThreadPool(6);
+                        ExecutorService executor = Executors.newCachedThreadPool();
                         List<GetResCallable> fl = new ArrayList<GetResCallable>();
 
                         for (Tubuyaki t : list) {

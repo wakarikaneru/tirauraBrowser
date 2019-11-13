@@ -89,9 +89,11 @@ public class StampActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Log.d("StampActivity", "submitButton onClick start");
 
-
                     ImageView img = new ImageView(StampActivity.this);
+
                     img.setImageResource(id);
+                    img.setScaleType(ImageView.ScaleType.FIT_XY);
+                    img.setAdjustViewBounds(true);
 
                     AlertDialog ad = new AlertDialog.Builder(StampActivity.this)
                             .setView(img)

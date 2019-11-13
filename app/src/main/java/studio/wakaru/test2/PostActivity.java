@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.preference.PreferenceManager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -24,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.flexbox.FlexboxLayout;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -94,7 +97,7 @@ public class PostActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("ID:" + tno);
         }
 
-        final TextView text = findViewById(R.id.text_tdata);
+        final EditText text = findViewById(R.id.text_tdata);
 
         //sage記憶
         final CheckBox sage = findViewById(R.id.check_sage);
@@ -182,6 +185,127 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
+        //文字装飾ボタンを押したらタグ選択
+        final View tag = findViewById(R.id.image_tag);
+        tag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("PostActivity", "tag onClick start");
+
+                final AlertDialog ad = new AlertDialog.Builder(v.getContext())
+                        .setCancelable(true)
+                        .create();
+
+                View.OnClickListener ocl = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int start = text.getSelectionStart();
+                        int end = text.getSelectionEnd();
+                        switch (v.getId()) {
+                            case R.id.button_bk:
+                                text.getText().replace(start, end, ":BK:" + text.getText().subSequence(start, end) + ":FC:");
+                                break;
+                            case R.id.button_b6:
+                                text.getText().replace(start, end, ":B6:" + text.getText().subSequence(start, end) + ":FC:");
+                                break;
+                            case R.id.button_wh:
+                                text.getText().replace(start, end, ":WH:" + text.getText().subSequence(start, end) + ":FC:");
+                                break;
+                            case R.id.button_lb:
+                                text.getText().replace(start, end, ":LB:" + text.getText().subSequence(start, end) + ":FC:");
+                                break;
+                            case R.id.button_bl:
+                                text.getText().replace(start, end, ":BL:" + text.getText().subSequence(start, end) + ":FC:");
+                                break;
+                            case R.id.button_re:
+                                text.getText().replace(start, end, ":RE:" + text.getText().subSequence(start, end) + ":FC:");
+                                break;
+                            case R.id.button_or:
+                                text.getText().replace(start, end, ":OR:" + text.getText().subSequence(start, end) + ":FC:");
+                                break;
+                            case R.id.button_ye:
+                                text.getText().replace(start, end, ":YE:" + text.getText().subSequence(start, end) + ":FC:");
+                                break;
+                            case R.id.button_lg:
+                                text.getText().replace(start, end, ":LG:" + text.getText().subSequence(start, end) + ":FC:");
+                                break;
+                            case R.id.button_gr:
+                                text.getText().replace(start, end, ":GR:" + text.getText().subSequence(start, end) + ":FC:");
+                                break;
+                            case R.id.button_pk:
+                                text.getText().replace(start, end, ":PK:" + text.getText().subSequence(start, end) + ":FC:");
+                                break;
+                            case R.id.button_pu:
+                                text.getText().replace(start, end, ":PU:" + text.getText().subSequence(start, end) + ":FC:");
+                                break;
+                            case R.id.button_br:
+                                text.getText().replace(start, end, ":BR:" + text.getText().subSequence(start, end) + ":FC:");
+                                break;
+                            case R.id.button_i:
+                                text.getText().replace(start, end, ":I:" + text.getText().subSequence(start, end) + ":IC:");
+                                break;
+                            case R.id.button_b:
+                                text.getText().replace(start, end, ":B:" + text.getText().subSequence(start, end) + ":BC:");
+                                break;
+                            case R.id.button_rand:
+                                text.getText().replace(start, end, ":rand:");
+                                break;
+                            case R.id.button_srand:
+                                text.getText().replace(start, end, ":srand:");
+                                break;
+                            case R.id.button_rand100:
+                                text.getText().replace(start, end, ":rand100:");
+                                break;
+                            case R.id.button_mbrand:
+                                text.getText().replace(start, end, ":mbrand:");
+                                break;
+                            case R.id.button_mbrand2:
+                                text.getText().replace(start, end, ":mbrand2:");
+                                break;
+                            case R.id.button_omikuji:
+                                text.getText().replace(start, end, ":omikuji:");
+                                break;
+                            case R.id.button_mkuji:
+                                text.getText().replace(start, end, ":MKUJI:");
+                                break;
+                            case R.id.button_status:
+                                text.getText().replace(start, end, ":status:");
+                                break;
+                            case R.id.button_iroate:
+                                text.getText().replace(start, end, ":iroate:");
+                                break;
+                            case R.id.button_turiage:
+                                text.getText().replace(start, end, ":TURIAGE:");
+                                break;
+                            case R.id.button_tpoint:
+                                text.getText().replace(start, end, ":TPOINT:");
+                                break;
+                            default:
+                                break;
+                        }
+                        if (ad != null) {
+                            ad.dismiss();
+                        }
+                    }
+                };
+
+                View tagDialog = getLayoutInflater().inflate(R.layout.dialog_tag, null);
+                FlexboxLayout tagList = tagDialog.findViewById(R.id.flexbox);
+
+                for (int i = 0; i < tagList.getChildCount(); i++) {
+                    View child = tagList.getChildAt(i);
+                    if (child != null && child instanceof Button) {
+                        child.setClickable(true);
+                        child.setOnClickListener(ocl);
+                    }
+                }
+
+                ad.setView(tagDialog);
+                ad.show();
+
+                Log.d("PostActivity", "tag onClick end");
+            }
+        });
 
     }
 

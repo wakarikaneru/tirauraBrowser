@@ -17,7 +17,7 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
-        <item>all</item>
+        <item>すべて</item>
     </string-array>
     <string-array name="reply_count_value">
         <item>1</item>
@@ -62,4 +62,18 @@
         <item>60</item>
     </string-array>
 
+    <string-array name="cache_size">
+        <item>64MB</item>
+        <item>128MB</item>
+        <item>256MB</item>
+        <item>512MB</item>
+        <item>1024MB</item>
+    </string-array>
+    <string-array name="cache_size_value">
+        <item>64</item>
+        <item>128</item>
+        <item>256</item>
+        <item>512</item>
+        <item>1024</item>
+    </string-array>
 </resources>

@@ -8,8 +8,8 @@ android {
         applicationId "studio.wakaru.test2"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 16
-        versionName '1.10.0'
+        versionCode 21
+        versionName '1.11.4'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
@@ -35,7 +35,10 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
 
     implementation 'org.apache.commons:commons-text:1.8'
+
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.squareup.okhttp:okhttp:2.7.5'
+
     implementation 'androidx.core:core:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.googlecode.juniversalchardet:juniversalchardet:1.0.3'

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -64,6 +66,7 @@ public class TubuyakiFragment extends RefreshableFragment {
 
     private String tiraURL;
     private String imgURL;
+    private boolean richText;
     private String cookie;
     private Map<Integer, Boolean> abayoMap;
     private MyData myData;
@@ -80,6 +83,7 @@ public class TubuyakiFragment extends RefreshableFragment {
         final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         tiraURL = pref.getString("tiraura_resource", "");
         imgURL = pref.getString("img_resource", "");
+        richText = pref.getBoolean("rich_text", false);
         cookie = pref.getString("COOKIE", "");
         String abayoMapString = pref.getString("ABAYO_MAP", "{}");
         //Log.d("TubuyakiFragment", abayoMapString);
@@ -195,10 +199,11 @@ public class TubuyakiFragment extends RefreshableFragment {
                             }
 
                             textTdata.setAutoLinkMask(Linkify.WEB_URLS);
-                            //textTdata.setLinksClickable(true);
-                            //textTdata.setClickable(false);
-                            //textTdata.setText(HtmlCompat.fromHtml(t.getTdata(),HtmlCompat.FROM_HTML_MODE_COMPACT));
-                            textTdata.setText(Tubuyaki.format(t.getTdata()));
+                            if (richText) {
+                                textTdata.setText(HtmlCompat.fromHtml(t.getTdata(), HtmlCompat.FROM_HTML_MODE_COMPACT));
+                            } else {
+                                textTdata.setText(Tubuyaki.format(t.getTdata()));
+                            }
 
                             if (t.getTtitle().contains("［スタンプ］")) {
                                 textTdata.setVisibility(View.GONE);
@@ -235,6 +240,8 @@ public class TubuyakiFragment extends RefreshableFragment {
                                 public void onClick(View v) {
                                     ImageView img = new ImageView(getActivity());
                                     Picasso.get().load(imgTupfile1Url).into(img);
+                                    img.setScaleType(ImageView.ScaleType.FIT_XY);
+                                    img.setAdjustViewBounds(true);
 
                                     new AlertDialog.Builder(getActivity())
                                             .setView(img)
@@ -287,10 +294,11 @@ public class TubuyakiFragment extends RefreshableFragment {
                             }
 
                             textTdata.setAutoLinkMask(Linkify.WEB_URLS);
-                            //textTdata.setLinksClickable(true);
-                            //textTdata.setClickable(false);
-                            //textTdata.setText(HtmlCompat.fromHtml(t.getTdata(),HtmlCompat.FROM_HTML_MODE_COMPACT));
-                            textTdata.setText(Tubuyaki.format(t.getTdata()));
+                            if (richText) {
+                                textTdata.setText(HtmlCompat.fromHtml(t.getTdata(), HtmlCompat.FROM_HTML_MODE_COMPACT));
+                            } else {
+                                textTdata.setText(Tubuyaki.format(t.getTdata()));
+                            }
 
                             if ("［画像有り］".equals(Tubuyaki.format(t.getTdata()).trim())) {
                                 textTdata.setVisibility(View.GONE);
@@ -328,6 +336,8 @@ public class TubuyakiFragment extends RefreshableFragment {
                                 public void onClick(View v) {
                                     ImageView img = new ImageView(getActivity());
                                     Picasso.get().load(imgTupfile1Url).into(img);
+                                    img.setScaleType(ImageView.ScaleType.FIT_XY);
+                                    img.setAdjustViewBounds(true);
 
                                     new AlertDialog.Builder(getActivity())
                                             .setView(img)

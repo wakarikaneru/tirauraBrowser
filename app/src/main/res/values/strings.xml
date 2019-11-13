@@ -17,6 +17,7 @@
     <string name="detail_header">詳細</string>
     <string name="new_header">新着</string>
     <string name="new_detail_header">新着(詳細)</string>
+    <string name="tubuyaki_header">つぶやき</string>
     <string name="post_header">書き込み</string>
     <string name="notice_header">通知</string>
 
@@ -38,6 +39,8 @@
     <string name="new_detail_entry_line_title">つぶやき表示行数制限</string>
     <string name="new_detail_reply_line_title">レス表示行数制限</string>
 
+    <string name="tubuyaki_rich_text_title">リッチテキスト</string>
+
     <string name="post_sage_memory_tubuyaki_title">非表示記憶(つぶやき)</string>
     <string name="post_sage_memory_res_title">sage記憶(レス)</string>
 
@@ -47,7 +50,5 @@
     <string name="notice_notice_title">おしらせ通知(beta)</string>
     <string name="notice_message_title">メッセージ通知(beta)</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="detail_cache_size_title">画像キャッシュ(再起動後に有効)</string>
 </resources>
