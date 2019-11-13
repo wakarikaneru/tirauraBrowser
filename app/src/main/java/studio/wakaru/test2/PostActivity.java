@@ -253,6 +253,9 @@ public class PostActivity extends AppCompatActivity {
                             case R.id.button_srand:
                                 text.getText().replace(start, end, ":srand:");
                                 break;
+                            case R.id.button_crand:
+                                text.getText().replace(start, end, ":crand:");
+                                break;
                             case R.id.button_rand100:
                                 text.getText().replace(start, end, ":rand100:");
                                 break;
@@ -273,6 +276,9 @@ public class PostActivity extends AppCompatActivity {
                                 break;
                             case R.id.button_iroate:
                                 text.getText().replace(start, end, ":iroate:");
+                                break;
+                            case R.id.button_trare:
+                                text.getText().replace(start, end, ":trare:");
                                 break;
                             case R.id.button_turiage:
                                 text.getText().replace(start, end, ":TURIAGE:");
