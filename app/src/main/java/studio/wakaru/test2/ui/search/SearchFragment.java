@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -154,6 +155,7 @@ public class SearchFragment extends RefreshableFragment {
             @Override
             public void onRefresh() {
                 searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
+                Log.d("SearchFragment", "refresh 1");
             }
         });
 
@@ -248,6 +250,7 @@ public class SearchFragment extends RefreshableFragment {
 
                                 searchViewModel.setScroll(0);
                                 searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
+                                Log.d("SearchFragment", "refresh 2");
                                 swipe.setRefreshing(true);
                             }
                         })
@@ -475,14 +478,22 @@ public class SearchFragment extends RefreshableFragment {
         //検索条件を設定する
         Bundle bundle = getArguments();
         if (bundle != null) {
-            searchMode = bundle.getInt("searchMode", SearchViewModel.SEARCH_MODE_NONE);
-            searchString = bundle.getString("searchString", "");
+            boolean setArgs = bundle.getBoolean("setArgs", false);
+            if (setArgs) {
+                searchMode = bundle.getInt("searchMode", SearchViewModel.SEARCH_MODE_NONE);
+                searchString = bundle.getString("searchString", "");
 
-            sortMode = bundle.getInt("sortMode", SearchViewModel.SORT_MODE_NONE);
-            sortReverse = bundle.getBoolean("sortReverse", true);
+                sortMode = bundle.getInt("sortMode", SearchViewModel.SORT_MODE_NONE);
+                sortReverse = bundle.getBoolean("sortReverse", true);
 
-            searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
-            swipe.setRefreshing(true);
+                if (searchViewModel.changeConditions(searchMode, searchString, sortMode, sortReverse)) {
+                    searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
+                    Log.d("SearchFragment", "refresh 3");
+                    swipe.setRefreshing(true);
+                }
+            }
+        } else {
+            Log.d("SearchFragment", "bundle == null");
         }
 
         //searchViewModel.refresh(getContext());
@@ -494,6 +505,7 @@ public class SearchFragment extends RefreshableFragment {
     public void refresh() {
         searchViewModel.setScroll(0);
         searchViewModel.refresh(getContext(), searchMode, searchString, sortMode, sortReverse);
+        Log.d("SearchFragment", "refresh 4");
         swipe.setRefreshing(true);
     }
 
@@ -558,12 +570,12 @@ public class SearchFragment extends RefreshableFragment {
 
     public void openTubuyaki(int tno, int uid, int tres) {
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        navController.navigate(HomeFragmentDirections.actionGlobalNavigationTubuyaki(tno, uid, tres));
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationTubuyaki(true, tno, uid, tres));
     }
 
     public void openSearch(int searchMode, String searchString, int sortMode, boolean sortReverse) {
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        navController.navigate(HomeFragmentDirections.actionGlobalNavigationSearch(searchMode, searchString, sortMode, sortReverse));
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationSearch(true, searchMode, searchString, sortMode, sortReverse));
     }
 
     public void openPostActivity(int tno, int tubuid, int tres) {

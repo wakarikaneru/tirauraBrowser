@@ -16,10 +16,15 @@
         android:name="studio.wakaru.test2.ui.search.SearchFragment"
         tools:layout="@layout/fragment_search" >
         <argument
+            android:name="setArgs"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
             android:name="searchMode"
             app:argType="integer" />
         <argument android:name="searchString"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
         <argument
             android:name="sortMode"
             app:argType="integer" />
@@ -32,6 +37,10 @@
         android:id="@+id/navigation_tubuyaki"
         android:name="studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment"
         tools:layout="@layout/fragment_tubuyaki" >
+        <argument
+            android:name="setArgs"
+            app:argType="boolean"
+            android:defaultValue="false" />
         <argument
             android:name="tno"
             app:argType="integer" />
@@ -76,11 +85,17 @@
         app:destination="@id/navigation_search"
         app:enterAnim="@anim/nav_default_enter_anim"
         app:exitAnim="@anim/nav_default_exit_anim"
-        app:launchSingleTop="true" />
+        app:launchSingleTop="true" >
+        <argument android:defaultValue="false"
+            android:name="setArgs" />
+    </action>
     <action
         android:id="@+id/action_global_navigation_tubuyaki"
         app:destination="@id/navigation_tubuyaki"
         app:enterAnim="@anim/nav_default_enter_anim"
         app:exitAnim="@anim/nav_default_exit_anim"
-        app:launchSingleTop="true" />
+        app:launchSingleTop="true" >
+        <argument android:defaultValue="false"
+            android:name="setArgs" />
+    </action>
 </navigation>

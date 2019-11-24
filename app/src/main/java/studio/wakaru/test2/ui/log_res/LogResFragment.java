@@ -230,12 +230,12 @@ public class LogResFragment extends RefreshableFragment {
 
     public void openTubuyaki(int tno, int uid, int tres) {
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        navController.navigate(HomeFragmentDirections.actionGlobalNavigationTubuyaki(tno, uid, tres));
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationTubuyaki(true, tno, uid, tres));
     }
 
     public void openSearch(int searchMode, String searchString, int sortMode, boolean sortReverse) {
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        navController.navigate(HomeFragmentDirections.actionGlobalNavigationSearch(searchMode, searchString, sortMode, sortReverse));
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationSearch(true, searchMode, searchString, sortMode, sortReverse));
     }
 
     public void openPostActivity(int tno, int tubuid, int tres) {

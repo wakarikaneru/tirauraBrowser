@@ -161,6 +161,22 @@ public class SearchViewModel extends ViewModel {
         new LoadXML().execute(true);
     }
 
+    public boolean changeConditions(int searchMode, String searchString, int sortMode, boolean sortReverse) {
+        boolean change = false;
+        if (this.searchMode == searchMode) {
+            change = true;
+        }
+        if (this.searchString.equals(searchString)) {
+            change = true;
+        }
+        if (this.sortMode == sortMode) {
+            change = true;
+        }
+        if (this.sortReverse == sortReverse) {
+            change = true;
+        }
+        return change;
+    }
 
     //非同期で新着を取得
     private class LoadXML extends AsyncTask<Boolean, Void, String> {

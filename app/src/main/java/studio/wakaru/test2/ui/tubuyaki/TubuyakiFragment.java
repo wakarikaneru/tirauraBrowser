@@ -396,21 +396,26 @@ public class TubuyakiFragment extends RefreshableFragment {
         //tnoを設定する
         Bundle bundle = getArguments();
         if (bundle != null) {
-            int prevTno = tubuyakiViewModel.getTno();
-            int nowTno = bundle.getInt("tno");
-            int uid = bundle.getInt("uid");
-            int tres = bundle.getInt("tres");
+            boolean setArgs = bundle.getBoolean("setArgs", false);
+            if (setArgs) {
+                int prevTno = tubuyakiViewModel.getTno();
+                int nowTno = bundle.getInt("tno");
+                int uid = bundle.getInt("uid");
+                int tres = bundle.getInt("tres");
 
-            if (prevTno != nowTno) {
-                tubuyakiViewModel.setTno(nowTno);
-                tubuyakiViewModel.setUid(uid);
-                tubuyakiViewModel.setTres(tres);
+                Log.d("TubuyakiFragment", "prevTno = " + prevTno + ", nowTno = " + nowTno);
+                if (prevTno != nowTno) {
+                    tubuyakiViewModel.setTno(nowTno);
+                    tubuyakiViewModel.setUid(uid);
+                    tubuyakiViewModel.setTres(tres);
 
-                tubuyakiViewModel.setScroll(0);
-                tubuyakiViewModel.refresh(getContext());
-                swipe.setRefreshing(true);
+                    tubuyakiViewModel.setScroll(0);
+                    tubuyakiViewModel.refresh(getContext());
+                    swipe.setRefreshing(true);
+                }
             }
-
+        } else {
+            Log.d("TubuyakiFragment", "bundle == null");
         }
 
         //tubuyakiViewModel.refresh(getContext());
@@ -486,12 +491,12 @@ public class TubuyakiFragment extends RefreshableFragment {
 
     public void openTubuyaki(int tno, int uid, int tres) {
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        navController.navigate(HomeFragmentDirections.actionGlobalNavigationTubuyaki(tno, uid, tres));
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationTubuyaki(true, tno, uid, tres));
     }
 
     public void openSearch(int searchMode, String searchString, int sortMode, boolean sortReverse) {
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        navController.navigate(HomeFragmentDirections.actionGlobalNavigationSearch(searchMode, searchString, sortMode, sortReverse));
+        navController.navigate(HomeFragmentDirections.actionGlobalNavigationSearch(true, searchMode, searchString, sortMode, sortReverse));
     }
 
     public void openPostActivity(int tno, int tubuid, int tres) {
