@@ -51,7 +51,6 @@ import studio.wakaru.test2.ui.RefreshableFragment;
 import studio.wakaru.test2.ui.home.HomeFragmentDirections;
 import studio.wakaru.test2.ui.search.SearchFragment;
 import studio.wakaru.test2.ui.search.SearchViewModel;
-import studio.wakaru.test2.ui.user.UserFragment;
 import studio.wakaru.test2.util.Good;
 import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.Tiraura;

@@ -17,8 +17,7 @@
         tools:layout="@layout/fragment_search" >
         <argument
             android:name="setArgs"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            app:argType="boolean"/>
         <argument
             android:name="searchMode"
             app:argType="integer" />
@@ -39,8 +38,7 @@
         tools:layout="@layout/fragment_tubuyaki" >
         <argument
             android:name="setArgs"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            app:argType="boolean"/>
         <argument
             android:name="tno"
             app:argType="integer" />
@@ -86,8 +84,6 @@
         app:enterAnim="@anim/nav_default_enter_anim"
         app:exitAnim="@anim/nav_default_exit_anim"
         app:launchSingleTop="true" >
-        <argument android:defaultValue="false"
-            android:name="setArgs" />
     </action>
     <action
         android:id="@+id/action_global_navigation_tubuyaki"
@@ -95,7 +91,5 @@
         app:enterAnim="@anim/nav_default_enter_anim"
         app:exitAnim="@anim/nav_default_exit_anim"
         app:launchSingleTop="true" >
-        <argument android:defaultValue="false"
-            android:name="setArgs" />
     </action>
 </navigation>

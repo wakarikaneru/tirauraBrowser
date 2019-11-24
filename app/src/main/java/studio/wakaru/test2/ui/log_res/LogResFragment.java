@@ -38,7 +38,6 @@ import studio.wakaru.test2.ui.home.HomeFragmentDirections;
 import studio.wakaru.test2.ui.search.SearchFragment;
 import studio.wakaru.test2.ui.search.SearchViewModel;
 import studio.wakaru.test2.ui.tubuyaki.TubuyakiFragment;
-import studio.wakaru.test2.ui.user.UserFragment;
 import studio.wakaru.test2.util.MyData;
 import studio.wakaru.test2.util.MyResLog;
 import studio.wakaru.test2.util.Tiraura;
